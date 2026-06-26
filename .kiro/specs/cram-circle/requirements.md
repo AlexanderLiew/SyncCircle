@@ -35,7 +35,7 @@ CramCircle is an educational dashboard MVP built for the AWS Kiro BuildFest 2026
 1. WHEN a user submits registration details with a valid email address (RFC 5322 format, maximum 254 characters) and a password between 8 and 128 characters, THE Authentication_Service SHALL create a new user account and return an authentication token
 2. WHEN a user submits valid login credentials, THE Authentication_Service SHALL authenticate the user and return a session token that expires after 24 hours of inactivity
 3. IF a user submits registration details with an invalid email format, a password shorter than 8 characters or longer than 128 characters, or an email that is already registered, THEN THE Authentication_Service SHALL return an error message indicating which field failed validation and the reason for failure
-4. IF a user submits incorrect login credentials, THEN THE Authentication_Service SHALL return a generic authentication error without revealing whether the email or password was incorrect
+4. IF a user submits incorrect login credentials, THEN THE Authentication_Service SHALL return an AUTHENTICATION_FAILED error type without revealing whether the email or password was incorrect
 5. IF a user fails login 5 times within a 15-minute window, THEN THE Authentication_Service SHALL temporarily block further login attempts for that account for 15 minutes and return an error message indicating the account is temporarily locked
 
 ### Requirement 2: Study Group Creation
@@ -60,7 +60,7 @@ CramCircle is an educational dashboard MVP built for the AWS Kiro BuildFest 2026
 2. WHEN an authenticated user requests their groups, THE Group_Service SHALL return a list of all Study_Groups the user belongs to, including each group's name, member count, and creation date
 3. WHEN an authenticated user requests a specific Study_Group they are a member of, THE Group_Service SHALL return the group details including the member list with display names
 4. WHEN a user leaves a Study_Group, THE Group_Service SHALL remove the user from the group membership
-5. IF a user attempts to join a Study_Group that would exceed the 50-group limit, THEN THE Group_Service SHALL reject the request and return an error message indicating the membership limit has been reached
+5. IF a user attempts to join a Study_Group and their current membership count equals 50, THEN THE Group_Service SHALL reject the request and return an error message indicating the membership limit has been reached
 
 ### Requirement 4: Academic Event Management
 
@@ -83,12 +83,13 @@ CramCircle is an educational dashboard MVP built for the AWS Kiro BuildFest 2026
 
 1. WHEN a user initiates a timetable grab and provides their university class schedule URL or credentials, THE Timetable_Grabber SHALL extract the academic schedule data from the university portal within 30 seconds
 2. THE Timetable_Grabber SHALL support class schedule extraction from SIT, NUS, SMU, and Singapore polytechnic portals
-3. WHEN the Timetable_Grabber extracts schedule data, THE Timetable_Grabber SHALL present the extracted Academic_Events to the user for confirmation before importing
+3. WHEN the Timetable_Grabber successfully extracts schedule data without errors or timeouts, THE Timetable_Grabber SHALL present the extracted Academic_Events to the user for confirmation before importing
 4. WHEN the user confirms the extracted events, THE Timetable_Grabber SHALL create Academic_Events with title, module code, location, start time, end time, and recurrence pattern
-5. WHEN a user uploads an ICS_File that is in valid iCalendar format containing at least one VEVENT component and does not exceed 5 MB in size, THE Timetable_Grabber SHALL parse the file and create Academic_Events for each calendar entry, up to a maximum of 500 events
-6. IF the Timetable_Grabber cannot connect to or extract data from a university portal within 30 seconds, THEN THE Timetable_Grabber SHALL return an error message indicating the connection failure reason and suggest the ICS_File upload as a fallback
-7. WHEN imported Academic_Events have a time range that overlaps with existing events for the same user, THE Timetable_Grabber SHALL flag the overlapping events as conflicts and allow the user to choose whether to overwrite or skip each conflicting entry
-8. IF a user uploads an ICS_File that is not in valid iCalendar format, exceeds 5 MB, or contains no VEVENT components, THEN THE Timetable_Grabber SHALL reject the file and return an error message indicating the specific validation failure
+5. WHEN a user uploads an ICS_File that is in valid iCalendar format containing at least one VEVENT component, does not exceed 5 MB in size, and contains no more than 500 VEVENT components, THE Timetable_Grabber SHALL parse the file and create Academic_Events for each calendar entry
+6. IF a user uploads an ICS_File that contains more than 500 VEVENT components, THEN THE Timetable_Grabber SHALL reject the entire file and return an error message indicating the event count limit has been exceeded
+7. IF the Timetable_Grabber cannot connect to or extract data from a university portal within 30 seconds, THEN THE Timetable_Grabber SHALL return an error message indicating the connection failure reason and suggest the ICS_File upload as a fallback
+8. WHEN imported Academic_Events have a time range that overlaps with existing events for the same user, THE Timetable_Grabber SHALL flag the overlapping events as conflicts and allow the user to choose whether to overwrite or skip each conflicting entry
+9. IF a user uploads an ICS_File that is not in valid iCalendar format, exceeds 5 MB, or contains no VEVENT components, THEN THE Timetable_Grabber SHALL reject the file and return an error message indicating the specific validation failure
 
 ### Requirement 6: Personal Event Management with Privacy Masking and Categories
 
@@ -104,7 +105,7 @@ CramCircle is an educational dashboard MVP built for the AWS Kiro BuildFest 2026
 6. WHEN a user deletes a Personal_Event, THE Timetable_Service SHALL remove the event
 7. WHEN a group member views another user's timetable, THE Timetable_Service SHALL display each Personal_Event as a Busy_Block showing only the time range without title, category, or details
 8. WHEN a user views their own timetable, THE Timetable_Service SHALL display all Personal_Event details including the title, category name, and associated color
-9. IF a user submits a Personal_Event or Event_Category with missing required fields or invalid values (end time not after start time, title exceeding 100 characters, or category limit exceeded), THEN THE Timetable_Service SHALL reject the request and return a descriptive error message indicating the validation failure
+9. IF a user submits a Personal_Event or Event_Category with missing required fields or invalid values (end time not after start time, title exceeding 100 characters, or category limit exceeded), THEN THE Timetable_Service SHALL reject the request and return a descriptive error message indicating the validation failure; error messages SHALL only be returned when validation actually fails
 
 ### Requirement 7: AI Scheduling Query
 
@@ -144,10 +145,10 @@ CramCircle is an educational dashboard MVP built for the AWS Kiro BuildFest 2026
 1. WHEN a user creates a Todo_Item with a title (1 to 200 characters), optional due date, priority level (High, Medium, or Low), and initial status of "To Do", THE Todo_Service SHALL persist the task and associate it with the authenticated user
 2. WHEN a user updates the status of a Todo_Item they own, THE Todo_Service SHALL allow selection from the following statuses: To Do, In Progress, Done, and Delayed
 3. WHEN a user sets or updates the priority of a Todo_Item they own, THE Todo_Service SHALL persist the priority as High, Medium, or Low
-4. WHEN a user requests their to-do list, THE Todo_Service SHALL return all Todo_Items owned by that user with status "To Do", "In Progress", or "Delayed", ordered by priority (High first, then Medium, then Low) and then by due date ascending, with items lacking a due date listed last within each priority group
-5. WHEN a user requests completed tasks, THE Todo_Service SHALL return all Todo_Items owned by that user with status "Done" in reverse chronological order of completion date
+4. WHEN a user requests their to-do list and the user is successfully authorized, THE Todo_Service SHALL return all Todo_Items owned by that user with status "To Do", "In Progress", or "Delayed", ordered by priority (High first, then Medium, then Low) and then by due date ascending, with items lacking a due date listed last within each priority group
+5. WHEN a user requests completed tasks and explicit authorization validation confirms the user owns the requested items, THE Todo_Service SHALL return all Todo_Items owned by that user with status "Done" in reverse chronological order of completion date
 6. WHEN a user updates a Todo_Item title, due date, priority, or status, THE Todo_Service SHALL validate that the title is between 1 and 200 characters (if changed) and persist the changes
-7. WHEN a user deletes a Todo_Item they own, THE Todo_Service SHALL remove the task permanently
+7. WHEN a user deletes a Todo_Item and direct ownership verification confirms they own the item, THE Todo_Service SHALL remove the task permanently
 8. IF a user attempts to create or update a Todo_Item with invalid data (empty title, title exceeding 200 characters, or unrecognized priority/status value), THEN THE Todo_Service SHALL reject the request and return a descriptive error message indicating the validation failure
 9. IF a user attempts to access, update, or delete a Todo_Item they do not own, THEN THE Todo_Service SHALL reject the request and return an authorization error
 
@@ -158,7 +159,7 @@ CramCircle is an educational dashboard MVP built for the AWS Kiro BuildFest 2026
 #### Acceptance Criteria
 
 1. THE CramCircle_System SHALL expose RESTful API endpoints for all user, group, timetable, notes, and AI planner operations
-2. THE CramCircle_System SHALL require a valid authentication token (non-expired and properly signed) for all API endpoints except registration and login, with tokens expiring after 24 hours of inactivity
+2. THE CramCircle_System SHALL require a valid authentication token (non-expired and properly signed) for all API endpoints except registration and login, with tokens expiring after 24 hours of inactivity; expired tokens SHALL be treated as completely unauthenticated and result in a 401 response
 3. WHEN an unauthenticated request is made to a protected endpoint, THE CramCircle_System SHALL return a 401 Unauthorized response
 4. WHEN a user requests a resource belonging to a Study_Group they are not a member of, THE CramCircle_System SHALL return a 403 Forbidden response
 5. THE CramCircle_System SHALL return HTTP status codes mapped as follows: 200 for successful retrieval or update, 201 for successful resource creation, 400 for malformed or invalid request parameters, 401 for missing or invalid authentication, 403 for insufficient permissions, 404 for non-existent resources, and 500 for unhandled server errors
