@@ -2,6 +2,9 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { Eye, EyeOff, Sparkles, ArrowLeft, BookOpen, Users, Brain } from "lucide-react";
 import { useNavigate } from "react-router";
+import { validateEmail, validatePassword } from "../lib/validators";
+import { getUser, saveUser } from "../lib/storage";
+import { STORAGE_KEYS, type User } from "../types";
 
 type AuthView = "login" | "signup" | "forgot";
 
@@ -12,17 +15,56 @@ export function Auth() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [forgotSent, setForgotSent] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem("synccircle_auth", "true");
-    navigate("/");
+    setErrors({});
+
+    const storedUser = getUser();
+    const storedPassword = localStorage.getItem("synccircle_password");
+
+    if (
+      storedUser &&
+      storedPassword &&
+      storedUser.email === email.trim() &&
+      storedPassword === password
+    ) {
+      localStorage.setItem(STORAGE_KEYS.AUTH, "true");
+      navigate("/");
+    } else {
+      setErrors({ login: "Invalid credentials" });
+    }
   };
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem("synccircle_auth", "true");
+    setErrors({});
+
+    const emailResult = validateEmail(email);
+    const passwordResult = validatePassword(password);
+
+    const fieldErrors: Record<string, string> = {
+      ...emailResult.errors,
+      ...passwordResult.errors,
+    };
+
+    if (Object.keys(fieldErrors).length > 0) {
+      setErrors(fieldErrors);
+      return;
+    }
+
+    const user: User = {
+      id: crypto.randomUUID(),
+      email: email.trim(),
+      displayName: name.trim(),
+      createdAt: new Date().toISOString(),
+    };
+
+    saveUser(user);
+    localStorage.setItem("synccircle_password", password);
+    localStorage.setItem(STORAGE_KEYS.AUTH, "true");
     navigate("/");
   };
 
@@ -129,6 +171,12 @@ export function Auth() {
               <p className="text-muted-foreground mb-8">Sign in to continue studying 📚</p>
 
               <form onSubmit={handleLogin} className="space-y-5">
+                {errors.login && (
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm">
+                    {errors.login}
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-medium mb-2">Email</label>
                   <input
@@ -203,7 +251,7 @@ export function Auth() {
 
               <p className="text-center text-sm text-muted-foreground mt-6">
                 Don&apos;t have an account?{" "}
-                <button onClick={() => setView("signup")} className="text-primary font-medium hover:underline">
+                <button onClick={() => { setErrors({}); setView("signup"); }} className="text-primary font-medium hover:underline">
                   Sign up free
                 </button>
               </p>
@@ -237,8 +285,11 @@ export function Auth() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="emma@university.edu"
                     required
-                    className="w-full px-4 py-3 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all"
+                    className={`w-full px-4 py-3 rounded-xl bg-input-background border ${errors.email ? 'border-red-400' : 'border-border'} focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all`}
                   />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                  )}
                 </div>
 
                 <div>
@@ -251,7 +302,7 @@ export function Auth() {
                       placeholder="Min 8 characters"
                       required
                       minLength={8}
-                      className="w-full px-4 py-3 pr-12 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all"
+                      className={`w-full px-4 py-3 pr-12 rounded-xl bg-input-background border ${errors.password ? 'border-red-400' : 'border-border'} focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all`}
                     />
                     <button
                       type="button"
@@ -261,6 +312,9 @@ export function Auth() {
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
+                  {errors.password && (
+                    <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                  )}
                 </div>
 
                 <div className="flex items-start gap-3">
@@ -284,7 +338,7 @@ export function Auth() {
 
               <p className="text-center text-sm text-muted-foreground mt-6">
                 Already have an account?{" "}
-                <button onClick={() => setView("login")} className="text-primary font-medium hover:underline">
+                <button onClick={() => { setErrors({}); setView("login"); }} className="text-primary font-medium hover:underline">
                   Sign in
                 </button>
               </p>

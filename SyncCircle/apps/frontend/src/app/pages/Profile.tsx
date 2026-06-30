@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "motion/react";
 import {
   User,
@@ -14,11 +14,17 @@ import {
   Edit,
   ChevronLeft,
   ChevronRight,
+  CheckCircle2,
+  Users,
+  StickyNote,
+  Sparkles,
 } from "lucide-react";
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
 } from "recharts";
+import { ProfileCharacter, type CharacterState } from "../components/ProfileCharacter";
+import { getUser, getSettings, getTasks, getFriends, getNotes } from "../lib/storage";
 
 // ——— Character customizer data ———
 const SKIN_TONES = ["#FDDBB4", "#F1C27D", "#E0AC69", "#C68642", "#8D5524"];
@@ -245,6 +251,47 @@ export function Profile() {
     outfitIdx: 0,
     accessory: "none",
   });
+  const [characterState, setCharacterState] = useState<CharacterState>("idle");
+
+  // Load user profile info from localStorage
+  const user = useMemo(() => getUser(), []);
+  const settings = useMemo(() => getSettings(), []);
+  const tasks = useMemo(() => getTasks(), []);
+  const friends = useMemo(() => getFriends(), []);
+  const notes = useMemo(() => getNotes(), []);
+
+  const displayName = user?.displayName || settings.profile.displayName || "Student";
+  const course = user?.course || settings.profile.course || "Your Course";
+  const avatar = user?.avatar || settings.profile.avatar || "";
+
+  // Profile stats from localStorage
+  const completedTasks = tasks.filter((t) => t.completed).length;
+  const totalTasks = tasks.length;
+  const friendsCount = friends.length;
+  const notesCount = notes.length;
+
+  // Check if any task was completed in the last hour to trigger celebration
+  useEffect(() => {
+    const oneHourAgo = Date.now() - 60 * 60 * 1000;
+    const recentlyCompleted = tasks.some(
+      (t) => t.completed && t.completedAt && new Date(t.completedAt).getTime() > oneHourAgo
+    );
+    if (recentlyCompleted) {
+      setCharacterState("celebration");
+    }
+  }, [tasks]);
+
+  const handleCelebrationComplete = () => {
+    setCharacterState("idle");
+  };
+
+  const toggleStudyMode = () => {
+    setCharacterState((prev) => (prev === "studying" ? "idle" : "studying"));
+  };
+
+  const triggerCelebration = () => {
+    setCharacterState("celebration");
+  };
 
   const set = (field: keyof CharConfig) => (v: any) => setCharConfig(prev => ({ ...prev, [field]: v }));
 
@@ -263,23 +310,27 @@ export function Profile() {
           <div className="flex items-center gap-6">
             {/* Character avatar preview */}
             <div className="w-24 h-24 rounded-3xl bg-white/20 backdrop-blur-sm flex items-center justify-center border-4 border-white/30 overflow-hidden">
-              <svg viewBox="0 0 120 180" width="70" height="70" className="mt-6">
-                <ellipse cx="60" cy="145" rx="32" ry="36" fill={OUTFIT_COLORS[charConfig.outfitIdx]} />
-                <rect x="52" y="106" width="16" height="12" rx="4" fill={SKIN_TONES[charConfig.skinIdx]} />
-                <circle cx="60" cy="72" r="36" fill={SKIN_TONES[charConfig.skinIdx]} />
-                <ellipse cx="60" cy="54" rx="34" ry="20" fill={HAIR_COLORS[charConfig.hairColorIdx]} />
-                <circle cx="48" cy="74" r="5" fill="#2C1810" />
-                <circle cx="72" cy="74" r="5" fill="#2C1810" />
-                <circle cx="50" cy="72" r="2" fill="white" />
-                <circle cx="74" cy="72" r="2" fill="white" />
-                <circle cx="40" cy="82" r="6" fill="#f4b8d0" opacity="0.5" />
-                <circle cx="80" cy="82" r="6" fill="#f4b8d0" opacity="0.5" />
-                <path d="M52 88 Q60 96 68 88" fill="none" stroke="#c07090" strokeWidth="2.5" strokeLinecap="round" />
-              </svg>
+              {avatar ? (
+                <img src={avatar} alt={displayName} className="w-full h-full object-cover" />
+              ) : (
+                <svg viewBox="0 0 120 180" width="70" height="70" className="mt-6">
+                  <ellipse cx="60" cy="145" rx="32" ry="36" fill={OUTFIT_COLORS[charConfig.outfitIdx]} />
+                  <rect x="52" y="106" width="16" height="12" rx="4" fill={SKIN_TONES[charConfig.skinIdx]} />
+                  <circle cx="60" cy="72" r="36" fill={SKIN_TONES[charConfig.skinIdx]} />
+                  <ellipse cx="60" cy="54" rx="34" ry="20" fill={HAIR_COLORS[charConfig.hairColorIdx]} />
+                  <circle cx="48" cy="74" r="5" fill="#2C1810" />
+                  <circle cx="72" cy="74" r="5" fill="#2C1810" />
+                  <circle cx="50" cy="72" r="2" fill="white" />
+                  <circle cx="74" cy="72" r="2" fill="white" />
+                  <circle cx="40" cy="82" r="6" fill="#f4b8d0" opacity="0.5" />
+                  <circle cx="80" cy="82" r="6" fill="#f4b8d0" opacity="0.5" />
+                  <path d="M52 88 Q60 96 68 88" fill="none" stroke="#c07090" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
+              )}
             </div>
             <div>
-              <h1 className="text-3xl font-bold mb-2">Emma Wilson</h1>
-              <p className="text-lg opacity-90 mb-3">Computer Science • Class of 2026</p>
+              <h1 className="text-3xl font-bold mb-2">{displayName}</h1>
+              <p className="text-lg opacity-90 mb-3">{course}</p>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-xl backdrop-blur-sm">
                   <Flame className="w-5 h-5" />
@@ -287,7 +338,7 @@ export function Profile() {
                 </div>
                 <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-xl backdrop-blur-sm">
                   <Trophy className="w-5 h-5" />
-                  <span className="font-semibold">4 Achievements</span>
+                  <span className="font-semibold">{completedTasks} Tasks Done</span>
                 </div>
               </div>
             </div>
@@ -298,6 +349,102 @@ export function Profile() {
           </button>
         </div>
       </motion.div>
+
+      {/* Profile Character & Stats Section */}
+      <div className="grid grid-cols-[auto_1fr] gap-6">
+        {/* Animated Profile Character */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="bg-card rounded-2xl border border-border p-6 flex flex-col items-center gap-4"
+        >
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-xl bg-[#b8a4d4]/20 flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-[#b8a4d4]" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold">Study Buddy</h2>
+              <p className="text-xs text-muted-foreground">Your animated companion</p>
+            </div>
+          </div>
+
+          <div className="w-52 h-52 rounded-2xl bg-gradient-to-br from-[#f0e6f6] to-[#d4e8f4] flex items-center justify-center border-2 border-border">
+            <ProfileCharacter
+              state={characterState}
+              onCelebrationComplete={handleCelebrationComplete}
+            />
+          </div>
+
+          <div className="flex gap-2 mt-2">
+            <button
+              onClick={toggleStudyMode}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                characterState === "studying"
+                  ? "bg-[#b8a4d4] text-white shadow-md"
+                  : "bg-accent hover:bg-accent/80"
+              }`}
+            >
+              {characterState === "studying" ? "📖 Studying..." : "📚 Study Mode"}
+            </button>
+            <button
+              onClick={triggerCelebration}
+              className="px-4 py-2 rounded-xl text-sm font-medium bg-accent hover:bg-accent/80 transition-all"
+            >
+              🎉 Celebrate
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Quick Stats from localStorage */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.08 }}
+          className="grid grid-cols-2 grid-rows-2 gap-4"
+        >
+          <div
+            className="bg-card rounded-2xl p-5 border border-border"
+            style={{ background: "linear-gradient(135deg, #b8a4d415 0%, transparent 100%)" }}
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: "#b8a4d430" }}>
+              <CheckCircle2 className="w-5 h-5" style={{ color: "#b8a4d4" }} />
+            </div>
+            <p className="text-2xl font-bold mb-1">{completedTasks}/{totalTasks}</p>
+            <p className="text-sm text-muted-foreground">Tasks Completed</p>
+          </div>
+          <div
+            className="bg-card rounded-2xl p-5 border border-border"
+            style={{ background: "linear-gradient(135deg, #f4b8d015 0%, transparent 100%)" }}
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: "#f4b8d030" }}>
+              <Users className="w-5 h-5" style={{ color: "#f4b8d0" }} />
+            </div>
+            <p className="text-2xl font-bold mb-1">{friendsCount}</p>
+            <p className="text-sm text-muted-foreground">Study Friends</p>
+          </div>
+          <div
+            className="bg-card rounded-2xl p-5 border border-border"
+            style={{ background: "linear-gradient(135deg, #d4f4e815 0%, transparent 100%)" }}
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: "#d4f4e830" }}>
+              <StickyNote className="w-5 h-5" style={{ color: "#4ade80" }} />
+            </div>
+            <p className="text-2xl font-bold mb-1">{notesCount}</p>
+            <p className="text-sm text-muted-foreground">Notes Created</p>
+          </div>
+          <div
+            className="bg-card rounded-2xl p-5 border border-border"
+            style={{ background: "linear-gradient(135deg, #d4e8f415 0%, transparent 100%)" }}
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: "#d4e8f430" }}>
+              <Target className="w-5 h-5" style={{ color: "#60a5fa" }} />
+            </div>
+            <p className="text-2xl font-bold mb-1">{totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0}%</p>
+            <p className="text-sm text-muted-foreground">Completion Rate</p>
+          </div>
+        </motion.div>
+      </div>
 
       {/* ——— Character Customizer ——— */}
       <motion.div
@@ -456,9 +603,9 @@ export function Profile() {
       <div className="grid grid-cols-4 gap-4">
         {[
           { label: "Total Study Hours", value: "87.3", icon: Clock, color: "#b8a4d4" },
-          { label: "Notes Shared", value: "56", icon: BookOpen, color: "#d4f4e8" },
+          { label: "Notes Shared", value: String(notesCount), icon: BookOpen, color: "#d4f4e8" },
           { label: "Study Sessions", value: "23", icon: Calendar, color: "#d4e8f4" },
-          { label: "Study Friends", value: "24", icon: User, color: "#f4b8d0" },
+          { label: "Study Friends", value: String(friendsCount), icon: User, color: "#f4b8d0" },
         ].map((stat, index) => (
           <motion.div
             key={stat.label}

@@ -1,454 +1,477 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { 
-  Settings as SettingsIcon, 
-  User, 
-  Bell, 
-  Lock, 
-  Palette, 
+import {
+  Settings as SettingsIcon,
+  User,
+  Bell,
+  Lock,
+  Palette,
   Accessibility,
   Sparkles,
-  Moon,
-  Sun,
-  Volume2,
-  Eye,
-  Shield,
-  Globe,
-  Smartphone,
-  ChevronRight,
 } from "lucide-react";
+import { useTheme } from "../hooks/useTheme";
+import { getSettings, saveSettings } from "../lib/storage";
+import type { UserSettings } from "../types";
 
 const settingsSections = [
-  { id: "account", label: "Account", icon: User },
   { id: "appearance", label: "Appearance", icon: Palette },
   { id: "notifications", label: "Notifications", icon: Bell },
   { id: "privacy", label: "Privacy & Security", icon: Lock },
   { id: "accessibility", label: "Accessibility", icon: Accessibility },
+  { id: "profile", label: "Profile", icon: User },
   { id: "ai", label: "AI Preferences", icon: Sparkles },
 ];
 
-const pastelThemes = [
-  { name: "Lavender Dream", primary: "#b8a4d4", secondary: "#f4b8d0" },
-  { name: "Ocean Breeze", primary: "#d4e8f4", secondary: "#d4f4e8" },
-  { name: "Peachy Keen", primary: "#ffd4c8", secondary: "#fef4d4" },
-  { name: "Mint Fresh", primary: "#d4f4e8", secondary: "#d4e8f4" },
-  { name: "Rose Garden", primary: "#f4b8d0", secondary: "#fef4d4" },
-  { name: "Twilight Sky", primary: "#b8a4d4", secondary: "#d4e8f4" },
-];
-
 export function Settings() {
-  const [activeSection, setActiveSection] = useState("account");
-  const [darkMode, setDarkMode] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState(pastelThemes[0]);
-  const [notifications, setNotifications] = useState({
-    studySessions: true,
-    friendRequests: true,
-    noteShares: true,
-    achievements: true,
-    reminders: true,
-    messages: true,
-  });
+  const [activeSection, setActiveSection] = useState("appearance");
+  const [settings, setSettings] = useState<UserSettings>(getSettings);
+  const { currentTheme, applyTheme, getAvailableThemes } = useTheme();
+
+  // Sync theme from context into local settings state on mount
+  useEffect(() => {
+    setSettings((prev) => ({
+      ...prev,
+      appearance: { ...prev.appearance, theme: currentTheme },
+    }));
+  }, [currentTheme]);
+
+  // Apply reduced motion globally
+  useEffect(() => {
+    if (settings.accessibility.reducedMotion) {
+      document.documentElement.classList.add("reduce-motion");
+    } else {
+      document.documentElement.classList.remove("reduce-motion");
+    }
+  }, [settings.accessibility.reducedMotion]);
+
+  const updateSettings = (updater: (prev: UserSettings) => UserSettings) => {
+    setSettings((prev) => {
+      const next = updater(prev);
+      saveSettings(next);
+      return next;
+    });
+  };
+
+  const themes = getAvailableThemes();
+
+  const renderToggle = (
+    checked: boolean,
+    onChange: () => void,
+    label: string
+  ) => (
+    <button
+      role="switch"
+      aria-checked={checked}
+      aria-label={label}
+      onClick={onChange}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+        checked ? "bg-primary" : "bg-switch-background"
+      }`}
+    >
+      <span
+        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+          checked ? "translate-x-6" : "translate-x-1"
+        }`}
+      />
+    </button>
+  );
+
+  const renderAppearance = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Theme</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {themes.map((theme) => (
+            <button
+              key={theme.name}
+              onClick={() => {
+                applyTheme(theme.name);
+                updateSettings((prev) => ({
+                  ...prev,
+                  appearance: { ...prev.appearance, theme: theme.name },
+                }));
+              }}
+              className={`p-4 rounded-xl border-2 transition-all ${
+                settings.appearance.theme === theme.name
+                  ? "border-primary shadow-lg"
+                  : "border-border hover:border-primary/50"
+              }`}
+            >
+              <div
+                className="w-full h-8 rounded-lg mb-3"
+                style={{
+                  backgroundColor: theme.variables["--primary"],
+                }}
+              />
+              <p className="font-medium text-sm">{theme.label}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Font Size</h3>
+        <div className="flex gap-4">
+          {(["small", "medium", "large"] as const).map((size) => (
+            <label
+              key={size}
+              className={`flex-1 flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                settings.appearance.fontSize === size
+                  ? "border-primary bg-primary/10"
+                  : "border-border hover:border-primary/50"
+              }`}
+            >
+              <input
+                type="radio"
+                name="fontSize"
+                value={size}
+                checked={settings.appearance.fontSize === size}
+                onChange={() =>
+                  updateSettings((prev) => ({
+                    ...prev,
+                    appearance: { ...prev.appearance, fontSize: size },
+                  }))
+                }
+                className="sr-only"
+              />
+              <span
+                className={`font-medium capitalize ${
+                  size === "small"
+                    ? "text-sm"
+                    : size === "large"
+                    ? "text-lg"
+                    : "text-base"
+                }`}
+              >
+                {size}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderNotifications = () => (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
+        <div>
+          <p className="font-medium">Push Notifications</p>
+          <p className="text-sm text-muted-foreground">
+            Receive push notifications on your device
+          </p>
+        </div>
+        {renderToggle(
+          settings.notifications.push,
+          () =>
+            updateSettings((prev) => ({
+              ...prev,
+              notifications: {
+                ...prev.notifications,
+                push: !prev.notifications.push,
+              },
+            })),
+          "Push Notifications"
+        )}
+      </div>
+      <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
+        <div>
+          <p className="font-medium">Email Notifications</p>
+          <p className="text-sm text-muted-foreground">
+            Receive email notifications for updates
+          </p>
+        </div>
+        {renderToggle(
+          settings.notifications.email,
+          () =>
+            updateSettings((prev) => ({
+              ...prev,
+              notifications: {
+                ...prev.notifications,
+                email: !prev.notifications.email,
+              },
+            })),
+          "Email Notifications"
+        )}
+      </div>
+    </div>
+  );
+
+  const renderPrivacy = () => (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
+        <div>
+          <p className="font-medium">Profile Visibility</p>
+          <p className="text-sm text-muted-foreground">
+            Who can see your profile
+          </p>
+        </div>
+        <select
+          value={settings.privacy.profileVisibility}
+          onChange={(e) =>
+            updateSettings((prev) => ({
+              ...prev,
+              privacy: {
+                ...prev.privacy,
+                profileVisibility: e.target.value as
+                  | "public"
+                  | "friends"
+                  | "private",
+              },
+            }))
+          }
+          className="px-4 py-2 rounded-lg bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+        >
+          <option value="public">Public</option>
+          <option value="friends">Friends Only</option>
+          <option value="private">Private</option>
+        </select>
+      </div>
+      <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
+        <div>
+          <p className="font-medium">Data Sharing</p>
+          <p className="text-sm text-muted-foreground">
+            Share usage data for personalized AI recommendations
+          </p>
+        </div>
+        {renderToggle(
+          settings.privacy.dataSharing,
+          () =>
+            updateSettings((prev) => ({
+              ...prev,
+              privacy: {
+                ...prev.privacy,
+                dataSharing: !prev.privacy.dataSharing,
+              },
+            })),
+          "Data Sharing"
+        )}
+      </div>
+    </div>
+  );
+
+  const renderAccessibility = () => (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
+        <div>
+          <p className="font-medium">High Contrast</p>
+          <p className="text-sm text-muted-foreground">
+            Increase contrast for better readability
+          </p>
+        </div>
+        {renderToggle(
+          settings.accessibility.highContrast,
+          () =>
+            updateSettings((prev) => ({
+              ...prev,
+              accessibility: {
+                ...prev.accessibility,
+                highContrast: !prev.accessibility.highContrast,
+              },
+            })),
+          "High Contrast"
+        )}
+      </div>
+      <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
+        <div>
+          <p className="font-medium">Reduced Motion</p>
+          <p className="text-sm text-muted-foreground">
+            Disable animations and transitions
+          </p>
+        </div>
+        {renderToggle(
+          settings.accessibility.reducedMotion,
+          () =>
+            updateSettings((prev) => ({
+              ...prev,
+              accessibility: {
+                ...prev.accessibility,
+                reducedMotion: !prev.accessibility.reducedMotion,
+              },
+            })),
+          "Reduced Motion"
+        )}
+      </div>
+    </div>
+  );
+
+  const renderProfile = () => (
+    <div className="space-y-6">
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">Display Name</label>
+          <input
+            type="text"
+            value={settings.profile.displayName}
+            onChange={(e) =>
+              updateSettings((prev) => ({
+                ...prev,
+                profile: { ...prev.profile, displayName: e.target.value },
+              }))
+            }
+            placeholder="Enter your display name"
+            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Avatar</label>
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground text-xl font-bold">
+              {settings.profile.avatar ||
+                settings.profile.displayName
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase()
+                  .slice(0, 2) ||
+                "?"}
+            </div>
+            <input
+              type="text"
+              value={settings.profile.avatar}
+              onChange={(e) =>
+                updateSettings((prev) => ({
+                  ...prev,
+                  profile: { ...prev.profile, avatar: e.target.value },
+                }))
+              }
+              placeholder="Initials or emoji (e.g. 🎓)"
+              className="flex-1 px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Course / Program
+          </label>
+          <input
+            type="text"
+            value={settings.profile.course}
+            onChange={(e) =>
+              updateSettings((prev) => ({
+                ...prev,
+                profile: { ...prev.profile, course: e.target.value },
+              }))
+            }
+            placeholder="e.g. Computer Science"
+            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderAIPreferences = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Response Style</h3>
+        <div className="flex gap-4">
+          {(["concise", "balanced", "detailed"] as const).map((style) => (
+            <label
+              key={style}
+              className={`flex-1 flex flex-col items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                settings.aiPreferences.responseStyle === style
+                  ? "border-primary bg-primary/10"
+                  : "border-border hover:border-primary/50"
+              }`}
+            >
+              <input
+                type="radio"
+                name="responseStyle"
+                value={style}
+                checked={settings.aiPreferences.responseStyle === style}
+                onChange={() =>
+                  updateSettings((prev) => ({
+                    ...prev,
+                    aiPreferences: {
+                      ...prev.aiPreferences,
+                      responseStyle: style,
+                    },
+                  }))
+                }
+                className="sr-only"
+              />
+              <span className="font-medium capitalize">{style}</span>
+              <span className="text-xs text-muted-foreground mt-1">
+                {style === "concise"
+                  ? "Short & direct"
+                  : style === "detailed"
+                  ? "In-depth explanations"
+                  : "Mix of both"}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Planning Aggressiveness</h3>
+        <div className="flex gap-4">
+          {(["relaxed", "moderate", "intensive"] as const).map((level) => (
+            <label
+              key={level}
+              className={`flex-1 flex flex-col items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                settings.aiPreferences.planningAggressiveness === level
+                  ? "border-primary bg-primary/10"
+                  : "border-border hover:border-primary/50"
+              }`}
+            >
+              <input
+                type="radio"
+                name="planningAggressiveness"
+                value={level}
+                checked={
+                  settings.aiPreferences.planningAggressiveness === level
+                }
+                onChange={() =>
+                  updateSettings((prev) => ({
+                    ...prev,
+                    aiPreferences: {
+                      ...prev.aiPreferences,
+                      planningAggressiveness: level,
+                    },
+                  }))
+                }
+                className="sr-only"
+              />
+              <span className="font-medium capitalize">{level}</span>
+              <span className="text-xs text-muted-foreground mt-1">
+                {level === "relaxed"
+                  ? "Fewer reminders"
+                  : level === "intensive"
+                  ? "Proactive planning"
+                  : "Balanced nudges"}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 
   const renderSection = () => {
     switch (activeSection) {
-      case "account":
-        return (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Full Name</label>
-                  <input
-                    type="text"
-                    defaultValue="Emma Wilson"
-                    className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Email</label>
-                  <input
-                    type="email"
-                    defaultValue="emma.wilson@university.edu"
-                    className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Major</label>
-                  <input
-                    type="text"
-                    defaultValue="Computer Science"
-                    className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Year</label>
-                  <select className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20">
-                    <option>Freshman</option>
-                    <option>Sophomore</option>
-                    <option selected>Junior</option>
-                    <option>Senior</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="pt-4 border-t border-border">
-              <button className="px-6 py-2 rounded-xl bg-primary text-primary-foreground hover:shadow-lg transition-all">
-                Save Changes
-              </button>
-            </div>
-          </div>
-        );
-
       case "appearance":
-        return (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Theme Mode</h3>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setDarkMode(false)}
-                  className={`flex-1 p-4 rounded-xl border-2 transition-all ${
-                    !darkMode
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-primary/50'
-                  }`}
-                >
-                  <Sun className="w-8 h-8 mx-auto mb-2" />
-                  <p className="font-medium">Light Mode</p>
-                </button>
-                <button
-                  onClick={() => setDarkMode(true)}
-                  className={`flex-1 p-4 rounded-xl border-2 transition-all ${
-                    darkMode
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-primary/50'
-                  }`}
-                >
-                  <Moon className="w-8 h-8 mx-auto mb-2" />
-                  <p className="font-medium">Dark Mode</p>
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Pastel Color Theme</h3>
-              <div className="grid grid-cols-3 gap-4">
-                {pastelThemes.map((theme) => (
-                  <button
-                    key={theme.name}
-                    onClick={() => setSelectedTheme(theme)}
-                    className={`p-4 rounded-xl border-2 transition-all ${
-                      selectedTheme.name === theme.name
-                        ? 'border-primary shadow-lg'
-                        : 'border-border hover:border-primary/50'
-                    }`}
-                  >
-                    <div className="flex gap-2 mb-3">
-                      <div
-                        className="w-8 h-8 rounded-lg"
-                        style={{ backgroundColor: theme.primary }}
-                      ></div>
-                      <div
-                        className="w-8 h-8 rounded-lg"
-                        style={{ backgroundColor: theme.secondary }}
-                      ></div>
-                    </div>
-                    <p className="font-medium text-sm">{theme.name}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Interface Preferences</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div className="flex items-center gap-3">
-                    <Eye className="w-5 h-5 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">Compact Mode</p>
-                      <p className="text-sm text-muted-foreground">Show more content</p>
-                    </div>
-                  </div>
-                  <input type="checkbox" className="w-12 h-6 rounded-full" />
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div className="flex items-center gap-3">
-                    <Sparkles className="w-5 h-5 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">Animations</p>
-                      <p className="text-sm text-muted-foreground">Smooth transitions</p>
-                    </div>
-                  </div>
-                  <input type="checkbox" defaultChecked className="w-12 h-6 rounded-full" />
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderAppearance();
       case "notifications":
-        return (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Notification Preferences</h3>
-              <div className="space-y-3">
-                {Object.entries(notifications).map(([key, value]) => (
-                  <div
-                    key={key}
-                    className="flex items-center justify-between p-4 rounded-xl bg-accent/30"
-                  >
-                    <div>
-                      <p className="font-medium capitalize">
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Get notified about {key.toLowerCase()}
-                      </p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={value}
-                      onChange={() =>
-                        setNotifications({ ...notifications, [key]: !value })
-                      }
-                      className="w-12 h-6 rounded-full"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Notification Channels</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div className="flex items-center gap-3">
-                    <Bell className="w-5 h-5 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">Push Notifications</p>
-                      <p className="text-sm text-muted-foreground">Desktop & mobile</p>
-                    </div>
-                  </div>
-                  <input type="checkbox" defaultChecked className="w-12 h-6 rounded-full" />
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div className="flex items-center gap-3">
-                    <Volume2 className="w-5 h-5 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">Sound Alerts</p>
-                      <p className="text-sm text-muted-foreground">Audio notifications</p>
-                    </div>
-                  </div>
-                  <input type="checkbox" defaultChecked className="w-12 h-6 rounded-full" />
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderNotifications();
       case "privacy":
-        return (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Privacy Settings</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div className="flex items-center gap-3">
-                    <Eye className="w-5 h-5 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">Profile Visibility</p>
-                      <p className="text-sm text-muted-foreground">Who can see your profile</p>
-                    </div>
-                  </div>
-                  <select className="px-4 py-2 rounded-lg bg-input-background border border-border">
-                    <option>Everyone</option>
-                    <option selected>Friends Only</option>
-                    <option>Private</option>
-                  </select>
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div className="flex items-center gap-3">
-                    <Globe className="w-5 h-5 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">Activity Status</p>
-                      <p className="text-sm text-muted-foreground">Show when you're online</p>
-                    </div>
-                  </div>
-                  <input type="checkbox" defaultChecked className="w-12 h-6 rounded-full" />
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div className="flex items-center gap-3">
-                    <Shield className="w-5 h-5 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">Share Study Data</p>
-                      <p className="text-sm text-muted-foreground">For personalized AI recommendations</p>
-                    </div>
-                  </div>
-                  <input type="checkbox" defaultChecked className="w-12 h-6 rounded-full" />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Security</h3>
-              <div className="space-y-3">
-                <button className="w-full p-4 rounded-xl bg-accent/30 hover:bg-accent transition-colors flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Lock className="w-5 h-5 text-muted-foreground" />
-                    <div className="text-left">
-                      <p className="font-medium">Change Password</p>
-                      <p className="text-sm text-muted-foreground">Update your password</p>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                </button>
-                <button className="w-full p-4 rounded-xl bg-accent/30 hover:bg-accent transition-colors flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Smartphone className="w-5 h-5 text-muted-foreground" />
-                    <div className="text-left">
-                      <p className="font-medium">Two-Factor Authentication</p>
-                      <p className="text-sm text-muted-foreground">Add extra security</p>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                </button>
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderPrivacy();
       case "accessibility":
-        return (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Visual Accessibility</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div>
-                    <p className="font-medium">Text Size</p>
-                    <p className="text-sm text-muted-foreground">Adjust font size</p>
-                  </div>
-                  <select className="px-4 py-2 rounded-lg bg-input-background border border-border">
-                    <option>Small</option>
-                    <option selected>Medium</option>
-                    <option>Large</option>
-                    <option>Extra Large</option>
-                  </select>
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div>
-                    <p className="font-medium">High Contrast</p>
-                    <p className="text-sm text-muted-foreground">Improve readability</p>
-                  </div>
-                  <input type="checkbox" className="w-12 h-6 rounded-full" />
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div>
-                    <p className="font-medium">Reduce Motion</p>
-                    <p className="text-sm text-muted-foreground">Minimize animations</p>
-                  </div>
-                  <input type="checkbox" className="w-12 h-6 rounded-full" />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Screen Reader</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div>
-                    <p className="font-medium">Enable Screen Reader Support</p>
-                    <p className="text-sm text-muted-foreground">Optimize for assistive technology</p>
-                  </div>
-                  <input type="checkbox" className="w-12 h-6 rounded-full" />
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderAccessibility();
+      case "profile":
+        return renderProfile();
       case "ai":
-        return (
-          <div className="space-y-6">
-            <div className="p-4 rounded-xl bg-gradient-to-br from-[#b8a4d4]/20 to-[#f4b8d0]/20 border border-[#b8a4d4]/30">
-              <div className="flex items-center gap-3 mb-2">
-                <Sparkles className="w-5 h-5 text-[#b8a4d4]" />
-                <h4 className="font-semibold">AI Study Assistant</h4>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Customize how the AI assistant helps with your studying
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">AI Features</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div>
-                    <p className="font-medium">Smart Scheduling</p>
-                    <p className="text-sm text-muted-foreground">AI suggests optimal meeting times</p>
-                  </div>
-                  <input type="checkbox" defaultChecked className="w-12 h-6 rounded-full" />
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div>
-                    <p className="font-medium">Study Recommendations</p>
-                    <p className="text-sm text-muted-foreground">Personalized study tips</p>
-                  </div>
-                  <input type="checkbox" defaultChecked className="w-12 h-6 rounded-full" />
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div>
-                    <p className="font-medium">Break Reminders</p>
-                    <p className="text-sm text-muted-foreground">AI suggests when to take breaks</p>
-                  </div>
-                  <input type="checkbox" defaultChecked className="w-12 h-6 rounded-full" />
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                  <div>
-                    <p className="font-medium">Note Summaries</p>
-                    <p className="text-sm text-muted-foreground">Auto-generate note summaries</p>
-                  </div>
-                  <input type="checkbox" defaultChecked className="w-12 h-6 rounded-full" />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Learning Style</h3>
-              <div className="space-y-3">
-                <div className="p-4 rounded-xl bg-accent/30">
-                  <p className="font-medium mb-2">Preferred Study Time</p>
-                  <select className="w-full px-4 py-2 rounded-lg bg-input-background border border-border">
-                    <option selected>Morning (6 AM - 12 PM)</option>
-                    <option>Afternoon (12 PM - 6 PM)</option>
-                    <option>Evening (6 PM - 12 AM)</option>
-                    <option>Night (12 AM - 6 AM)</option>
-                  </select>
-                </div>
-                <div className="p-4 rounded-xl bg-accent/30">
-                  <p className="font-medium mb-2">Focus Duration</p>
-                  <select className="w-full px-4 py-2 rounded-lg bg-input-background border border-border">
-                    <option>25 minutes (Pomodoro)</option>
-                    <option selected>50 minutes (Standard)</option>
-                    <option>90 minutes (Deep Focus)</option>
-                    <option>Custom</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderAIPreferences();
       default:
         return null;
     }
   };
 
   return (
-    <div className="grid grid-cols-[280px_1fr] gap-6 max-w-7xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 max-w-7xl mx-auto">
       {/* Sidebar */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -456,12 +479,14 @@ export function Settings() {
         className="bg-card rounded-2xl border border-border p-4"
       >
         <div className="flex items-center gap-3 mb-6 p-2">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
             <SettingsIcon className="w-5 h-5 text-white" />
           </div>
           <div>
             <h2 className="text-xl font-bold">Settings</h2>
-            <p className="text-xs text-muted-foreground">Customize your experience</p>
+            <p className="text-xs text-muted-foreground">
+              Customize your experience
+            </p>
           </div>
         </div>
 
@@ -472,8 +497,8 @@ export function Settings() {
               onClick={() => setActiveSection(section.id)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                 activeSection === section.id
-                  ? 'bg-primary text-primary-foreground shadow-lg'
-                  : 'hover:bg-accent'
+                  ? "bg-primary text-primary-foreground shadow-lg"
+                  : "hover:bg-accent"
               }`}
             >
               <section.icon className="w-5 h-5" />
@@ -491,7 +516,7 @@ export function Settings() {
         className="bg-card rounded-2xl border border-border p-8"
       >
         <h2 className="text-2xl font-bold mb-6">
-          {settingsSections.find(s => s.id === activeSection)?.label}
+          {settingsSections.find((s) => s.id === activeSection)?.label}
         </h2>
         {renderSection()}
       </motion.div>

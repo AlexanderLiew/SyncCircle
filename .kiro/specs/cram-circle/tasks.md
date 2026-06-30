@@ -2,431 +2,301 @@
 
 ## Overview
 
-Build the CramCircle educational dashboard MVP as a TypeScript monorepo with AWS serverless backend (Lambda + API Gateway + DynamoDB), Amazon Bedrock AI integration, and Next.js frontend. Implementation follows an incremental approach: shared types and infrastructure first, then core services, then integration and AI features.
+This plan makes the existing Vite React prototype functional by adding a shared data layer (TypeScript types, localStorage helpers, validators), connecting each page to real CRUD operations, integrating Kiro API for AI features, wiring Workato webhooks for Google sync, implementing the theme system, and adding the animated Profile Character. All tasks build incrementally on the existing `SyncCircle/apps/frontend/` codebase.
 
 ## Tasks
 
-- [ ] 1. Set up monorepo structure, shared types, and infrastructure
-  - [ ] 1.1 Initialize monorepo with package structure and tooling
-    - Create `packages/shared/`, `packages/backend/`, `packages/frontend/` directories
-    - Initialize root `package.json` with workspaces configuration
-    - Configure TypeScript (`tsconfig.json`) for each package with shared base config
-    - Set up Vitest as the test runner with fast-check dependency
-    - Add ESLint and Prettier configurations
-    - _Requirements: 10.1_
+- [x] 1. Create shared data layer (types, localStorage helpers, validators)
+  - [x] 1.1 Create TypeScript interfaces and types
+    - Create `src/app/types/index.ts` with all entity interfaces: User, TimetableClass, Task, Note, Folder, StudyGroup, Friend, ChatMessage, UserSettings, ThemeName, ThemeDefinition
+    - Define the localStorage key constants as an enum or const object
+    - _Requirements: 4.2, 6.4, 7.2, 9.3, 12.1, 14.1, 15.1_
 
-  - [ ] 1.2 Define shared TypeScript types and interfaces
-    - Create `packages/shared/src/types.ts` with all interfaces: User, StudyGroup, InviteLink, AcademicEvent, PersonalEvent, RecurrencePattern, EventCategory, BusyBlock, Note, TodoItem, FreeWindow, ApiResponse
-    - Create `packages/shared/src/constants.ts` with validation limits and enums (DayOfWeek, Priority, TodoStatus)
-    - Export types from package index
-    - _Requirements: 10.6, 4.1, 6.1, 8.1, 9.1_
+  - [x] 1.2 Create localStorage CRUD helpers
+    - Create `src/app/lib/storage.ts` implementing the StorageLayer interface
+    - Implement getClasses, saveClass, deleteClass, getTasks, saveTask, deleteTask, getNotes, saveNote, getFolders, saveFolder, getFriends, saveFriend, removeFriend, getSettings, saveSettings, getGroups, joinGroup, getMessages, saveMessage, getUser, saveUser
+    - Each function reads/writes JSON to localStorage using the key constants
+    - _Requirements: 4.2, 6.4, 7.2, 7.4, 9.3, 12.1, 15.2_
 
-  - [ ] 1.3 Create shared validation utilities
-    - Implement `validateEmail(email: string)` — RFC 5322 format, max 254 chars
-    - Implement `validatePassword(password: string)` — 8-128 chars
-    - Implement `validateGroupName(name: string)` — 1-100 chars
-    - Implement `validateAcademicEvent(event)` — all field validations
-    - Implement `validatePersonalEvent(event)` — title 1-100 chars, end > start
-    - Implement `validateCategory(category)` — name 1-50 chars, valid hex color, count < 20
-    - Implement `validateNote(note)` — title 1-200 chars, content 1-50000 chars
-    - Implement `validateTodoItem(item)` — title 1-200 chars, valid priority/status
-    - _Requirements: 1.1, 1.3, 2.1, 4.5, 6.9, 8.6, 9.8_
+  - [x] 1.3 Create form validators
+    - Create `src/app/lib/validators.ts` with pure validation functions
+    - Implement: validateEmail, validatePassword (min 8 chars), validateClassForm (all required fields + endTime > startTime), validateTaskForm (non-empty title), validateGroupJoin (non-empty name + exactly 4 numeric digits)
+    - Return structured error objects with field-level messages
+    - _Requirements: 2.4, 2.5, 4.5, 6.4, 9.2_
 
-  - [ ]* 1.4 Write property tests for shared validation utilities
-    - **Property 1: Registration Input Validation** — random emails and passwords verify accept/reject boundary
-    - **Property 3: Group Name Validation** — random strings 0-200 chars verify 1-100 acceptance
-    - **Property 7: Academic Event Validation** — random event objects with valid/invalid fields
-    - **Property 11: Personal Event and Category Validation** — random events and categories
-    - **Property 17: Note Validation** — random note objects
-    - **Property 20: Todo Item Validation** — random todo objects
-    - **Validates: Requirements 1.1, 1.3, 2.1, 4.1, 4.5, 6.1, 6.2, 6.9, 8.1, 8.6, 9.1, 9.8**
+  - [x] 1.4 Create useLocalStorage generic hook
+    - Create `src/app/hooks/useLocalStorage.ts` — a generic React hook for reading and writing typed values to localStorage with automatic re-render on change
+    - _Requirements: 4.2, 6.4, 7.2, 15.2_
 
-  - [ ] 1.5 Set up DynamoDB table definition and infrastructure-as-code
-    - Create AWS SAM or CDK template defining the CramCircle single table
-    - Define PK/SK schema, GSI1 (GSI1PK, GSI1SK), GSI2 (GSI2PK, GSI2SK)
-    - Configure provisioned/on-demand capacity settings
-    - Add API Gateway REST API resource with JWT authorizer
-    - Define Lambda function resources for each service
-    - _Requirements: 10.1, 10.2_
+  - [x]* 1.5 Write property tests for validators
+    - **Property 1: Registration validation rejects invalid inputs**
+    - **Property 5: Invalid class data is rejected**
+    - **Validates: Requirements 2.4, 2.5, 4.5**
 
-- [ ] 2. Implement Authentication Service
-  - [ ] 2.1 Implement auth service core logic
-    - Create `packages/backend/src/services/auth.service.ts`
-    - Implement `hashPassword()` using bcrypt with salt rounds = 12
-    - Implement `verifyPassword()` for credential verification
-    - Implement `generateToken()` — JWT with 24h expiry, HMAC-SHA256
-    - Implement `validateToken()` — verify signature and expiry
-    - Implement `checkRateLimit()` — query LoginAttempt records within 15-min window, block at 5 failures
-    - _Requirements: 1.1, 1.2, 1.4, 1.5_
+  - [x]* 1.6 Write property tests for localStorage CRUD
+    - **Property 4: Valid class creation persists and displays**
+    - **Property 6: Class and task deletion removes entity**
+    - **Property 9: Task creation persists with all fields**
+    - **Property 10: Task completion is a one-way state transition**
+    - **Property 22: Settings persistence round-trip**
+    - **Validates: Requirements 4.2, 4.4, 6.4, 6.5, 6.6, 15.2**
 
-  - [ ] 2.2 Implement auth Lambda handler with registration and login endpoints
-    - Create `packages/backend/src/handlers/auth.handler.ts`
-    - POST `/auth/register` — validate input, check duplicate email, hash password, store user, return JWT
-    - POST `/auth/login` — validate input, check rate limit, verify credentials, record attempt, return JWT
-    - Map all errors to ApiResponse envelope with correct HTTP status codes
-    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 10.5, 10.6_
+- [x] 2. Implement the Theme System
+  - [x] 2.1 Create theme configuration and definitions
+    - Create `src/app/lib/theme-config.ts` with 5 theme definitions: 'darker-purple' (default), 'ocean-blue', 'forest-green', 'sunset-warm', 'midnight-dark'
+    - Each theme is a Record of CSS custom property names to values (background, foreground, primary, secondary, accent, card, border, etc.)
+    - _Requirements: 14.1, 14.2_
 
-  - [ ]* 2.3 Write property test for rate limiting
-    - **Property 2: Rate Limiting Threshold** — random sequences of timestamps within/across 15-min windows verify block at N≥5
-    - **Validates: Requirements 1.5**
+  - [x] 2.2 Create ThemeProvider component and useTheme hook
+    - Create `src/app/components/ThemeProvider.tsx` — wraps the app, reads persisted theme on mount, applies CSS variables to document.documentElement
+    - Create `src/app/hooks/useTheme.ts` — exposes currentTheme, applyTheme(), getAvailableThemes()
+    - On theme change, iterate CSS variable map and call `document.documentElement.style.setProperty()` for each
+    - Persist selected theme to `synccircle_theme` in localStorage
+    - _Requirements: 14.3, 14.4_
 
-  - [ ]* 2.4 Write unit tests for auth service
-    - Test successful registration flow
-    - Test duplicate email rejection
-    - Test login with valid/invalid credentials
-    - Test generic error message on failed login (no email/password leak)
-    - Test token generation and validation lifecycle
-    - Test account lockout after 5 failed attempts
-    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 2.3 Integrate ThemeProvider into the app root
+    - Wrap the app in `ThemeProvider` in `src/main.tsx` or `src/app/App.tsx`
+    - Ensure default darker-purple theme is applied on first load
+    - _Requirements: 14.1, 14.4_
 
-- [ ] 3. Implement Group Service
-  - [ ] 3.1 Implement group service core logic
-    - Create `packages/backend/src/services/group.service.ts`
-    - Implement `createGroup()` — generate groupId, store GROUP#META + MEMBER record, generate invite code
-    - Implement `generateInviteCode()` — 8-char URL-safe random string with uniqueness check
-    - Implement `joinGroup()` — validate invite code, check membership limit (50), add MEMBER record
-    - Implement `leaveGroup()` — remove MEMBER record, update member count
-    - Implement `listUserGroups()` — query GSI1 for USER# → GROUP# entries
-    - Implement `getGroupDetails()` — fetch META + all MEMBER# records
-    - Implement `validateMembershipLimit()` — check < 50 groups
-    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 3.4, 3.5_
+  - [x]* 2.4 Write property tests for theme system
+    - **Property 20: Theme application updates CSS variables**
+    - **Property 21: Theme persistence round-trip**
+    - **Validates: Requirements 14.3, 14.4**
 
-  - [ ] 3.2 Implement group Lambda handler with all endpoints
-    - Create `packages/backend/src/handlers/group.handler.ts`
-    - POST `/groups` — create group
-    - GET `/groups` — list user's groups
-    - GET `/groups/:id` — get group details with member list
-    - POST `/groups/:id/leave` — leave group
-    - POST `/groups/join/:inviteCode` — join via invite link
-    - Enforce authentication on all endpoints
-    - Map errors to ApiResponse envelope
-    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 3.4, 3.5, 10.2, 10.5, 10.6_
+- [x] 3. Make Auth Page functional
+  - [x] 3.1 Implement registration and login logic
+    - Update `src/app/pages/Auth.tsx` to use validators for email/password
+    - On valid registration: create User object, save to localStorage, set `synccircle_auth` flag, redirect to Dashboard
+    - On valid login: check credentials against stored user, set auth flag, redirect
+    - Display inline field-level validation errors for invalid registration inputs
+    - Display generic "Invalid credentials" message for failed login (never reveal which field)
+    - _Requirements: 2.1, 2.2, 2.4, 2.5_
 
-  - [ ]* 3.3 Write property tests for group service
-    - **Property 4: Invite Code Uniqueness** — generate N codes, verify set size = N
-    - **Property 5: Group Membership Leave** — after leave, user not in group and group not in user's list
-    - **Validates: Requirements 2.2, 3.4**
+  - [x]* 3.2 Write property test for login failure message
+    - **Property 2: Login failure message is generic**
+    - **Validates: Requirements 2.5**
 
-  - [ ]* 3.4 Write unit tests for group service
-    - Test group creation assigns creator as member
-    - Test invite link generation and join flow
-    - Test invalid/expired invite link rejection
-    - Test already-a-member message on duplicate join
-    - Test 50-group membership limit enforcement
-    - Test leave group removes membership bidirectionally
-    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.4, 3.5_
-
-- [ ] 4. Checkpoint - Ensure all tests pass
+- [x] 4. Checkpoint - Core data layer and auth
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. Implement Timetable Service (Academic Events)
-  - [ ] 5.1 Implement timetable service core logic for academic events
-    - Create `packages/backend/src/services/timetable.service.ts`
-    - Implement `createAcademicEvent()` — validate fields, store with USER# PK and ACADEMIC# SK, index in GSI1 by group
-    - Implement `updateAcademicEvent()` — verify ownership, validate fields, persist changes
-    - Implement `deleteAcademicEvent()` — verify ownership, remove record
-    - Implement `expandRecurrence()` — generate occurrences within a date range from recurrence days
-    - Implement `getUserTimetable()` — query GSI2 by time range, expand recurrences, merge academic + personal
-    - Implement `validateTimeRange()` — ensure end > start, range ≤ 90 days
-    - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
+- [x] 5. Make Dashboard Page functional
+  - [x] 5.1 Connect Dashboard to localStorage data
+    - Update `src/app/pages/Dashboard.tsx` to read tasks, classes, and groups from localStorage using the storage helpers
+    - Display upcoming tasks (sorted by due date, incomplete only)
+    - Display today's schedule highlights (classes for the current day of week)
+    - Display recent collaboration activity (latest group messages or shared notes)
+    - Make scheduled class items clickable to navigate to Timetable page
+    - _Requirements: 3.1, 3.2, 3.3_
 
-  - [ ]* 5.2 Write property tests for timetable query and validation
-    - **Property 6: Timetable Date Range Query Correctness** — random events + random date ranges verify all-and-only overlapping events returned
-    - **Validates: Requirements 4.2**
+  - [x]* 5.2 Write property test for Dashboard rendering
+    - **Property 3: Dashboard renders all data sections**
+    - **Validates: Requirements 3.1**
 
-  - [ ] 5.3 Implement personal event and category management
-    - Implement `createPersonalEvent()` — validate, store with PERSONAL# SK
-    - Implement `updatePersonalEvent()` — verify ownership, validate, persist
-    - Implement `deletePersonalEvent()` — verify ownership, remove
-    - Implement `createCategory()` — validate name/color, check < 20 limit, persist
-    - Implement `updateCategory()` — persist changes, reflect on associated events
-    - Implement `deleteCategory()` — remove category, nullify categoryId on associated events
-    - Implement `maskPersonalEvents()` — strip title/category/details, return BusyBlock with time only
-    - Implement `getGroupTimetable()` — fetch all members' events, mask personal events for non-owners
-    - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9_
+- [x] 6. Make Timetable Page functional
+  - [x] 6.1 Implement Calendar/Task tab toggle
+    - Update `src/app/pages/Timetable.tsx` to use Radix UI Tabs for Your_Calendar_Tab and Your_Task_Tab
+    - Calendar tab shows weekly grid view with classes positioned by day/time
+    - Task tab shows active tasks list and completed tasks section
+    - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ]* 5.4 Write property tests for privacy masking and event validation
-    - **Property 10: Privacy Masking Completeness** — random personal events verify non-owner sees only time, owner sees all
-    - **Validates: Requirements 6.7, 6.8**
+  - [x] 6.2 Implement Add Class form with validation
+    - Add an "Add Class" button that opens a dialog/form
+    - Form fields: title, moduleCode, location, dayOfWeek (Mon-Fri dropdown), startTime, endTime
+    - Validate using `validateClassForm`, show inline errors on failure
+    - On success: persist via storage.saveClass(), display on calendar grid, trigger Workato sync
+    - Support edit and delete operations on existing classes
+    - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-  - [ ] 5.5 Implement timetable Lambda handler with all endpoints
-    - Create `packages/backend/src/handlers/timetable.handler.ts`
-    - POST `/events/academic` — create academic event
-    - PUT `/events/academic/:id` — update academic event
-    - DELETE `/events/academic/:id` — delete academic event
-    - POST `/events/personal` — create personal event
-    - PUT `/events/personal/:id` — update personal event
-    - DELETE `/events/personal/:id` — delete personal event
-    - POST `/events/categories` — create category
-    - PUT `/events/categories/:id` — update category
-    - DELETE `/events/categories/:id` — delete category
-    - GET `/events?start=&end=` — get own timetable
-    - GET `/events/group/:groupId?start=&end=` — get group timetable (privacy-masked)
-    - Enforce authentication and authorization on all endpoints
-    - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 10.2, 10.4, 10.5_
+  - [x] 6.3 Implement Task CRUD in Task tab
+    - Add task creation form: title (required), due date (optional), priority dropdown (High/Medium/Low, optional)
+    - Persist tasks via storage helpers
+    - Implement mark-as-complete (moves to completed section, sets completed flag + timestamp)
+    - Implement task deletion
+    - _Requirements: 6.4, 6.5, 6.6_
 
-  - [ ]* 5.6 Write unit tests for timetable service
-    - Test academic event CRUD with ownership verification
-    - Test personal event CRUD
-    - Test category CRUD with 20-limit enforcement
-    - Test recurrence expansion for various patterns
-    - Test privacy masking for group timetable views
-    - Test date range validation (≤ 90 days)
-    - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 6.1, 6.5, 6.6, 6.7, 6.8_
+  - [x] 6.4 Implement Friend Availability Dropdown and overlay
+    - Add a "Friend Availability" dropdown button above the calendar
+    - Dropdown shows checkboxes for each friend (from localStorage)
+    - When friends are selected, overlay their timetable blocks on the calendar with distinct colors per friend
+    - When deselected, remove that friend's overlay
+    - Highlight time slots where user + all selected friends are simultaneously free
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-- [ ] 6. Implement Timetable Grabber Service
-  - [ ] 6.1 Implement ICS file parser and validator
-    - Create `packages/backend/src/services/grabber.service.ts`
-    - Implement `validateIcsFile()` — check valid iCalendar format, size ≤ 5MB, ≤ 500 VEVENTs, at least 1 VEVENT
-    - Implement `parseIcsFile()` — extract VEVENT components into AcademicEvent objects (title, start, end, recurrence, location)
-    - Implement `detectConflicts()` — compare imported events against existing events, flag overlapping time ranges
-    - _Requirements: 5.5, 5.6, 5.8, 5.9_
+  - [x]* 6.5 Write property tests for Timetable features
+    - **Property 7: Friend overlay round-trip**
+    - **Property 8: Free slot computation correctness**
+    - **Property 24: Friend availability dropdown renders all friends**
+    - **Validates: Requirements 5.2, 5.3, 5.4, 5.5**
 
-  - [ ]* 6.2 Write property tests for ICS parsing and conflict detection
-    - **Property 8: ICS File Parsing Round-Trip** — random valid events serialized to ICS then parsed back should be equivalent
-    - **Property 9: Event Conflict Detection** — random time interval pairs verify overlap iff start₁ < end₂ AND start₂ < end₁
-    - **Validates: Requirements 5.5, 5.8**
-
-  - [ ] 6.3 Implement university portal extraction (stub with SIT support)
-    - Implement `extractFromPortal()` — HTTP client with 30-second timeout for university portal scraping
-    - Create portal-specific parsers for SIT (initial implementation), with extension points for NUS, SMU, polytechnics
-    - Handle connection failures with descriptive error and ICS fallback suggestion
-    - _Requirements: 5.1, 5.2, 5.7_
-
-  - [ ] 6.4 Implement grabber Lambda handler
-    - Create `packages/backend/src/handlers/grabber.handler.ts`
-    - POST `/grabber/extract` — initiate portal extraction, return extracted events for confirmation
-    - POST `/grabber/confirm` — confirm and import extracted events, handle conflict resolution
-    - POST `/grabber/ics` — upload ICS file, validate, parse, detect conflicts, return for confirmation
-    - _Requirements: 5.1, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 10.5_
-
-  - [ ]* 6.5 Write unit tests for grabber service
-    - Test valid ICS file parsing with various VEVENT structures
-    - Test ICS rejection for invalid format, > 5MB, > 500 events, 0 events
-    - Test conflict detection with overlapping and non-overlapping intervals
-    - Test portal extraction timeout handling
-    - _Requirements: 5.5, 5.6, 5.7, 5.8, 5.9_
-
-- [ ] 7. Implement Notes Service
-  - [ ] 7.1 Implement notes service core logic
-    - Create `packages/backend/src/services/notes.service.ts`
-    - Implement `createNote()` — validate title/content/event, verify group membership, persist with NOTE# SK
-    - Implement `updateNote()` — verify group membership, validate content, persist with last-write-wins, update lastModifiedBy/At
-    - Implement `getNote()` — verify group membership, return full note content
-    - Implement `getGroupNotes()` — query all notes for group, order by associated Academic_Event date ascending
-    - Implement `getNotesForEvent()` — query GSI1 by EVENT# to find notes for a specific academic event
-    - Implement `verifyGroupMembership()` — check user is member of the group
-    - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7_
-
-  - [ ] 7.2 Implement notes Lambda handler
-    - Create `packages/backend/src/handlers/notes.handler.ts`
-    - GET `/notes/group/:groupId` — list notes for group ordered by event date
-    - POST `/notes/group/:groupId` — create note linked to academic event
-    - GET `/notes/:id` — get note content
-    - PUT `/notes/:id` — update note content (last-write-wins)
-    - Enforce authentication and group membership authorization
-    - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 10.2, 10.4, 10.5_
-
-  - [ ]* 7.3 Write property tests for notes service
-    - **Property 15: Notes Last-Write-Wins** — random edit sequences verify final state = last write content and lastModifiedBy = last editor
-    - **Property 16: Notes Ordering by Event Date** — random notes verify ascending chronological order by event date
-    - **Validates: Requirements 8.4, 8.5**
-
-  - [ ]* 7.4 Write unit tests for notes service
-    - Test note creation with valid/invalid event references
-    - Test authorization rejection for non-group-members
-    - Test note content update and metadata tracking
-    - Test notes listing ordered by academic event date
-    - _Requirements: 8.1, 8.2, 8.3, 8.6, 8.7_
-
-- [ ] 8. Implement Todo Service
-  - [ ] 8.1 Implement todo service core logic
-    - Create `packages/backend/src/services/todo.service.ts`
-    - Implement `createTodo()` — validate item, set initial status "To Do", persist with TODO# SK
-    - Implement `updateTodo()` — verify ownership, validate fields, persist changes, set completedAt when status → Done
-    - Implement `deleteTodo()` — verify ownership, remove record
-    - Implement `listActiveTodos()` — query user's todos with status ≠ Done, sort by priority desc then due date asc (nulls last)
-    - Implement `listCompletedTodos()` — query user's todos with status = Done, sort by completedAt desc
-    - Implement `sortTodos()` — pure function: priority (High > Medium > Low), then due date asc, nulls last
-    - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 9.9_
-
-  - [ ] 8.2 Implement todo Lambda handler
-    - Create `packages/backend/src/handlers/todo.handler.ts`
-    - GET `/todos` — list active todos (sorted)
-    - GET `/todos/completed` — list completed todos
-    - POST `/todos` — create todo item
-    - PUT `/todos/:id` — update todo item
-    - DELETE `/todos/:id` — delete todo item
-    - Enforce authentication and ownership verification
-    - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 9.9, 10.2, 10.5_
-
-  - [ ]* 8.3 Write property tests for todo sorting
-    - **Property 18: Todo Sort Order** — random todo lists verify priority desc, then due date asc, nulls last
-    - **Property 19: Completed Todos Reverse Chronological Order** — random completed todos verify reverse completedAt order
-    - **Validates: Requirements 9.4, 9.5**
-
-  - [ ]* 8.4 Write unit tests for todo service
-    - Test todo creation with valid/invalid data
-    - Test status transitions (To Do → In Progress → Done → Delayed)
-    - Test ownership verification on update/delete
-    - Test active todo sorting with mixed priorities and due dates
-    - Test completed todos reverse chronological ordering
-    - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 9.9_
-
-- [ ] 9. Checkpoint - Ensure all tests pass
+- [x] 7. Checkpoint - Timetable fully functional
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 10. Implement AI Planner Service
-  - [ ] 10.1 Implement free window computation algorithm
-    - Create `packages/backend/src/services/ai-planner.service.ts`
-    - Implement `computeFreeWindows()` — for each day, collect all member events, merge overlapping busy intervals, compute complement within 08:00-22:00, filter by minimum duration
-    - Implement `mergeBusyIntervals()` — sort and merge overlapping time intervals into consolidated timeline
-    - Implement `parseDuration()` — extract meeting duration (15min-8hr) from natural language text
-    - _Requirements: 7.1, 7.5, 7.6_
+- [x] 8. Make Notes Page functional
+  - [x] 8.1 Implement User Notes tab with folders
+    - Update `src/app/pages/Notes.tsx` to use Radix Tabs for "User's Notes" and "Shared Notes"
+    - User's Notes tab: display notes grouped by folders, allow folder creation (name input), allow note creation assigned to a folder
+    - Note CRUD: create, edit, delete notes with title and content
+    - Ensure no react/emote icons are shown on note items
+    - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.7_
 
-  - [ ]* 10.2 Write property tests for free window computation
-    - **Property 12: Free Window Correctness** — random member schedules verify windows are within 08:00-22:00, ≥ requested duration, no overlap with any member event, and contiguous
-    - **Property 13: Free Window Ordering** — verify at most 3 windows returned, ordered by earliest start time
-    - **Property 14: Duration Parsing** — random NL duration strings verify correct extraction
-    - **Validates: Requirements 7.1, 7.5, 7.6, 7.7**
+  - [x] 8.2 Implement Shared Notes tab with group filtering
+    - Shared Notes tab: display only notes from Study_Groups the user belongs to
+    - Organize shared notes in folders named after each group
+    - Display "Join Group" button
+    - _Requirements: 7.5, 7.6_
 
-  - [ ] 10.3 Implement Bedrock integration and AI response formatting
-    - Implement `buildPrompt()` — construct Claude Haiku prompt with group context and scheduling query
-    - Implement `invokeBedrock()` — call Amazon Bedrock with Claude Haiku model, 15-second timeout
-    - Implement `formatResponse()` — format top 3 earliest free windows with day, start time, end time, duration
-    - Handle case where no free windows exist — suggest shorter duration or different time range
-    - Default to next 7 calendar days when no date range specified
-    - _Requirements: 7.2, 7.3, 7.4, 7.7, 7.8_
-
-  - [ ] 10.4 Implement AI planner Lambda handler
-    - Create `packages/backend/src/handlers/ai-planner.handler.ts`
-    - POST `/ai/schedule` — accept NL query, parse duration, fetch group schedules, compute free windows, format response
-    - Enforce authentication and group membership
-    - Handle Bedrock timeout gracefully
-    - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 10.2, 10.4_
-
-  - [ ]* 10.5 Write unit tests for AI planner service
-    - Test free window computation with known schedules
-    - Test duration parsing for various NL expressions
-    - Test no-availability response generation
-    - Test 08:00-22:00 boundary enforcement
-    - Test top-3 ordering by earliest start time
-    - _Requirements: 7.1, 7.5, 7.6, 7.7, 7.8_
-
-- [ ] 11. Implement API middleware and response envelope
-  - [ ] 11.1 Implement JWT authorization middleware
-    - Create `packages/backend/src/middleware/auth.middleware.ts`
-    - Implement token extraction from Authorization header
-    - Implement token validation (signature + expiry check)
-    - Return 401 for missing, expired, or invalid tokens
-    - Skip auth for `/auth/register` and `/auth/login` endpoints
-    - _Requirements: 10.2, 10.3_
-
-  - [ ] 11.2 Implement API response formatter and error handler
-    - Create `packages/backend/src/middleware/response.middleware.ts`
-    - Implement consistent ApiResponse envelope for all responses
-    - Map service-layer errors to HTTP status codes (200, 201, 400, 401, 403, 404, 500)
-    - Include machine-readable error type and human-readable message
-    - Include per-field validation errors in the fields property
-    - Log full errors to CloudWatch, return sanitized errors to client
-    - _Requirements: 10.5, 10.6, 10.7_
-
-  - [ ]* 11.3 Write property tests for auth enforcement and response envelope
-    - **Property 21: Authentication Enforcement** — random tokens (expired, malformed, missing, valid) verify correct 401/pass-through behavior
-    - **Property 22: API Response Envelope Consistency** — random success/error responses verify envelope structure
-    - **Validates: Requirements 10.2, 10.3, 10.6, 10.7**
-
-- [ ] 12. Implement Next.js Frontend
-  - [ ] 12.1 Set up Next.js app with routing and auth context
-    - Create `packages/frontend/` with Next.js App Router
-    - Implement auth context provider (store JWT, handle login/logout state)
-    - Create login and registration pages with form validation
-    - Set up API client utility with token attachment and error handling
-    - Implement protected route wrapper (redirect to login if unauthenticated)
-    - _Requirements: 1.1, 1.2, 1.3, 10.2_
-
-  - [ ] 12.2 Implement dashboard and group management UI
-    - Create dashboard page showing user's groups, upcoming events, active todos
-    - Implement group creation form (name input, 1-100 chars)
-    - Implement group detail page showing members and invite link
-    - Implement join-via-invite flow
-    - Implement leave group confirmation dialog
-    - _Requirements: 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4_
-
-  - [ ] 12.3 Implement timetable calendar view
-    - Create weekly/daily calendar view component with time grid
-    - Display academic events with module code, title, and location
-    - Display personal events with category color coding (owner view)
-    - Display busy blocks for other members in group timetable view
-    - Implement event creation/edit forms for academic and personal events
-    - Implement category management (create, edit, delete with color picker)
-    - _Requirements: 4.1, 4.2, 4.3, 4.4, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8_
-
-  - [ ] 12.4 Implement timetable grabber and ICS import UI
-    - Create timetable import page with university portal selection
-    - Implement ICS file upload with drag-and-drop support
-    - Display extracted events for confirmation with conflict indicators
-    - Implement conflict resolution UI (overwrite/skip per event)
-    - Show error messages for invalid files or portal connection failures
-    - _Requirements: 5.1, 5.3, 5.4, 5.5, 5.7, 5.8, 5.9_
-
-  - [ ] 12.5 Implement collaborative notes UI
-    - Create notes list view for a group (ordered by event date)
-    - Implement note creation form with academic event selector
-    - Implement note editor with title and content fields
-    - Display last-modified timestamp and editor info
-    - _Requirements: 8.1, 8.2, 8.3, 8.5_
-
-  - [ ] 12.6 Implement todo list UI
-    - Create todo list page with active/completed tab views
-    - Implement todo creation form (title, priority, optional due date)
-    - Implement inline status update (To Do, In Progress, Done, Delayed)
-    - Implement priority indicator with visual differentiation
-    - Display sorted list (priority desc, due date asc, nulls last)
+  - [x] 8.3 Implement Join Group form
+    - "Join Group" button opens a form: group name input + 4-digit numeric password input
+    - Validate with `validateGroupJoin`
+    - On valid submission: check group exists and password matches, add user to group members, display group's shared notes
+    - On failure: show generic "Invalid credentials" error (don't reveal which field)
+    - If already a member: show "Already a member" message
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
-  - [ ] 12.7 Implement AI scheduling chat interface
-    - Create chat-style UI within group context for scheduling queries
-    - Implement natural language input for scheduling requests
-    - Display AI responses with formatted time slot suggestions
-    - Show loading state during AI processing
-    - Handle and display error/clarification messages from AI
-    - _Requirements: 7.1, 7.2, 7.7, 7.8_
+  - [x] 8.4 Implement AI Summarize button
+    - Add "AI Summarize" button on each note view
+    - On click: call Kiro API with note content, display loading state
+    - On success: display summary within the note view, persist to note.summary
+    - On timeout (30s): show timeout error with retry option
+    - On API error: show user-friendly error with retry button
+    - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [ ] 13. Integration and wiring
-  - [ ] 13.1 Wire API Gateway routes to Lambda handlers
-    - Configure API Gateway REST API with all route mappings
-    - Attach JWT authorizer to protected routes
-    - Configure CORS for frontend origin
-    - Set up environment variables for DynamoDB table name, Bedrock model ID, JWT secret
-    - _Requirements: 10.1, 10.2, 10.3, 10.4_
+  - [x]* 8.5 Write property tests for Notes features
+    - **Property 11: Notes display under assigned folders**
+    - **Property 12: Shared notes filtered by group membership**
+    - **Property 13: AI summary display**
+    - **Property 14: Group join with valid credentials succeeds**
+    - **Property 15: Group join error is generic**
+    - **Validates: Requirements 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.3, 9.4**
 
-  - [ ] 13.2 Connect frontend to backend API
-    - Configure API base URL in frontend environment
-    - Wire all frontend components to their corresponding API endpoints
-    - Implement error handling and user-facing error messages
-    - Test full authentication flow (register → login → access protected resources)
-    - _Requirements: 10.1, 10.5, 10.6_
+- [x] 9. Make AI Planner Page functional
+  - [x] 9.1 Create useKiroAPI hook
+    - Create `src/app/hooks/useKiroAPI.ts` implementing the KiroAPIClient interface
+    - `summarizeNote(content)`: POST to Kiro API summarize endpoint with 30s timeout
+    - `chatMessage(message, history, context)`: POST to Kiro API chat endpoint with 10s timeout
+    - Use AbortController for timeout, return `{ data, error }` pattern
+    - Include user context (timetable, tasks, settings.aiPreferences) in chat requests
+    - _Requirements: 8.2, 11.1, 11.2, 11.3_
 
-  - [ ]* 13.3 Write integration tests for key workflows
-    - Test registration → login → create group → invite → join flow
-    - Test create academic event → view timetable → view group timetable (masked)
-    - Test create note → edit note → verify last-write-wins
-    - Test AI scheduling query end-to-end with mocked Bedrock
-    - _Requirements: 1.1, 1.2, 2.1, 2.3, 4.1, 4.2, 6.7, 7.7, 8.3, 8.4_
+  - [x] 9.2 Implement AI Planner chatbot interface
+    - Update `src/app/pages/AIPlanner.tsx` to render a conversational chat UI
+    - Display message thread with user messages and AI responses
+    - Text input with send button at the bottom
+    - On send: call useKiroAPI.chatMessage with message, full conversation history, and user context
+    - Display AI response in the thread
+    - Maintain conversation history in localStorage (`synccircle_chat_history`)
+    - Show loading indicator while waiting for response
+    - On error/timeout: show error message with retry button
+    - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5, 11.6_
 
-- [ ] 14. Final checkpoint - Ensure all tests pass
+  - [x]* 9.3 Write property test for chat history
+    - **Property 16: Chat conversation history accumulates**
+    - **Validates: Requirements 11.2, 11.6**
+
+- [x] 10. Make Friends Page functional
+  - [x] 10.1 Implement Friends list and management
+    - Update `src/app/pages/Friends.tsx` to read friends from localStorage
+    - Display friend list with display name and online status
+    - Implement friend search (filter by name or email, case-insensitive substring match)
+    - Implement send friend request, accept request, remove friend
+    - Friendship is bidirectional (add to both users' lists)
+    - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
+
+  - [x]* 10.2 Write property tests for Friends features
+    - **Property 17: Friend list renders all friends with required data**
+    - **Property 18: Friendship is bidirectional**
+    - **Property 19: Friend search returns matching users**
+    - **Validates: Requirements 12.1, 12.3, 12.4, 12.5**
+
+- [x] 11. Checkpoint - Notes, AI Planner, and Friends functional
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 12. Make Settings Page fully functional
+  - [x] 12.1 Implement all 6 Settings sections
+    - Update `src/app/pages/Settings.tsx` to implement functional controls for all sections:
+    - **Appearance**: Theme selector (5 themes via useTheme hook), font size preference (small/medium/large)
+    - **Notifications**: Toggle push notifications, toggle email notifications
+    - **Privacy & Security**: Profile visibility dropdown (public/friends/private), data sharing toggle
+    - **Accessibility**: High contrast toggle, reduced motion toggle
+    - **Profile**: Display name input, avatar upload/selection, course/program input
+    - **AI Preferences**: Response style selector (concise/detailed/balanced), planning aggressiveness (relaxed/moderate/intensive)
+    - All changes persist to localStorage via storage.saveSettings() and apply immediately
+    - Reduced motion: disable Motion animations globally when enabled
+    - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5, 15.6, 15.7_
+
+- [x] 13. Implement animated Profile Character
+  - [x] 13.1 Create ProfileCharacter component with Motion animations
+    - Create `src/app/components/ProfileCharacter.tsx`
+    - Use Motion's `variants` API with three states: idle (breathing/floating), studying (head-bob), celebration (confetti + jump)
+    - idle: subtle scale oscillation + gentle Y translation loop
+    - studying: rotation keyframes simulating writing motion
+    - celebration: use `canvas-confetti` + Motion spring for jump animation
+    - Default to idle state, transition to celebration on task completion trigger
+    - _Requirements: 16.1, 16.2, 16.3, 16.4_
+
+  - [x] 13.2 Integrate ProfileCharacter into Profile page
+    - Update `src/app/pages/Profile.tsx` to render ProfileCharacter component
+    - Wire task completion events to trigger celebration state
+    - Display user profile info (name, course, avatar) from localStorage alongside the character
+    - _Requirements: 16.1, 16.3_
+
+- [x] 14. Wire Workato webhooks for Google sync
+  - [x] 14.1 Create Workato client and useWorkato hook
+    - Create `src/app/lib/workato-client.ts` with webhook URL configuration
+    - Create `src/app/hooks/useWorkato.ts` implementing the WorkatoClient interface
+    - `syncClass(action, classData)`: POST to Workato webhook with class data + action type
+    - `syncNote(action, noteData)`: POST to Workato webhook with note data
+    - `connectGoogleCalendar(userId)` / `disconnectGoogleCalendar(userId)`: trigger connection webhooks
+    - `connectGoogleNotes(userId)`: trigger Google Notes connection
+    - Fire-and-forget with toast notification on failure
+    - Store failed syncs in `synccircle_pending_syncs` for retry on next load
+    - _Requirements: 4.6, 10.1, 10.2, 17.1, 17.2, 17.3, 17.4, 17.5_
+
+  - [x] 14.2 Integrate Workato sync into Timetable and Notes pages
+    - After class add/edit/delete in Timetable: call useWorkato.syncClass()
+    - After note create/update in Notes: call useWorkato.syncNote()
+    - Show toast on sync failure: "Sync to Google Calendar/Notes failed. Changes saved locally."
+    - Add Google Calendar connect/disconnect controls in Settings page
+    - On app load: retry any pending syncs from `synccircle_pending_syncs`
+    - _Requirements: 4.6, 10.1, 10.3, 17.2, 17.4_
+
+  - [x]* 14.3 Write property test for Workato field mapping
+    - **Property 23: Workato class field mapping**
+    - **Validates: Requirements 17.3**
+
+- [x] 15. Implement Group Chat page and SyncCircle icon navigation
+  - [x] 15.1 Make Group Chat functional
+    - Update `src/app/pages/GroupChat.tsx` to display group chat threads
+    - Show message history from localStorage when opening a chat
+    - Implement message sending: persist to localStorage, display in thread
+    - Show sender name and timestamp for each message
+    - If group chat feature is disabled in settings, hide from nav menu
+    - _Requirements: 13.1, 13.2, 13.3, 13.4_
+
+  - [x] 15.2 Ensure SyncCircle icon navigates to Dashboard
+    - Update `src/app/components/Layout.tsx` to ensure the SyncCircle logo/icon in the sidebar navigates to the Dashboard page on click
+    - Verify the icon is visible and clickable on all authenticated pages
+    - _Requirements: 1.1, 1.2, 1.3_
+
+  - [x]* 15.3 Write property test for Group Chat
+    - **Property 25: Group chat messages display for all members**
+    - **Validates: Requirements 13.2, 13.3**
+
+- [x] 16. Final checkpoint - Full integration
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
 
-- Tasks marked with `*` are optional and can be skipped for faster MVP delivery
+- Tasks marked with `*` are optional and can be skipped for faster MVP
 - Each task references specific requirements for traceability
-- Checkpoints at tasks 4 and 9 ensure incremental validation of core services before building dependent features
+- Checkpoints ensure incremental validation
 - Property tests validate universal correctness properties from the design document
 - Unit tests validate specific examples and edge cases
-- The frontend tasks (12.x) can be developed in parallel with backend integration (13.x) using mock API responses
-- University portal scraping (task 6.3) should start with SIT as the primary target for the hackathon demo
+- The existing prototype pages are updated in-place — no new pages need to be created from scratch
+- localStorage is the persistence layer for the hackathon MVP; no traditional backend server is needed
+- Workato webhooks are fire-and-forget; the frontend always persists locally first (optimistic updates)
+- Kiro API endpoints and Workato webhook URLs should be configured via environment variables
 
 ## Task Dependency Graph
 
@@ -434,24 +304,17 @@ Build the CramCircle educational dashboard MVP as a TypeScript monorepo with AWS
 {
   "waves": [
     { "id": 0, "tasks": ["1.1"] },
-    { "id": 1, "tasks": ["1.2", "1.5"] },
-    { "id": 2, "tasks": ["1.3"] },
-    { "id": 3, "tasks": ["1.4", "2.1", "3.1"] },
-    { "id": 4, "tasks": ["2.2", "2.3", "3.2"] },
-    { "id": 5, "tasks": ["2.4", "3.3", "3.4"] },
-    { "id": 6, "tasks": ["5.1", "8.1"] },
-    { "id": 7, "tasks": ["5.2", "5.3", "8.2"] },
-    { "id": 8, "tasks": ["5.4", "5.5", "6.1", "8.3", "8.4"] },
-    { "id": 9, "tasks": ["5.6", "6.2", "6.3", "7.1"] },
-    { "id": 10, "tasks": ["6.4", "6.5", "7.2", "10.1"] },
-    { "id": 11, "tasks": ["7.3", "7.4", "10.2", "10.3"] },
-    { "id": 12, "tasks": ["10.4", "10.5", "11.1", "11.2"] },
-    { "id": 13, "tasks": ["11.3", "12.1"] },
-    { "id": 14, "tasks": ["12.2", "12.3", "12.6"] },
-    { "id": 15, "tasks": ["12.4", "12.5", "12.7"] },
-    { "id": 16, "tasks": ["13.1"] },
-    { "id": 17, "tasks": ["13.2"] },
-    { "id": 18, "tasks": ["13.3"] }
+    { "id": 1, "tasks": ["1.2", "1.3", "2.1"] },
+    { "id": 2, "tasks": ["1.4", "1.5", "1.6", "2.2"] },
+    { "id": 3, "tasks": ["2.3", "2.4", "3.1"] },
+    { "id": 4, "tasks": ["3.2", "5.1"] },
+    { "id": 5, "tasks": ["5.2", "6.1", "6.3", "9.1"] },
+    { "id": 6, "tasks": ["6.2", "6.4", "8.1", "10.1"] },
+    { "id": 7, "tasks": ["6.5", "8.2", "8.3", "10.2"] },
+    { "id": 8, "tasks": ["8.4", "8.5", "9.2"] },
+    { "id": 9, "tasks": ["9.3", "12.1", "14.1"] },
+    { "id": 10, "tasks": ["13.1", "14.2", "15.1", "15.2"] },
+    { "id": 11, "tasks": ["13.2", "14.3", "15.3"] }
   ]
 }
 ```

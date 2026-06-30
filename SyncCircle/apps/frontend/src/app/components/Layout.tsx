@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useNavigate } from "react-router";
+import { Outlet, NavLink, useNavigate, Link } from "react-router";
 import {
   Home,
   Calendar,
@@ -12,7 +12,9 @@ import {
   Bell,
   LogOut,
 } from "lucide-react";
+import { useEffect } from "react";
 import { motion } from "motion/react";
+import { useWorkato } from "../hooks/useWorkato";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: Home },
@@ -27,6 +29,13 @@ const navItems = [
 
 export function Layout() {
   const navigate = useNavigate();
+  const { retryPendingSyncs } = useWorkato();
+
+  // Retry any pending syncs from previous sessions on app load
+  useEffect(() => {
+    retryPendingSyncs();
+  }, [retryPendingSyncs]);
+
   const handleLogout = () => {
     localStorage.removeItem("synccircle_auth");
     navigate("/login");
@@ -38,21 +47,25 @@ export function Layout() {
       <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
         {/* Logo */}
         <div className="p-6 border-b border-sidebar-border">
-          <motion.div 
-            className="flex items-center gap-3"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] bg-clip-text text-transparent">
-                SyncCircle
-              </h1>
-              <p className="text-xs text-muted-foreground">Sync your study circle</p>
-            </div>
-          </motion.div>
+          <Link to="/" className="block cursor-pointer hover:opacity-80 transition-opacity" aria-label="Navigate to Dashboard">
+            <motion.div 
+              className="flex items-center gap-3"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] bg-clip-text text-transparent">
+                  SyncCircle
+                </h1>
+                <p className="text-xs text-muted-foreground">Sync your study circle</p>
+              </div>
+            </motion.div>
+          </Link>
         </div>
 
         {/* Navigation */}

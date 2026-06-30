@@ -2,627 +2,641 @@
 
 ## Overview
 
-CramCircle is a full-stack educational dashboard that eliminates administrative burden for students by unifying shared group timetables, personal schedule blocking, collaborative notes, and an AI-driven scheduling assistant. The system targets the AWS Kiro BuildFest 2026 "Most Practical Solution" category.
+CramCircle (SyncCircle) is a student collaboration web app for the AWS Kiro BuildFest 2026 Hackathon. It enables classmates to coordinate schedules, share study material, plan sessions with AI assistance, and communicate — all from a single Vite React frontend with Workato-powered backend integrations.
 
-**Key Design Decisions:**
-- **Monorepo TypeScript** — shared types between frontend and backend reduce integration bugs
-- **AWS Serverless** — Lambda + API Gateway + DynamoDB for zero-ops and free-tier friendliness during hackathon
-- **Amazon Bedrock (Claude Haiku)** — lightweight, cost-effective model for natural language scheduling queries
-- **Single-table DynamoDB design** — optimized for the primary access pattern: overlapping time range queries across group members
-- **Next.js frontend** — server-side rendering for fast initial load, React for rich calendar interactions
+The architecture follows a **frontend-heavy + webhook-based backend** pattern: the React SPA handles all user interactions and local state, while Workato recipes manage external integrations (Google Calendar, Google Notes). AI features (summarization, chat planner) call the Kiro API directly from the frontend.
+
+### Key Design Decisions
+
+1. **localStorage-first persistence** — For hackathon speed, all user data (classes, tasks, notes, settings, friends) is stored in localStorage. Workato webhooks sync relevant data to Google services asynchronously.
+2. **Workato as backend** — No traditional server. Workato recipes act as the integration layer, triggered via webhooks from the frontend.
+3. **Kiro API for AI** — Note summarization and the AI Planner chatbot use Kiro API endpoints, called directly from the frontend.
+4. **CSS variable theming** — The existing theme system uses CSS custom properties in `theme.css`, making theme switching a matter of updating variable values.
+5. **Motion animation library** — Already integrated for page transitions and UI micro-interactions; extended for the Profile Character animations.
 
 ## Architecture
 
 ```mermaid
-graph TB
-    subgraph Frontend
-        UI[Next.js App]
+graph TD
+    subgraph Frontend ["Vite React Frontend (apps/frontend)"]
+        Router[React Router]
+        Layout[Layout.tsx - Sidebar + Top Nav]
+        Pages[Page Components]
+        Store[localStorage Data Layer]
+        ThemeEngine[CSS Variable Theme Engine]
+        MotionLib[Motion Animation System]
     end
 
-    subgraph API Layer
-        APIGW[API Gateway REST]
+    subgraph ExternalAPIs ["External Services"]
+        KiroAPI[Kiro API - AI Features]
+        WorkatoRecipes[Workato Recipes]
+        GoogleCal[Google Calendar]
+        GoogleNotes[Google Notes]
     end
 
-    subgraph Compute
-        AUTH[Auth Lambda]
-        GROUP[Group Lambda]
-        TIMETABLE[Timetable Lambda]
-        NOTES[Notes Lambda]
-        TODO[Todo Lambda]
-        AI[AI Planner Lambda]
-        GRABBER[Timetable Grabber Lambda]
-    end
-
-    subgraph Data
-        DDB[(DynamoDB Single Table)]
-    end
-
-    subgraph AI Services
-        BEDROCK[Amazon Bedrock - Claude Haiku]
-    end
-
-    subgraph External
-        UNI[University Portals]
-    end
-
-    UI --> APIGW
-    APIGW --> AUTH
-    APIGW --> GROUP
-    APIGW --> TIMETABLE
-    APIGW --> NOTES
-    APIGW --> TODO
-    APIGW --> AI
-    APIGW --> GRABBER
-    AUTH --> DDB
-    GROUP --> DDB
-    TIMETABLE --> DDB
-    NOTES --> DDB
-    TODO --> DDB
-    AI --> DDB
-    AI --> BEDROCK
-    GRABBER --> UNI
-    GRABBER --> DDB
+    Router --> Layout
+    Layout --> Pages
+    Pages --> Store
+    Pages --> KiroAPI
+    Pages --> WorkatoRecipes
+    WorkatoRecipes --> GoogleCal
+    WorkatoRecipes --> GoogleNotes
+    Pages --> ThemeEngine
+    Pages --> MotionLib
 ```
 
-**Architectural Rationale:**
-- Each domain (auth, groups, timetable, notes, todo, AI) maps to a separate Lambda function for independent scaling and deployment
-- API Gateway provides a unified REST endpoint with JWT authorizer for token validation
-- DynamoDB single-table design avoids joins and enables efficient access patterns for the primary use case: finding free windows across multiple members
-- Amazon Bedrock integration avoids self-hosting ML infrastructure while staying within AWS ecosystem
+### System Layers
+
+| Layer | Technology | Responsibility |
+|-------|-----------|---------------|
+| UI Components | React + Radix UI + Tailwind CSS | Render pages, handle user input |
+| State & Persistence | localStorage + React state | Store user data, hydrate on load |
+| Theming | CSS custom properties (theme.css) | Color schemes, font sizes, dark mode |
+| Animation | Motion (framer-motion) | Page transitions, character animations |
+| AI Integration | Kiro API (fetch calls) | Note summarization, chat planner |
+| Backend Integration | Workato webhooks | Google Calendar sync, Google Notes sync |
+| Routing | React Router v7 | SPA navigation, protected routes |
 
 ## Components and Interfaces
 
-### 1. Authentication Service (`/api/auth`)
+### Page Component Structure
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/auth/register` | POST | Create account, return JWT |
-| `/auth/login` | POST | Authenticate, return JWT |
+```text
+src/app/
+├── components/
+│   ├── Layout.tsx              # Sidebar nav + top bar + Outlet
+│   ├── ui/                     # Radix UI primitives (button, dialog, tabs, etc.)
+│   ├── ProfileCharacter.tsx    # Animated study character (Motion)
+│   ├── FriendOverlay.tsx       # Friend availability overlay on calendar
+│   ├── ThemeProvider.tsx       # CSS variable theme switcher
+│   └── AISummarizeButton.tsx   # Kiro API summarization trigger
+├── pages/
+│   ├── Auth.tsx                # Login / Register / Forgot Password
+│   ├── Dashboard.tsx           # Overview: tasks, schedule, activity
+│   ├── Timetable.tsx           # Calendar + Tasks tabs, friend overlay
+│   ├── Notes.tsx               # User Notes + Shared Notes tabs
+│   ├── AIPlanner.tsx           # Kiro API chatbot interface
+│   ├── Friends.tsx             # Friend list, requests, search
+│   ├── GroupChat.tsx           # Real-time group messaging
+│   ├── Profile.tsx             # User profile + animated character
+│   └── Settings.tsx            # All settings sections
+├── hooks/
+│   ├── useLocalStorage.ts      # Generic localStorage read/write hook
+│   ├── useTheme.ts             # Theme selection and persistence
+│   ├── useKiroAPI.ts           # Kiro API fetch wrapper
+│   └── useWorkato.ts           # Workato webhook trigger wrapper
+├── lib/
+│   ├── storage.ts              # localStorage CRUD helpers
+│   ├── validators.ts           # Form validation (email, password, class times)
+│   ├── theme-config.ts         # Theme definitions (CSS variable maps)
+│   └── workato-client.ts       # Workato webhook URL config + fetch
+├── types/
+│   └── index.ts                # TypeScript interfaces for all entities
+└── routes.tsx                  # React Router config
+```
 
-**Internal Interfaces:**
-- `hashPassword(password: string): Promise<string>` — bcrypt hashing with salt rounds = 12
-- `verifyPassword(password: string, hash: string): Promise<boolean>`
-- `generateToken(userId: string): string` — JWT with 24h expiry, signed with HMAC-SHA256
-- `validateToken(token: string): TokenPayload | null`
-- `checkRateLimit(email: string): { blocked: boolean; remainingAttempts: number }`
+### Key Interfaces
 
-### 2. Group Service (`/api/groups`)
+```typescript
+// Kiro API Client Interface
+interface KiroAPIClient {
+  summarizeNote(content: string): Promise<{ summary: string }>;
+  chatMessage(
+    message: string,
+    history: ChatMessage[],
+    context: UserContext
+  ): Promise<{ response: string }>;
+}
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/groups` | POST | Create group |
-| `/groups` | GET | List user's groups |
-| `/groups/:id` | GET | Get group details + members |
-| `/groups/:id/leave` | POST | Leave group |
-| `/groups/join/:inviteCode` | POST | Join via invite link |
+// Workato Webhook Interface
+interface WorkatoClient {
+  syncClass(action: 'create' | 'update' | 'delete', classData: TimetableClass): Promise<void>;
+  syncNote(action: 'create' | 'update', noteData: Note): Promise<void>;
+  connectGoogleCalendar(userId: string): Promise<{ connected: boolean }>;
+  connectGoogleNotes(userId: string): Promise<{ connected: boolean }>;
+  disconnectGoogleCalendar(userId: string): Promise<void>;
+}
 
-**Internal Interfaces:**
-- `generateInviteCode(): string` — 8-character URL-safe random string
-- `validateMembershipLimit(userId: string): Promise<boolean>` — checks < 50 groups
-- `getGroupMembers(groupId: string): Promise<Member[]>`
+// Theme Engine Interface
+interface ThemeEngine {
+  currentTheme: ThemeName;
+  applyTheme(theme: ThemeName): void;
+  getAvailableThemes(): ThemeDefinition[];
+  persistTheme(theme: ThemeName): void;
+  loadPersistedTheme(): ThemeName | null;
+}
 
-### 3. Timetable Service (`/api/events`)
+// localStorage Data Layer Interface
+interface StorageLayer {
+  getClasses(): TimetableClass[];
+  saveClass(cls: TimetableClass): void;
+  deleteClass(id: string): void;
+  getTasks(): Task[];
+  saveTask(task: Task): void;
+  deleteTask(id: string): void;
+  getNotes(): Note[];
+  saveNote(note: Note): void;
+  getFriends(): Friend[];
+  saveFriend(friend: Friend): void;
+  removeFriend(id: string): void;
+  getSettings(): UserSettings;
+  saveSettings(settings: UserSettings): void;
+  getGroups(): StudyGroup[];
+  joinGroup(group: StudyGroup): void;
+}
+```
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/events/academic` | POST | Create academic event |
-| `/events/academic/:id` | PUT | Update academic event |
-| `/events/academic/:id` | DELETE | Delete academic event |
-| `/events/personal` | POST | Create personal event |
-| `/events/personal/:id` | PUT | Update personal event |
-| `/events/personal/:id` | DELETE | Delete personal event |
-| `/events/categories` | POST | Create event category |
-| `/events/categories/:id` | PUT | Update category |
-| `/events/categories/:id` | DELETE | Delete category |
-| `/events?start=&end=` | GET | Get own timetable (date range) |
-| `/events/group/:groupId?start=&end=` | GET | Get group timetable (privacy-masked) |
+### Integration Flow: Workato Webhooks
 
-**Internal Interfaces:**
-- `expandRecurrence(event: RecurringEvent, start: Date, end: Date): EventOccurrence[]` — generates occurrences within range
-- `maskPersonalEvents(events: PersonalEvent[]): BusyBlock[]` — strips title/category, keeps only time range
-- `detectConflicts(newEvents: Event[], existingEvents: Event[]): Conflict[]`
-- `validateTimeRange(start: Date, end: Date): ValidationResult` — ensures end > start, range ≤ 90 days
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant LocalStorage
+    participant Workato
+    participant GoogleCal
+    participant GoogleNotes
 
-### 4. Timetable Grabber Service (`/api/grabber`)
+    User->>Frontend: Add/Edit/Delete Class
+    Frontend->>LocalStorage: Persist change
+    Frontend->>Workato: POST webhook (class data)
+    Workato->>GoogleCal: Create/Update/Delete event
+    GoogleCal-->>Workato: Confirmation
+    Workato-->>Frontend: 200 OK or error
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/grabber/extract` | POST | Initiate timetable extraction from university portal |
-| `/grabber/confirm` | POST | Confirm and import extracted events |
-| `/grabber/ics` | POST | Upload and parse ICS file |
+    User->>Frontend: Create/Update Note
+    Frontend->>LocalStorage: Persist note
+    Frontend->>Workato: POST webhook (note data)
+    Workato->>GoogleNotes: Sync note
+    GoogleNotes-->>Workato: Confirmation
+    Workato-->>Frontend: 200 OK or error
+```
 
-**Internal Interfaces:**
-- `extractFromPortal(university: UniversityId, credentials: PortalCredentials): Promise<ExtractedEvent[]>` — scrapes university portal (30s timeout)
-- `parseIcsFile(buffer: Buffer): ParseResult` — validates and parses ICS content
-- `validateIcsFile(buffer: Buffer): IcsValidation` — size ≤ 5MB, valid format, ≤ 500 VEVENTs
+### Integration Flow: Kiro API
 
-### 5. Notes Service (`/api/notes`)
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant KiroAPI
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/notes/group/:groupId` | GET | List notes for group |
-| `/notes/group/:groupId` | POST | Create note linked to event |
-| `/notes/:id` | GET | Get note content |
-| `/notes/:id` | PUT | Update note content |
+    User->>Frontend: Click "AI Summarize" on note
+    Frontend->>KiroAPI: POST /summarize {content}
+    KiroAPI-->>Frontend: {summary}
+    Frontend->>User: Display summary in note view
 
-**Internal Interfaces:**
-- `validateNoteContent(title: string, content: string): ValidationResult`
-- `getNotesForEvent(eventId: string, groupId: string): Promise<Note[]>`
-- `verifyGroupMembership(userId: string, groupId: string): Promise<boolean>`
-
-### 6. Todo Service (`/api/todos`)
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/todos` | GET | List active todos (sorted) |
-| `/todos/completed` | GET | List completed todos |
-| `/todos` | POST | Create todo item |
-| `/todos/:id` | PUT | Update todo item |
-| `/todos/:id` | DELETE | Delete todo item |
-
-**Internal Interfaces:**
-- `sortTodos(todos: TodoItem[]): TodoItem[]` — priority desc, then due date asc, nulls last
-- `validateTodoItem(item: Partial<TodoItem>): ValidationResult`
-
-### 7. AI Planner Service (`/api/ai`)
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/ai/schedule` | POST | Submit natural language scheduling query |
-
-**Internal Interfaces:**
-- `parseDuration(query: string): Duration | null` — extracts meeting length from NL text
-- `computeFreeWindows(memberSchedules: MemberSchedule[], duration: Duration, dateRange: DateRange): FreeWindow[]` — interval arithmetic across all members
-- `formatResponse(windows: FreeWindow[]): string` — formats top 3 slots for display
-- `buildPrompt(query: string, groupContext: GroupContext): string` — constructs Bedrock prompt
+    User->>Frontend: Send chat message
+    Frontend->>KiroAPI: POST /chat {message, history, context}
+    KiroAPI-->>Frontend: {response}
+    Frontend->>User: Display AI response in chat
+```
 
 ## Data Models
 
-### DynamoDB Single-Table Design
-
-The system uses a single DynamoDB table with composite primary keys (`PK`, `SK`) and Global Secondary Indexes (GSIs) optimized for the primary access patterns.
-
-**Table: CramCircle**
-
-| Entity | PK | SK | GSI1PK | GSI1SK |
-|--------|----|----|--------|--------|
-| User | `USER#<userId>` | `PROFILE` | `EMAIL#<email>` | `USER` |
-| Group | `GROUP#<groupId>` | `META` | — | — |
-| GroupMember | `GROUP#<groupId>` | `MEMBER#<userId>` | `USER#<userId>` | `GROUP#<groupId>` |
-| InviteLink | `INVITE#<code>` | `LINK` | `GROUP#<groupId>` | `INVITE` |
-| AcademicEvent | `USER#<userId>` | `ACADEMIC#<eventId>` | `GROUP#<groupId>` | `EVENT#<startISO>` |
-| PersonalEvent | `USER#<userId>` | `PERSONAL#<eventId>` | — | — |
-| EventCategory | `USER#<userId>` | `CATEGORY#<categoryId>` | — | — |
-| Note | `GROUP#<groupId>` | `NOTE#<noteId>` | `EVENT#<eventId>` | `NOTE#<createdAt>` |
-| TodoItem | `USER#<userId>` | `TODO#<todoId>` | — | — |
-| LoginAttempt | `USER#<userId>` | `LOGIN_ATTEMPT#<timestamp>` | — | — |
-
-**GSI1** — enables:
-- Look up user by email (login)
-- List all groups for a user (multi-group membership)
-- Query events by group and time range (free window computation)
-- List notes by academic event
-
-**GSI2 (Timetable Index):**
-
-| GSI2PK | GSI2SK | Purpose |
-|--------|--------|---------|
-| `USER#<userId>` | `TIME#<startISO>` | Query user events by time range |
-
-This enables efficient per-user timetable queries with `BETWEEN` on the sort key for date range filtering.
-
-### TypeScript Type Definitions
+### Core Entities (localStorage)
 
 ```typescript
-// Shared types (packages/shared/types.ts)
-
 interface User {
-  userId: string;
+  id: string;
   email: string;
   displayName: string;
-  passwordHash: string;
-  createdAt: string; // ISO 8601
-}
-
-interface StudyGroup {
-  groupId: string;
-  name: string;        // 1-100 chars
-  createdBy: string;   // userId
+  avatar?: string;
+  course?: string;
   createdAt: string;
-  memberCount: number;
 }
 
-interface InviteLink {
-  code: string;        // 8-char URL-safe
-  groupId: string;
+interface TimetableClass {
+  id: string;
+  title: string;
+  moduleCode: string;
+  location: string;
+  dayOfWeek: 0 | 1 | 2 | 3 | 4; // Mon-Fri
+  startTime: string; // "HH:mm" format
+  endTime: string;   // "HH:mm" format
+  color: string;
+  source: 'personal' | 'imported';
+}
+
+interface Task {
+  id: string;
+  title: string;
+  dueDate?: string;        // ISO date string
+  priority: 'High' | 'Medium' | 'Low';
+  completed: boolean;
+  completedAt?: string;
   createdAt: string;
-  expiresAt: string | null;
-}
-
-type DayOfWeek = 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN';
-
-interface AcademicEvent {
-  eventId: string;
-  userId: string;
-  title: string;         // 1-100 chars
-  moduleCode: string;    // 1-20 chars
-  location: string;      // 1-100 chars
-  startTime: string;     // HH:mm format
-  endTime: string;       // HH:mm format
-  recurrenceDays: DayOfWeek[]; // at least one
-  effectiveFrom: string; // ISO date
-  effectiveUntil: string; // ISO date
-}
-
-interface PersonalEvent {
-  eventId: string;
-  userId: string;
-  title: string;        // 1-100 chars
-  startTime: string;    // ISO 8601 datetime
-  endTime: string;      // ISO 8601 datetime
-  recurrence: RecurrencePattern | null;
-  categoryId: string | null;
-}
-
-interface RecurrencePattern {
-  frequency: 'DAILY' | 'WEEKLY';
-  days?: DayOfWeek[];
-  until: string; // ISO date
-}
-
-interface EventCategory {
-  categoryId: string;
-  userId: string;
-  name: string;        // 1-50 chars
-  color: string;       // hex color e.g. #FF5733
-}
-
-interface BusyBlock {
-  startTime: string;   // ISO 8601
-  endTime: string;     // ISO 8601
-  type: 'busy';        // no other details exposed
 }
 
 interface Note {
-  noteId: string;
-  groupId: string;
-  eventId: string;
-  title: string;       // 1-200 chars
-  content: string;     // 1-50000 chars
-  lastModifiedBy: string;
-  lastModifiedAt: string;
-  createdAt: string;
-}
-
-type Priority = 'High' | 'Medium' | 'Low';
-type TodoStatus = 'To Do' | 'In Progress' | 'Done' | 'Delayed';
-
-interface TodoItem {
-  todoId: string;
-  userId: string;
-  title: string;       // 1-200 chars
-  dueDate: string | null; // ISO date
-  priority: Priority;
-  status: TodoStatus;
-  completedAt: string | null;
+  id: string;
+  title: string;
+  content: string;
+  folderId: string;
+  ownerId: string;
+  sharedGroupIds: string[];
+  summary?: string;
   createdAt: string;
   updatedAt: string;
 }
 
-interface FreeWindow {
-  day: string;         // ISO date
-  startTime: string;   // HH:mm
-  endTime: string;     // HH:mm
-  durationMinutes: number;
+interface Folder {
+  id: string;
+  name: string;
+  color: string;
+  ownerId: string;
+  type: 'personal' | 'group';
+  groupId?: string;
 }
 
-// API Response envelope
-interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: {
-    type: string;      // machine-readable
-    message: string;   // human-readable
-    fields?: Record<string, string>; // per-field validation errors
+interface StudyGroup {
+  id: string;
+  name: string;
+  passwordHash: string; // 4-digit pin hashed
+  members: string[];    // user IDs
+  createdAt: string;
+}
+
+interface Friend {
+  id: string;
+  userId: string;
+  friendId: string;
+  displayName: string;
+  status: 'online' | 'offline' | 'studying';
+  timetable: TimetableClass[]; // for availability overlay
+}
+
+interface ChatMessage {
+  id: string;
+  groupId: string;
+  senderId: string;
+  senderName: string;
+  content: string;
+  timestamp: string;
+}
+
+interface UserSettings {
+  appearance: {
+    theme: ThemeName;
+    fontSize: 'small' | 'medium' | 'large';
+  };
+  notifications: {
+    push: boolean;
+    email: boolean;
+  };
+  privacy: {
+    profileVisibility: 'public' | 'friends' | 'private';
+    dataSharing: boolean;
+  };
+  accessibility: {
+    highContrast: boolean;
+    reducedMotion: boolean;
+  };
+  profile: {
+    displayName: string;
+    avatar: string;
+    course: string;
+  };
+  aiPreferences: {
+    responseStyle: 'concise' | 'detailed' | 'balanced';
+    planningAggressiveness: 'relaxed' | 'moderate' | 'intensive';
   };
 }
+
+type ThemeName = 'darker-purple' | 'ocean-blue' | 'forest-green' | 'sunset-warm' | 'midnight-dark';
+
+interface ThemeDefinition {
+  name: ThemeName;
+  label: string;
+  variables: Record<string, string>; // CSS variable name -> value
+}
 ```
 
-### Free Window Computation Algorithm
+### localStorage Key Schema
 
-The core AI scheduling feature relies on interval arithmetic:
+| Key | Type | Description |
+|-----|------|-------------|
+| `synccircle_auth` | `"true" \| null` | Authentication flag (existing) |
+| `synccircle_user` | `User` | Current user profile |
+| `synccircle_classes` | `TimetableClass[]` | User's timetable entries |
+| `synccircle_tasks` | `Task[]` | User's task list |
+| `synccircle_notes` | `Note[]` | All user notes |
+| `synccircle_folders` | `Folder[]` | Note folder structure |
+| `synccircle_friends` | `Friend[]` | Friend list with timetables |
+| `synccircle_groups` | `StudyGroup[]` | Joined study groups |
+| `synccircle_messages` | `ChatMessage[]` | Group chat history |
+| `synccircle_settings` | `UserSettings` | All user preferences |
+| `synccircle_theme` | `ThemeName` | Active theme (quick access) |
+| `synccircle_chat_history` | `ChatMessage[]` | AI Planner conversation |
 
-```
-1. For each member in the group:
-   a. Query all AcademicEvent occurrences in date range (expand recurrence)
-   b. Query all PersonalEvent occurrences in date range (expand recurrence)
-   c. Merge into a sorted list of busy intervals
+### Theme System Design
 
-2. For each day in the queried range:
-   a. Collect all busy intervals for all members on that day
-   b. Merge overlapping intervals into a consolidated busy timeline
-   c. Compute complement within [08:00, 22:00] to get free windows
-   d. Filter free windows by minimum requested duration
+The existing `theme.css` uses CSS custom properties on `:root`. Theme switching works by:
 
-3. Return top 3 earliest-starting free windows
-```
+1. Defining theme presets in `lib/theme-config.ts` as objects mapping variable names to values
+2. On theme selection, iterating over the preset and calling `document.documentElement.style.setProperty()` for each variable
+3. Persisting the selected theme name to `localStorage` under `synccircle_theme`
+4. On app load, `ThemeProvider` reads the persisted theme and applies it before first paint
 
-This algorithm is O(n * m * log(m)) where n = number of days and m = total events across all members per day.
+The default "darker-purple" theme uses the existing values in `theme.css` (primary: `#b8a4d4`, secondary: `#f4b8d0`).
 
+### Profile Character Animation Design
 
+The Profile Character uses Motion's `variants` API with three states:
+
+- **idle** — Subtle breathing/floating animation (scale oscillation, gentle Y translation)
+- **studying** — Head-bob and pencil-writing motion (rotation keyframes)
+- **celebration** — Confetti burst + jump animation (triggered via `canvas-confetti` + Motion spring)
+
+State transitions are driven by user actions (task completion triggers celebration) and default to idle when no interaction is active.
 
 ## Correctness Properties
 
 *A property is a characteristic or behavior that should hold true across all valid executions of a system — essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
 
-### Property 1: Registration Input Validation
+### Property 1: Registration validation rejects invalid inputs
 
-*For any* email string and password string, the registration endpoint SHALL accept the input if and only if the email matches RFC 5322 format (≤254 chars) and the password is 8-128 characters; otherwise it SHALL reject with an error identifying the failing field.
+*For any* email string that does not match a valid email format, OR any password shorter than 8 characters, submitting the registration form SHALL be rejected with a validation error, and no user account shall be created.
 
-**Validates: Requirements 1.1, 1.3**
+**Validates: Requirements 2.4, 2.5**
 
-### Property 2: Rate Limiting Threshold
+### Property 2: Login failure message is generic
 
-*For any* sequence of N failed login attempts for a given account within a 15-minute window, the account SHALL be blocked if and only if N ≥ 5; attempts after blocking SHALL be rejected until the 15-minute lockout expires.
+*For any* invalid credential pair (wrong email, wrong password, or both), the authentication error message SHALL be identical regardless of which field is incorrect, never revealing whether the email exists.
 
-**Validates: Requirements 1.5**
+**Validates: Requirements 2.5**
 
-### Property 3: Group Name Validation and Creation
+### Property 3: Dashboard renders all data sections
 
-*For any* string of 1-100 characters submitted as a group name by an authenticated user, the Group_Service SHALL successfully create a group with the creator as a member; for any string outside that range, it SHALL reject.
+*For any* set of upcoming tasks, schedule entries, and collaboration activity items stored in localStorage, the Dashboard page SHALL render content from all three sections.
 
-**Validates: Requirements 2.1**
+**Validates: Requirements 3.1**
 
-### Property 4: Invite Code Uniqueness
+### Property 4: Valid class creation persists and displays
 
-*For any* set of generated invite codes, no two codes SHALL be identical.
-
-**Validates: Requirements 2.2**
-
-### Property 5: Group Membership Leave
-
-*For any* user who is a member of a group, after leaving that group, the user SHALL NOT appear in the group's member list and the group SHALL NOT appear in the user's group list.
-
-**Validates: Requirements 3.4**
-
-### Property 6: Timetable Date Range Query Correctness
-
-*For any* set of events (academic and personal) owned by a user and any date range query of up to 90 days, the returned event occurrences SHALL include all and only those events whose expanded time intervals overlap with the queried range.
+*For any* valid class object (all required fields present, end time strictly after start time), submitting the add-class form SHALL persist the class to localStorage and display it in the calendar grid at the correct day/time position.
 
 **Validates: Requirements 4.2**
 
-### Property 7: Academic Event Validation
+### Property 5: Invalid class data is rejected
 
-*For any* academic event submission, it SHALL be accepted if and only if: title is 1-100 chars, module code is 1-20 chars, location is 1-100 chars, at least one recurrence day is specified, and end time is strictly after start time; otherwise it SHALL be rejected with a descriptive error.
+*For any* class form submission with a missing required field (title, module code, location, day, start time, end time) OR an end time that is not after the start time, the form SHALL display a validation error and NOT persist any data.
 
-**Validates: Requirements 4.1, 4.5**
+**Validates: Requirements 4.5**
 
-### Property 8: ICS File Parsing Round-Trip
+### Property 6: Class and task deletion removes entity
 
-*For any* valid set of academic events, serializing them to ICS format and then parsing the result SHALL produce an equivalent set of events preserving title, start time, end time, and recurrence.
+*For any* class or task that exists in localStorage, deleting it SHALL remove it from storage and from the rendered view, and the remaining items SHALL be unchanged.
+
+**Validates: Requirements 4.4, 6.6**
+
+### Property 7: Friend overlay round-trip
+
+*For any* friend, selecting them in the Friend Availability Dropdown and then immediately deselecting them SHALL restore the calendar view to its original state (no overlay elements from that friend remain).
+
+**Validates: Requirements 5.3, 5.4**
+
+### Property 8: Free slot computation correctness
+
+*For any* set of timetables (user + selected friends), the highlighted free slots SHALL be exactly those time slots where NONE of the participants have a scheduled class. A slot is free if and only if no timetable entry overlaps it.
 
 **Validates: Requirements 5.5**
 
-### Property 9: Event Conflict Detection
+### Property 9: Task creation persists with all fields
 
-*For any* two sets of time intervals (existing events and import candidates), the conflict detection algorithm SHALL flag a pair as conflicting if and only if their time ranges overlap (start₁ < end₂ AND start₂ < end₁).
+*For any* valid task (non-empty title, optional due date, optional priority from {High, Medium, Low}), creating the task SHALL persist it to localStorage with all provided fields and display it in the active task list.
 
-**Validates: Requirements 5.8**
+**Validates: Requirements 6.4**
 
-### Property 10: Privacy Masking Completeness
+### Property 10: Task completion is a one-way state transition
 
-*For any* personal event with a title, category, and details, when viewed by a non-owner group member, the output SHALL contain only the start time and end time (as a Busy_Block) with no title, category name, color, or other detail present; when viewed by the owner, all fields SHALL be present.
+*For any* active task, marking it complete SHALL move it to the completed section. The task SHALL no longer appear in the active section, and its `completed` flag SHALL be `true` in localStorage.
 
-**Validates: Requirements 6.7, 6.8**
+**Validates: Requirements 6.5**
 
-### Property 11: Personal Event and Category Validation
+### Property 11: Notes display under assigned folders
 
-*For any* personal event submission, it SHALL be accepted if and only if: title is 1-100 chars and end time is strictly after start time. For any category submission, it SHALL be accepted if and only if: name is 1-50 chars, color is a valid hex code, and the user has fewer than 20 categories.
+*For any* set of notes each assigned to a folder, the "User's Notes" tab SHALL render every note grouped under its assigned folder. No note SHALL appear outside its folder or be missing.
 
-**Validates: Requirements 6.1, 6.2, 6.9**
+**Validates: Requirements 7.2, 7.3, 7.4**
 
-### Property 12: Free Window Correctness
+### Property 12: Shared notes filtered by group membership
 
-*For any* set of group member schedules (containing both academic and personal events), requested duration (15min-8hr), and date range, every returned Free_Window SHALL satisfy: (a) falls within 08:00-22:00 local time, (b) has duration ≥ requested, (c) does not overlap with any event from any group member, and (d) is a contiguous time block.
+*For any* set of notes shared across multiple Study Groups, the "Shared Notes" tab SHALL display only notes belonging to groups the current user is a member of, organized into folders named after each group.
 
 **Validates: Requirements 7.5, 7.6**
 
-### Property 13: Free Window Ordering
+### Property 13: AI summary display
 
-*For any* set of computed free windows, the AI_Planner SHALL return at most 3 windows, ordered by earliest start time.
+*For any* non-empty summary string returned by the Kiro API, the Notes page SHALL display that exact summary text within the note view.
 
-**Validates: Requirements 7.7**
+**Validates: Requirements 8.3**
 
-### Property 14: Duration Parsing
+### Property 14: Group join with valid credentials succeeds
 
-*For any* natural language string containing a time duration expression between 15 minutes and 8 hours, the parser SHALL extract the correct duration value.
+*For any* valid group name and correct 4-digit password combination, submitting the join form SHALL add the user to the group's member list and display the group's shared notes.
 
-**Validates: Requirements 7.1**
+**Validates: Requirements 9.3**
 
-### Property 15: Notes Last-Write-Wins
+### Property 15: Group join error is generic
 
-*For any* sequence of edits to a shared note, the final persisted state SHALL equal the content of the chronologically last write, and the lastModifiedBy field SHALL identify the author of that last write.
-
-**Validates: Requirements 8.4**
-
-### Property 16: Notes Ordering by Event Date
-
-*For any* set of notes within a Study_Group linked to academic events, the list endpoint SHALL return them ordered by the associated Academic_Event's date in ascending chronological order.
-
-**Validates: Requirements 8.5**
-
-### Property 17: Note Validation
-
-*For any* note creation request, it SHALL be accepted if and only if: title is 1-200 chars, content is 1-50000 chars, and the specified Academic_Event exists and belongs to a member of the group; otherwise it SHALL be rejected.
-
-**Validates: Requirements 8.1, 8.6**
-
-### Property 18: Todo Sort Order
-
-*For any* set of active todo items (status ≠ Done), the list endpoint SHALL return them ordered by: priority descending (High > Medium > Low), then due date ascending within each priority group, with items having no due date listed last within their priority group.
+*For any* incorrect group name OR incorrect 4-digit password, the error message SHALL be identical and SHALL NOT reveal which field was wrong.
 
 **Validates: Requirements 9.4**
 
-### Property 19: Completed Todos Reverse Chronological Order
+### Property 16: Chat conversation history accumulates
 
-*For any* set of completed todo items (status = Done), the completed-list endpoint SHALL return them in reverse chronological order of their completion date.
+*For any* sequence of N messages sent in the AI Planner, the chat thread SHALL contain all N user messages and their corresponding AI responses in chronological order. The Kiro API request SHALL include the full conversation history as context.
 
-**Validates: Requirements 9.5**
+**Validates: Requirements 11.2, 11.6**
 
-### Property 20: Todo Item Validation
+### Property 17: Friend list renders all friends with required data
 
-*For any* todo item creation or update, it SHALL be accepted if and only if: title is 1-200 chars, priority is one of (High, Medium, Low), and status is one of (To Do, In Progress, Done, Delayed); otherwise it SHALL be rejected with a descriptive error identifying the invalid field.
+*For any* friend list stored in localStorage, the Friends page SHALL render every friend with their display name and online status visible.
 
-**Validates: Requirements 9.1, 9.2, 9.3, 9.6, 9.8**
+**Validates: Requirements 12.1**
 
-### Property 21: Authentication Enforcement
+### Property 18: Friendship is bidirectional
 
-*For any* API endpoint other than `/auth/register` and `/auth/login`, a request without a valid (non-expired, properly signed) authentication token SHALL receive a 401 Unauthorized response.
+*For any* two users, accepting a friend request SHALL add each user to the other's friend list. Removing the friendship SHALL remove each user from the other's friend list.
 
-**Validates: Requirements 10.2, 10.3**
+**Validates: Requirements 12.3, 12.4**
 
-### Property 22: API Response Envelope Consistency
+### Property 19: Friend search returns matching users
 
-*For any* API response (success or failure), the JSON body SHALL conform to the structure: `{ success: boolean, data?: T, error?: { type: string, message: string } }`. For error responses, the error field SHALL include a machine-readable type and human-readable message; for validation errors, it SHALL additionally include per-field error descriptions.
+*For any* search query string, the friend search results SHALL contain only users whose display name or email contains the query as a substring (case-insensitive).
 
-**Validates: Requirements 10.6, 10.7**
+**Validates: Requirements 12.5**
+
+### Property 20: Theme application updates CSS variables
+
+*For any* theme from the available theme list, selecting it SHALL update all CSS custom properties on `document.documentElement` to match the theme's defined values.
+
+**Validates: Requirements 14.3**
+
+### Property 21: Theme persistence round-trip
+
+*For any* selected theme, persisting it to localStorage and then loading it on a fresh page load SHALL result in the same theme being active (CSS variables match the selected theme).
+
+**Validates: Requirements 14.4**
+
+### Property 22: Settings persistence round-trip
+
+*For any* settings section (appearance, notifications, privacy, accessibility, profile, AI preferences) and any valid preference value, saving the setting SHALL persist it to localStorage, and reading settings on next load SHALL return the saved value unchanged.
+
+**Validates: Requirements 15.2, 15.3, 15.4, 15.5, 15.6, 15.7**
+
+### Property 23: Workato class field mapping
+
+*For any* valid TimetableClass object, the Workato webhook payload SHALL contain all CramCircle fields (title, moduleCode, location, dayOfWeek, startTime, endTime) mapped to their corresponding Google Calendar event fields.
+
+**Validates: Requirements 17.3**
+
+### Property 24: Friend availability dropdown renders all friends
+
+*For any* friend list, opening the Friend Availability Dropdown SHALL display a checkbox for every friend in the list, with no friends missing or duplicated.
+
+**Validates: Requirements 5.2**
+
+### Property 25: Group chat messages display for all members
+
+*For any* message sent in a group chat, the message SHALL appear in the chat thread, and opening the chat SHALL display the full message history in chronological order.
+
+**Validates: Requirements 13.2, 13.3**
 
 ## Error Handling
 
-### Error Response Structure
+### Error Categories and Strategies
 
-All errors follow the consistent `ApiResponse` envelope:
+| Category | Trigger | User Experience | Recovery |
+|----------|---------|-----------------|----------|
+| Validation Error | Invalid form input | Inline field-level error messages | User corrects input |
+| API Timeout | Kiro API > 30s (summarize) or > 10s (chat) | Toast notification with timeout message | Retry button |
+| API Error | Kiro API 4xx/5xx | User-friendly error in context | Retry button |
+| Sync Failure | Workato webhook fails | Toast notification "Sync failed" | Auto-retry + manual retry |
+| Auth Failure | Invalid credentials | Generic error message (security) | User retries |
+| Storage Error | localStorage quota exceeded | Warning toast | Suggest clearing old data |
 
-```json
-{
-  "success": false,
-  "error": {
-    "type": "VALIDATION_ERROR",
-    "message": "One or more fields failed validation",
-    "fields": {
-      "email": "Email must be in valid RFC 5322 format",
-      "password": "Password must be between 8 and 128 characters"
+### Error Handling Patterns
+
+```typescript
+// Kiro API error handling wrapper
+async function callKiroAPI<T>(
+  endpoint: string,
+  payload: unknown,
+  timeoutMs: number
+): Promise<{ data?: T; error?: string }> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+
+    if (!res.ok) {
+      return { error: 'Something went wrong. Please try again.' };
     }
+    return { data: await res.json() };
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      return { error: 'Request timed out. Please try again.' };
+    }
+    return { error: 'Unable to connect. Please check your connection.' };
   }
 }
 ```
 
-### Error Types and HTTP Mappings
+### Workato Webhook Error Handling
 
-| Error Type | HTTP Status | Description |
-|-----------|-------------|-------------|
-| `VALIDATION_ERROR` | 400 | Invalid or missing request parameters |
-| `AUTHENTICATION_FAILED` | 401 | Invalid credentials (no field leak) |
-| `TOKEN_EXPIRED` | 401 | Session token has expired |
-| `TOKEN_INVALID` | 401 | Malformed or tampered token |
-| `ACCOUNT_LOCKED` | 403 | Rate limit exceeded (5 failed attempts) |
-| `FORBIDDEN` | 403 | User lacks permission for resource |
-| `NOT_FOUND` | 404 | Requested resource does not exist |
-| `CONFLICT` | 409 | Duplicate resource (e.g., email already registered) |
-| `LIMIT_EXCEEDED` | 400 | Resource limit hit (50 groups, 20 categories, 500 ICS events) |
-| `EXTERNAL_SERVICE_ERROR` | 502 | University portal unreachable or timeout |
-| `INTERNAL_ERROR` | 500 | Unhandled server error |
+Workato sync operations are fire-and-forget with notification on failure:
 
-### Error Handling Strategy by Layer
+1. Frontend makes the webhook call after persisting locally (optimistic update)
+2. If webhook returns non-2xx, show a toast: "Sync to Google Calendar failed. Your changes are saved locally."
+3. Store failed syncs in `synccircle_pending_syncs` for retry
+4. On next successful app load, retry pending syncs automatically
 
-**Lambda Handler Layer:**
-- Catches all exceptions from the service layer
-- Maps known error types to HTTP status codes
-- Wraps unknown errors as `INTERNAL_ERROR` with generic message (no internal details leaked)
-- Logs full error details to CloudWatch for debugging
+### Validation Error Display
 
-**Service Layer:**
-- Throws typed errors (`ValidationError`, `AuthError`, `NotFoundError`, etc.)
-- Validates all inputs before processing
-- Uses early-return pattern for validation failures
-
-**Data Layer:**
-- DynamoDB conditional writes catch race conditions (e.g., duplicate invite codes)
-- Retries with exponential backoff for throttled requests (max 3 retries)
-
-### Timeout Handling
-
-| Operation | Timeout | Fallback |
-|-----------|---------|----------|
-| University portal scrape | 30 seconds | Suggest ICS upload |
-| Bedrock AI inference | 15 seconds | Return "try again" message |
-| DynamoDB operations | 5 seconds | Return 500 with retry suggestion |
+- Form validation uses `lib/validators.ts` for pure validation functions
+- Errors display inline below the relevant field
+- Auth errors are intentionally generic (don't reveal which field failed)
+- Class form validates: all fields present + `endTime > startTime`
+- Task form validates: non-empty title
+- Group join form validates: non-empty group name + exactly 4 numeric digits
 
 ## Testing Strategy
 
-### Property-Based Testing (Primary Verification)
+### Testing Approach
 
-**Library:** [fast-check](https://github.com/dubzzz/fast-check) (TypeScript PBT library)
+The project uses a dual testing strategy:
 
-**Configuration:**
-- Minimum 100 iterations per property test
-- Each test tagged with: `Feature: cram-circle, Property {N}: {title}`
+1. **Property-based tests** (fast-check) — Verify universal correctness properties across generated inputs. Minimum 100 iterations per property.
+2. **Example-based unit tests** (Vitest) — Verify specific UI interactions, edge cases, and integration points.
 
-**Properties to implement as PBT:**
+### Property-Based Testing
 
-| Property | Target Function | Generator Strategy |
-|----------|----------------|-------------------|
-| P1: Registration Validation | `validateRegistration()` | Random strings for email (valid/invalid RFC 5322) and passwords (varying length) |
-| P2: Rate Limiting | `checkRateLimit()` | Random sequences of timestamps within/across 15-min windows |
-| P3: Group Name Validation | `validateGroupName()` | Random strings 0-200 chars |
-| P4: Invite Code Uniqueness | `generateInviteCode()` | Generate N codes, check set size = N |
-| P5: Leave Removes Member | `leaveGroup()` | Random user/group pairs |
-| P6: Date Range Query | `expandRecurrence()` + `filterByRange()` | Random events with various recurrence patterns, random date ranges |
-| P7: Academic Event Validation | `validateAcademicEvent()` | Random event objects with valid/invalid fields |
-| P8: ICS Round-Trip | `serializeToIcs()` + `parseIcsFile()` | Random valid academic events |
-| P9: Conflict Detection | `detectConflicts()` | Random pairs of time intervals |
-| P10: Privacy Masking | `maskPersonalEvents()` | Random personal events with rich metadata |
-| P11: Personal Event Validation | `validatePersonalEvent()` + `validateCategory()` | Random event/category objects |
-| P12: Free Window Correctness | `computeFreeWindows()` | Random member schedules, durations, date ranges |
-| P13: Free Window Ordering | `computeFreeWindows()` | Same as P12, verify ordering of output |
-| P14: Duration Parsing | `parseDuration()` | Random NL duration strings |
-| P15: Last-Write-Wins | `updateNote()` | Random sequences of note edits |
-| P16: Notes Ordering | `getGroupNotes()` | Random notes linked to events with various dates |
-| P17: Note Validation | `validateNote()` | Random note objects with valid/invalid fields |
-| P18: Todo Sort | `sortTodos()` | Random todo lists with varied priorities and due dates |
-| P19: Completed Sort | `getCompletedTodos()` | Random completed todos with varied completion dates |
-| P20: Todo Validation | `validateTodoItem()` | Random todo objects |
-| P21: Auth Enforcement | JWT middleware | Random tokens (expired, malformed, missing, valid) |
-| P22: Response Envelope | Response formatter | Random success/error responses |
+- **Library**: `fast-check` with Vitest as the test runner
+- **Location**: `SyncCircle/tests/properties/`
+- **Configuration**: Each property test runs minimum 100 iterations
+- **Tagging**: Each test is annotated with `// Feature: cram-circle, Property N: <title>`
 
-### Unit Testing (Example-Based)
+Property tests focus on:
+- Data layer logic (localStorage CRUD, validation, filtering)
+- Theme system (application + persistence round-trip)
+- Free slot computation algorithm
+- Field mapping for Workato payloads
+- Friend search filtering
+- Note organization and group membership filtering
 
-**Framework:** Vitest
+### Unit / Integration Tests
 
-**Focus Areas:**
-- Specific scenarios from acceptance criteria (login flow, join via invite, etc.)
-- Edge cases (boundary values: exactly 50 groups, exactly 500 ICS events, 0-length titles)
-- Authorization checks (accessing other user's resources)
-- Error message content verification
+- **Framework**: Vitest + React Testing Library
+- **Location**: `SyncCircle/tests/unit/` and `SyncCircle/tests/integration/`
+- **Coverage**: UI interactions, component rendering, API mocking
 
-### Integration Testing
+Unit tests focus on:
+- Navigation (SyncCircle icon -> Dashboard, tab switching)
+- Form submissions (add class, create task, join group)
+- Feature flag behavior (group chat enable/disable)
+- Error states (API timeout, validation failures)
+- Animation state triggers (task completion -> celebration)
 
-**Strategy:** LocalStack for DynamoDB + mocked external services
+### Integration Tests
 
-**Focus Areas:**
-- Full API request/response cycle through API Gateway → Lambda → DynamoDB
-- University portal scraping with mock HTTP responses
-- Bedrock AI inference with mocked responses
-- Token lifecycle (creation, validation, expiry)
-- Multi-user workflows (create group → invite → join → view timetable)
+Integration tests verify Workato webhook calls and Kiro API interactions using mocked HTTP:
 
-### Test Organization
+- Verify webhook payload structure matches Google Calendar event schema
+- Verify Kiro API request includes conversation history for chat
+- Verify retry behavior on failed syncs
 
-```
-packages/
-  backend/
-    src/
-      services/          # Service layer (unit + property testable)
-      handlers/          # Lambda handlers (integration testable)
-      utils/             # Pure utilities (property testable)
-    tests/
-      properties/        # Property-based tests (fast-check)
-      unit/              # Example-based unit tests (vitest)
-      integration/       # Integration tests with LocalStack
-  shared/
-    src/
-      validation/        # Shared validators (property testable)
-      types/             # Type definitions
-    tests/
-      properties/        # Shared validation properties
+### Test File Structure
+
+```text
+SyncCircle/tests/
+├── properties/
+│   ├── validators.property.test.ts    # Properties 1, 2, 5
+│   ├── storage.property.test.ts       # Properties 4, 6, 9, 10, 22
+│   ├── timetable.property.test.ts     # Properties 7, 8, 24
+│   ├── notes.property.test.ts         # Properties 11, 12, 13
+│   ├── friends.property.test.ts       # Properties 17, 18, 19
+│   ├── groups.property.test.ts        # Properties 14, 15, 25
+│   ├── theme.property.test.ts         # Properties 20, 21
+│   ├── chat.property.test.ts          # Property 16
+│   ├── dashboard.property.test.ts     # Property 3
+│   └── workato.property.test.ts       # Property 23
+├── unit/
+│   ├── Layout.test.tsx
+│   ├── Timetable.test.tsx
+│   ├── Notes.test.tsx
+│   ├── Settings.test.tsx
+│   ├── ProfileCharacter.test.tsx
+│   └── Auth.test.tsx
+└── integration/
+    ├── workato-sync.test.ts
+    └── kiro-api.test.ts
 ```

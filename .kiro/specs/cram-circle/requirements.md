@@ -2,166 +2,232 @@
 
 ## Introduction
 
-CramCircle is an educational dashboard MVP built for the AWS Kiro BuildFest 2026 Hackathon, targeting the "Most Practical Solution" category. It eliminates the administrative burden of student life by combining a shared group timetable, personal schedule blocking, collaborative notes, and an AI-driven scheduling assistant that automatically finds common free time for student groups. The system exposes a RESTful API connecting a frontend to a backend and AI services, with an efficient database schema optimized for overlapping time queries.
+CramCircle (SyncCircle) is a student collaboration web app built for the AWS Kiro BuildFest 2026 Hackathon. It helps classmates coordinate schedules, share learning material, plan study sessions, and communicate in one place. The frontend is a working Vite React prototype at `SyncCircle/apps/frontend/` with pages for Auth, Dashboard, Timetable, Notes, AI Planner, Friends, Group Chat, Profile, and Settings. The backend uses Workato for orchestration, connecting the timetable to Google Calendar and syncing notes to Google Notes. AI features (summarization, chatbot planner) use the Kiro API.
 
 ## Glossary
 
-- **CramCircle_System**: The full-stack educational dashboard application including frontend, backend API, database, and AI service
-- **Authentication_Service**: The subsystem responsible for user registration, login, and session management
-- **Group_Service**: The subsystem responsible for creating, managing, and querying Study Groups
-- **Timetable_Service**: The subsystem responsible for managing academic and personal calendar events
-- **AI_Planner**: The conversational AI agent that processes natural language scheduling queries and computes available meeting slots
-- **Notes_Service**: The subsystem responsible for managing collaborative text documents tied to academic events
-- **Study_Group**: A named collection of users who share timetable visibility and collaborative features
-- **Academic_Event**: A recurring calendar entry representing a fixed class, lecture, or tutorial with metadata (Module Code, Location, Title)
-- **ICS_File**: A calendar file in iCalendar (.ics) format containing academic schedule data
-- **Timetable_Grabber**: The subsystem that connects to university class schedule pages, extracts timetable data, and imports it as Academic_Events into the user's calendar
-- **Event_Category**: A user-defined label with an associated color used to visually organize Personal_Events (e.g., "Gym" in green, "Meals" in orange)
-- **Todo_Service**: The subsystem responsible for managing personal task lists for users
-- **Todo_Item**: A personal task entry with a title, optional due date, priority level (High, Medium, Low), status (To Do, In Progress, Done, Delayed), optional associated Study_Group, and completion status
-- **Personal_Event**: A one-off or recurring calendar entry representing blocked personal time (e.g., gym, meals)
-- **Busy_Block**: The privacy-masked representation of a Personal_Event visible to other group members
-- **Free_Window**: A contiguous time period where all members of a Study_Group have no scheduled events
-- **Invite_Link**: A unique URL or email-based token that allows a user to join a specific Study_Group
+- **CramCircle_App**: The complete student collaboration application including the Vite React frontend and Workato backend integrations
+- **Frontend**: The Vite React single-page application at `SyncCircle/apps/frontend/` using React Router, Tailwind CSS, Radix UI, Lucide icons, and Motion animations
+- **Workato_Backend**: The Workato-based backend orchestration layer that connects CramCircle features to external services (Google Calendar, Google Notes)
+- **Kiro_API**: The AI service API used for note summarization and the AI Planner chatbot
+- **Dashboard_Page**: The main landing page after login showing upcoming tasks, schedule highlights, and collaboration activity
+- **Timetable_Page**: The page where users manage classes, view calendars, compare friend availability, and access their task list
+- **Notes_Page**: The page where users create, organize, and share notes with AI summarization support
+- **AI_Planner_Page**: The page hosting the Kiro API-powered chatbot for study planning and scheduling assistance
+- **Friends_Page**: The page where users manage friend connections and view friend status
+- **Settings_Page**: The page for managing Appearance, Notifications, Privacy & Security, Accessibility, Profile, and AI Preferences
+- **SyncCircle_Icon**: The application logo/icon displayed in the navigation that serves as a home button
+- **Study_Group**: A named collection of users who share notes and collaborate, joined via a group name and 4-digit password
+- **User_Notes**: Personal notes organized in user-created folders by topic
+- **Shared_Notes**: Notes shared within a Study_Group, organized in group-assigned folders
+- **Friend_Availability_Dropdown**: A dropdown with checkboxes on the Timetable_Page allowing selection of friends whose timetables overlay on the calendar
+- **Your_Calendar_Tab**: The tab on the Timetable_Page showing the user's class schedule and events
+- **Your_Task_Tab**: The tab on the Timetable_Page showing the user's personal to-do list
+- **Profile_Character**: The animated study character displayed on the user's profile page
+- **Theme_Settings**: The appearance configuration allowing users to change the app's color scheme from the default darker purple
 
 ## Requirements
 
-### Requirement 1: User Registration and Authentication
+### Requirement 1: Global Navigation and SyncCircle Icon
 
-**User Story:** As a student, I want to create an account and log in securely, so that I can access my personal dashboard and group features.
-
-#### Acceptance Criteria
-
-1. WHEN a user submits registration details with a valid email address (RFC 5322 format, maximum 254 characters) and a password between 8 and 128 characters, THE Authentication_Service SHALL create a new user account and return an authentication token
-2. WHEN a user submits valid login credentials, THE Authentication_Service SHALL authenticate the user and return a session token that expires after 24 hours of inactivity
-3. IF a user submits registration details with an invalid email format, a password shorter than 8 characters or longer than 128 characters, or an email that is already registered, THEN THE Authentication_Service SHALL return an error message indicating which field failed validation and the reason for failure
-4. IF a user submits incorrect login credentials, THEN THE Authentication_Service SHALL return an AUTHENTICATION_FAILED error type without revealing whether the email or password was incorrect
-5. IF a user fails login 5 times within a 15-minute window, THEN THE Authentication_Service SHALL temporarily block further login attempts for that account for 15 minutes and return an error message indicating the account is temporarily locked
-
-### Requirement 2: Study Group Creation
-
-**User Story:** As a student, I want to create a Study Group, so that I can collaborate with classmates on scheduling and notes.
+**User Story:** As a student, I want to click the SyncCircle Icon from any page and return to the Dashboard, so that I always have a quick way to navigate home.
 
 #### Acceptance Criteria
 
-1. WHEN an authenticated user submits a group name (1-100 characters), THE Group_Service SHALL create a new Study_Group and assign the creating user as a member
-2. THE Group_Service SHALL generate a unique Invite_Link for each Study_Group upon creation
-3. WHEN a user accesses a valid Invite_Link, THE Group_Service SHALL add the authenticated user to the corresponding Study_Group
-4. IF a user accesses an invalid or expired Invite_Link, THEN THE Group_Service SHALL return an error message indicating whether the link is invalid or has expired
-5. IF a user accesses an Invite_Link for a Study_Group they are already a member of, THEN THE Group_Service SHALL return a message indicating they are already a member without creating a duplicate membership
+1. THE Frontend SHALL display the SyncCircle_Icon in the navigation bar on every authenticated page
+2. WHEN a user clicks the SyncCircle_Icon, THE Frontend SHALL navigate the user to the Dashboard_Page
+3. WHILE a user is on any authenticated page, THE SyncCircle_Icon SHALL remain visible and clickable in the navigation bar
 
-### Requirement 3: Multi-Group Membership
+### Requirement 2: User Authentication
 
-**User Story:** As a student, I want to belong to multiple Study Groups, so that I can collaborate with different sets of classmates for different modules.
+**User Story:** As a student, I want to sign up, log in, and reset my password, so that I can securely access my personal dashboard and group features.
 
 #### Acceptance Criteria
 
-1. THE Group_Service SHALL allow a user to be a member of up to 50 Study_Groups simultaneously
-2. WHEN an authenticated user requests their groups, THE Group_Service SHALL return a list of all Study_Groups the user belongs to, including each group's name, member count, and creation date
-3. WHEN an authenticated user requests a specific Study_Group they are a member of, THE Group_Service SHALL return the group details including the member list with display names
-4. WHEN a user leaves a Study_Group, THE Group_Service SHALL remove the user from the group membership
-5. IF a user attempts to join a Study_Group and their current membership count equals 50, THEN THE Group_Service SHALL reject the request and return an error message indicating the membership limit has been reached
+1. WHEN a user submits registration details with a valid email address and a password of at least 8 characters, THE CramCircle_App SHALL create a new user account and redirect the user to the Dashboard_Page
+2. WHEN a user submits valid login credentials, THE CramCircle_App SHALL authenticate the user and redirect to the Dashboard_Page
+3. WHEN a user requests a password reset with a registered email, THE CramCircle_App SHALL send a password reset link to the provided email address
+4. IF a user submits registration details with an invalid email format, a password shorter than 8 characters, or an email already registered, THEN THE CramCircle_App SHALL display an error message indicating which field failed validation
+5. IF a user submits incorrect login credentials, THEN THE CramCircle_App SHALL display a generic authentication failure message without revealing whether the email or password was incorrect
 
-### Requirement 4: Academic Event Management
+### Requirement 3: Dashboard Page
 
-**User Story:** As a student, I want to add, view, edit, and delete my recurring academic events (lectures, tutorials), so that my fixed class schedule is reflected in the timetable.
-
-#### Acceptance Criteria
-
-1. WHEN a user creates an Academic_Event with a title (1-100 characters), module code (1-20 characters), location (1-100 characters), recurrence pattern (one or more days of the week the event repeats on), start time, and end time, THE Timetable_Service SHALL persist the event and associate it with the user
-2. WHEN a user requests their timetable for a date range of up to 90 days, THE Timetable_Service SHALL return all Academic_Event occurrences and Personal_Events that overlap with the requested range
-3. WHEN a user updates an existing Academic_Event that they own, THE Timetable_Service SHALL persist the changes and reflect them in all Study_Group timetables where the user is a member
-4. WHEN a user deletes an Academic_Event that they own, THE Timetable_Service SHALL remove the event and update all Study_Group timetables where the user is a member
-5. IF a user submits an Academic_Event with missing required fields or with an end time that is not after the start time, THEN THE Timetable_Service SHALL reject the request and return an error message indicating the validation failure
-6. IF a user attempts to update or delete an Academic_Event they do not own, THEN THE Timetable_Service SHALL reject the request and return an authorization error
-
-### Requirement 5: Timetable Grabber and Import
-
-**User Story:** As a student, I want CramCircle to grab my academic timetable directly from my university's class schedule page, so that I do not have to manually enter each class or rely on external tools.
+**User Story:** As a student, I want a Dashboard overview after logging in, so that I can see my upcoming tasks, schedule highlights, and collaboration activity at a glance.
 
 #### Acceptance Criteria
 
-1. WHEN a user initiates a timetable grab and provides their university class schedule URL or credentials, THE Timetable_Grabber SHALL extract the academic schedule data from the university portal within 30 seconds
-2. THE Timetable_Grabber SHALL support class schedule extraction from SIT, NUS, SMU, and Singapore polytechnic portals
-3. WHEN the Timetable_Grabber successfully extracts schedule data without errors or timeouts, THE Timetable_Grabber SHALL present the extracted Academic_Events to the user for confirmation before importing
-4. WHEN the user confirms the extracted events, THE Timetable_Grabber SHALL create Academic_Events with title, module code, location, start time, end time, and recurrence pattern
-5. WHEN a user uploads an ICS_File that is in valid iCalendar format containing at least one VEVENT component, does not exceed 5 MB in size, and contains no more than 500 VEVENT components, THE Timetable_Grabber SHALL parse the file and create Academic_Events for each calendar entry
-6. IF a user uploads an ICS_File that contains more than 500 VEVENT components, THEN THE Timetable_Grabber SHALL reject the entire file and return an error message indicating the event count limit has been exceeded
-7. IF the Timetable_Grabber cannot connect to or extract data from a university portal within 30 seconds, THEN THE Timetable_Grabber SHALL return an error message indicating the connection failure reason and suggest the ICS_File upload as a fallback
-8. WHEN imported Academic_Events have a time range that overlaps with existing events for the same user, THE Timetable_Grabber SHALL flag the overlapping events as conflicts and allow the user to choose whether to overwrite or skip each conflicting entry
-9. IF a user uploads an ICS_File that is not in valid iCalendar format, exceeds 5 MB, or contains no VEVENT components, THEN THE Timetable_Grabber SHALL reject the file and return an error message indicating the specific validation failure
+1. WHEN an authenticated user navigates to the Dashboard_Page, THE Frontend SHALL display upcoming tasks, today's schedule highlights, and recent collaboration activity
+2. THE Dashboard_Page SHALL serve as the default landing page after successful authentication
+3. WHEN a user clicks on a scheduled class item on the Dashboard_Page, THE Frontend SHALL navigate to the Timetable_Page with that class in focus
 
-### Requirement 6: Personal Event Management with Privacy Masking and Categories
+### Requirement 4: Timetable Page - Class Management
 
-**User Story:** As a student, I want to block personal time on my calendar with custom categories and colors while keeping the details private from group members, so that my schedule is visually organized and my availability is accurately reflected without exposing personal information.
+**User Story:** As a student, I want to add, view, edit, and delete my classes on the Timetable page, so that my academic schedule is accurately reflected.
 
 #### Acceptance Criteria
 
-1. WHEN a user creates a Personal_Event with a title (1-100 characters), start time, end time that is after the start time, optional recurrence pattern, and optional Event_Category, THE Timetable_Service SHALL persist the event and associate it with the user
-2. WHEN a user creates an Event_Category with a name (1-50 characters) and a hex color code, THE Timetable_Service SHALL persist the category and make it available for the user's Personal_Events, up to a maximum of 20 categories per user
-3. WHEN a user updates an Event_Category, THE Timetable_Service SHALL persist the changes and reflect the updated name or color on all associated Personal_Events
-4. WHEN a user deletes an Event_Category, THE Timetable_Service SHALL remove the category and set the category association to none on all previously associated Personal_Events
-5. WHEN a user updates an existing Personal_Event, THE Timetable_Service SHALL persist the changes
-6. WHEN a user deletes a Personal_Event, THE Timetable_Service SHALL remove the event
-7. WHEN a group member views another user's timetable, THE Timetable_Service SHALL display each Personal_Event as a Busy_Block showing only the time range without title, category, or details
-8. WHEN a user views their own timetable, THE Timetable_Service SHALL display all Personal_Event details including the title, category name, and associated color
-9. IF a user submits a Personal_Event or Event_Category with missing required fields or invalid values (end time not after start time, title exceeding 100 characters, or category limit exceeded), THEN THE Timetable_Service SHALL reject the request and return a descriptive error message indicating the validation failure; error messages SHALL only be returned when validation actually fails
+1. WHEN a user clicks "Add Class" on the Timetable_Page, THE Frontend SHALL display a form to enter class details including title, module code, location, day of the week, start time, and end time
+2. WHEN a user submits a valid class form with all required fields and an end time after the start time, THE Timetable_Page SHALL persist the class entry and display it on the calendar view
+3. WHEN a user edits an existing class entry, THE Timetable_Page SHALL update the calendar to reflect the changes
+4. WHEN a user deletes a class entry, THE Timetable_Page SHALL remove the class from the calendar view
+5. IF a user submits a class form with missing required fields or an end time that is not after the start time, THEN THE Timetable_Page SHALL display an error message indicating the validation failure
+6. THE Workato_Backend SHALL sync all class entries to the user's connected Google Calendar
 
-### Requirement 7: AI Scheduling Query
+### Requirement 5: Timetable Page - Friend Availability Comparison
 
-**User Story:** As a student in a Study Group, I want to ask a natural language question about when we can meet, so that the AI finds common free time without me manually comparing everyone's schedules.
+**User Story:** As a student, I want to compare my timetable with selected friends' timetables, so that I can find common free time to study together.
 
 #### Acceptance Criteria
 
-1. WHEN a user submits a natural language scheduling query within a Study_Group chat, THE AI_Planner SHALL parse the requested meeting duration from the query, accepting values between 15 minutes and 8 hours
-2. IF the AI_Planner cannot determine the requested meeting duration from the query, THEN THE AI_Planner SHALL respond asking the user to specify how long the meeting should be
-3. WHEN a scheduling query is triggered and the user does not specify a date range, THE AI_Planner SHALL default to searching the next 7 calendar days from the current date
-4. WHEN a scheduling query is triggered, THE AI_Planner SHALL fetch the combined schedules of all members in the specified Study_Group for the determined time range
-5. THE AI_Planner SHALL treat both Academic_Events and Personal_Events as strictly unavailable time when computing Free_Windows
-6. WHEN computing Free_Windows, THE AI_Planner SHALL identify contiguous time periods between 08:00 and 22:00 local time where all group members have no scheduled events and that match or exceed the requested duration
-7. THE AI_Planner SHALL respond with the top 3 available time slots ordered by earliest start time, each including the day, start time, end time, and the total slot duration
-8. IF no Free_Windows matching the requested duration exist in the queried time range, THEN THE AI_Planner SHALL inform the user that no common availability was found and suggest trying a shorter duration or a different time range
+1. THE Timetable_Page SHALL display a Friend_Availability_Dropdown button
+2. WHEN a user clicks the Friend_Availability_Dropdown, THE Frontend SHALL display a dropdown containing checkboxes for each of the user's friends
+3. WHEN a user selects one or more friends via checkboxes in the Friend_Availability_Dropdown, THE Timetable_Page SHALL overlay the selected friends' timetables on top of the user's calendar using visually distinct colors for each friend
+4. WHEN a user deselects a friend in the Friend_Availability_Dropdown, THE Timetable_Page SHALL remove that friend's timetable overlay from the calendar view
+5. WHILE friends' timetables are overlaid, THE Timetable_Page SHALL visually highlight time slots where the user and all selected friends are simultaneously free
 
-### Requirement 8: Collaborative Notes Linked to Academic Events
+### Requirement 6: Timetable Page - Calendar and Task Tabs
 
-**User Story:** As a student in a Study Group, I want to create and edit shared notes tied to upcoming lectures, so that my group can collaboratively prepare for classes.
+**User Story:** As a student, I want to toggle between my calendar view and my task list on the Timetable page, so that I can manage both my schedule and to-do items in one place.
 
 #### Acceptance Criteria
 
-1. WHEN a user creates a note within a Study_Group by providing a title (1 to 200 characters) and content (1 to 50,000 characters) and specifying an existing Academic_Event belonging to any member of the Study_Group, THE Notes_Service SHALL associate the note with that Academic_Event and persist the title and content
-2. WHEN a user in the Study_Group requests notes for a specific Academic_Event, THE Notes_Service SHALL return the current content of the shared note document including its title, content, last-modified timestamp, and the identifier of the last editor
-3. WHEN a user edits a shared note, THE Notes_Service SHALL persist the updated content, update the last-modified timestamp, and make the changes visible to all Study_Group members on their next retrieval request
-4. THE Notes_Service SHALL support sequential editing by multiple users without data loss by persisting the most recent write (last-write-wins strategy)
-5. WHEN a user requests all notes for a Study_Group, THE Notes_Service SHALL return a list of notes ordered by the associated Academic_Event date in ascending chronological order
-6. IF a user attempts to create a note with an invalid or nonexistent Academic_Event, blank title, blank content, or content exceeding 50,000 characters, THEN THE Notes_Service SHALL reject the request and return a descriptive error message indicating the validation failure
-7. IF a user attempts to create or edit a note in a Study_Group they are not a member of, THEN THE Notes_Service SHALL reject the request and return an authorization error
+1. THE Timetable_Page SHALL display two tabs: Your_Calendar_Tab and Your_Task_Tab
+2. WHEN a user selects the Your_Calendar_Tab, THE Timetable_Page SHALL display the weekly calendar view with all classes and events
+3. WHEN a user selects the Your_Task_Tab, THE Timetable_Page SHALL display the user's personal to-do list
+4. WHEN a user creates a task in the Your_Task_Tab with a title and optional due date and priority (High, Medium, Low), THE Frontend SHALL persist the task and display it in the list
+5. WHEN a user marks a task as complete in the Your_Task_Tab, THE Frontend SHALL move the task to a completed section
+6. WHEN a user deletes a task in the Your_Task_Tab, THE Frontend SHALL remove the task from the list
 
-### Requirement 9: Personal To-Do List
+### Requirement 7: Notes Page - User Notes and Shared Notes Tabs
 
-**User Story:** As a student, I want a personal to-do list with status tracking and priority levels within CramCircle, so that I can organize and prioritize tasks, assignments, and reminders alongside my schedule.
-
-#### Acceptance Criteria
-
-1. WHEN a user creates a Todo_Item with a title (1 to 200 characters), optional due date, priority level (High, Medium, or Low), and initial status of "To Do", THE Todo_Service SHALL persist the task and associate it with the authenticated user
-2. WHEN a user updates the status of a Todo_Item they own, THE Todo_Service SHALL allow selection from the following statuses: To Do, In Progress, Done, and Delayed
-3. WHEN a user sets or updates the priority of a Todo_Item they own, THE Todo_Service SHALL persist the priority as High, Medium, or Low
-4. WHEN a user requests their to-do list and the user is successfully authorized, THE Todo_Service SHALL return all Todo_Items owned by that user with status "To Do", "In Progress", or "Delayed", ordered by priority (High first, then Medium, then Low) and then by due date ascending, with items lacking a due date listed last within each priority group
-5. WHEN a user requests completed tasks and explicit authorization validation confirms the user owns the requested items, THE Todo_Service SHALL return all Todo_Items owned by that user with status "Done" in reverse chronological order of completion date
-6. WHEN a user updates a Todo_Item title, due date, priority, or status, THE Todo_Service SHALL validate that the title is between 1 and 200 characters (if changed) and persist the changes
-7. WHEN a user deletes a Todo_Item and direct ownership verification confirms they own the item, THE Todo_Service SHALL remove the task permanently
-8. IF a user attempts to create or update a Todo_Item with invalid data (empty title, title exceeding 200 characters, or unrecognized priority/status value), THEN THE Todo_Service SHALL reject the request and return a descriptive error message indicating the validation failure
-9. IF a user attempts to access, update, or delete a Todo_Item they do not own, THEN THE Todo_Service SHALL reject the request and return an authorization error
-
-### Requirement 10: RESTful API Design
-
-**User Story:** As a developer, I want a well-structured RESTful API, so that the frontend can interact with backend services and AI features through consistent endpoints.
+**User Story:** As a student, I want separate tabs for my personal notes and group-shared notes, so that I can keep my personal study material organized while also accessing collaborative group notes.
 
 #### Acceptance Criteria
 
-1. THE CramCircle_System SHALL expose RESTful API endpoints for all user, group, timetable, notes, and AI planner operations
-2. THE CramCircle_System SHALL require a valid authentication token (non-expired and properly signed) for all API endpoints except registration and login, with tokens expiring after 24 hours of inactivity; expired tokens SHALL be treated as completely unauthenticated and result in a 401 response
-3. WHEN an unauthenticated request is made to a protected endpoint, THE CramCircle_System SHALL return a 401 Unauthorized response
-4. WHEN a user requests a resource belonging to a Study_Group they are not a member of, THE CramCircle_System SHALL return a 403 Forbidden response
-5. THE CramCircle_System SHALL return HTTP status codes mapped as follows: 200 for successful retrieval or update, 201 for successful resource creation, 400 for malformed or invalid request parameters, 401 for missing or invalid authentication, 403 for insufficient permissions, 404 for non-existent resources, and 500 for unhandled server errors
-6. THE CramCircle_System SHALL return all API responses in a consistent JSON structure containing a success indicator, a data field for successful responses, and an error field with a machine-readable error type and a human-readable message for error responses
-7. IF a request contains missing required fields or values failing validation rules, THEN THE CramCircle_System SHALL return a 400 response with the error field identifying each invalid parameter and the reason for rejection
+1. THE Notes_Page SHALL display two tabs: "User's Notes" and "Shared Notes"
+2. WHEN a user selects the "User's Notes" tab, THE Notes_Page SHALL display the user's personal notes organized in user-created folders by topic
+3. WHEN a user creates a new folder in "User's Notes", THE Notes_Page SHALL allow the user to name the folder and organize notes within it
+4. WHEN a user creates a new note in "User's Notes", THE Notes_Page SHALL allow the user to assign the note to an existing folder
+5. WHEN a user selects the "Shared Notes" tab, THE Notes_Page SHALL display only notes that have been shared within Study_Groups the user belongs to
+6. WHILE on the "Shared Notes" tab, THE Notes_Page SHALL organize shared notes in group-assigned folders corresponding to each Study_Group
+7. THE Notes_Page SHALL NOT display react or emote icons on individual note items
+
+### Requirement 8: Notes Page - AI Summarization
+
+**User Story:** As a student, I want an AI summarize button on each note, so that I can get a quick summary of long notes without reading the entire content.
+
+#### Acceptance Criteria
+
+1. THE Notes_Page SHALL display an "AI Summarize" button on each individual note
+2. WHEN a user clicks the "AI Summarize" button on a note, THE CramCircle_App SHALL send the note content to the Kiro_API for summarization
+3. WHEN the Kiro_API returns a summary, THE Notes_Page SHALL display the generated summary within the note view
+4. IF the Kiro_API fails to return a summary within 30 seconds, THEN THE Notes_Page SHALL display an error message indicating the summarization request timed out
+5. IF the Kiro_API returns an error, THEN THE Notes_Page SHALL display a user-friendly error message and allow the user to retry
+
+### Requirement 9: Notes Page - Group Join Mechanism
+
+**User Story:** As a student, I want to join a study group's shared notes by entering the group chat name and a 4-digit password, so that I can access shared materials from verified groups.
+
+#### Acceptance Criteria
+
+1. THE Notes_Page "Shared Notes" tab SHALL display a "Join Group" button
+2. WHEN a user clicks "Join Group", THE Frontend SHALL display a form requiring the group chat name and a 4-digit numeric password
+3. WHEN a user submits a valid group chat name and correct 4-digit password, THE CramCircle_App SHALL add the user to the Study_Group and display the group's shared notes
+4. IF a user submits an incorrect group name or 4-digit password combination, THEN THE CramCircle_App SHALL display an error message indicating the credentials are invalid without revealing which field was incorrect
+5. IF a user attempts to join a Study_Group they are already a member of, THEN THE CramCircle_App SHALL display a message indicating they are already a member
+
+### Requirement 10: Notes Page - Sync to Google Notes
+
+**User Story:** As a student, I want my notes to sync to Google Notes via Workato, so that I can access my study materials from any device through Google's ecosystem.
+
+#### Acceptance Criteria
+
+1. WHEN a user creates or updates a note, THE Workato_Backend SHALL sync the note content to the user's connected Google Notes account
+2. WHEN syncing notes to Google Notes, THE Workato_Backend SHALL preserve the note title and content
+3. IF the Workato_Backend fails to sync a note to Google Notes, THEN THE CramCircle_App SHALL display a notification indicating the sync failure and allow the user to retry
+4. WHEN a user connects their Google Notes account, THE Workato_Backend SHALL perform an initial sync of all existing notes
+
+### Requirement 11: AI Planner Page - Kiro API Chatbot
+
+**User Story:** As a student, I want a working AI chatbot on the AI Planner page that helps me plan my study schedule, so that I can get personalized scheduling suggestions based on my workload and availability.
+
+#### Acceptance Criteria
+
+1. THE AI_Planner_Page SHALL display a conversational chat interface powered by the Kiro_API
+2. WHEN a user submits a message in the AI Planner chat, THE CramCircle_App SHALL send the message to the Kiro_API and display the response in the chat thread
+3. THE Kiro_API chatbot SHALL provide study planning suggestions based on the user's timetable, tasks, and stated preferences
+4. WHEN the Kiro_API returns a response, THE AI_Planner_Page SHALL display the response within 10 seconds of the user's message submission
+5. IF the Kiro_API is unavailable or returns an error, THEN THE AI_Planner_Page SHALL display a user-friendly error message and allow the user to retry their message
+6. THE AI_Planner_Page SHALL maintain conversation history within the current session so the chatbot can provide contextual follow-up responses
+
+### Requirement 12: Friends Page
+
+**User Story:** As a student, I want to manage my friend connections and view friend status, so that I can collaborate and compare schedules with classmates.
+
+#### Acceptance Criteria
+
+1. THE Friends_Page SHALL display a list of the user's current friends with their display names and online status
+2. WHEN a user sends a friend request, THE CramCircle_App SHALL deliver the request to the target user
+3. WHEN a user accepts a friend request, THE CramCircle_App SHALL add both users to each other's friend list
+4. WHEN a user removes a friend, THE CramCircle_App SHALL remove the connection from both users' friend lists
+5. THE Friends_Page SHALL allow searching for users by name or email to send friend requests
+
+### Requirement 13: Group Chat (Optional Feature)
+
+**User Story:** As a student, I want an optional group chat feature similar to Microsoft Teams, so that I can communicate with my study group members in real time.
+
+#### Acceptance Criteria
+
+1. WHERE the Group Chat feature is enabled, THE CramCircle_App SHALL display a Group Chat page accessible from the navigation
+2. WHERE the Group Chat feature is enabled, WHEN a user sends a message in a group chat, THE Frontend SHALL display the message in the chat thread for all group members
+3. WHERE the Group Chat feature is enabled, THE Frontend SHALL display message history when a user opens a group chat
+4. WHERE the Group Chat feature is disabled, THE Frontend SHALL hide the Group Chat option from the navigation menu
+
+### Requirement 14: UI Theme - Default Darker Purple with Customization
+
+**User Story:** As a student, I want the app to have a darker purple theme by default (similar to the Kiro logo color), with the option to change colors in Settings, so that the interface feels cohesive and I can personalize it to my preference.
+
+#### Acceptance Criteria
+
+1. THE Frontend SHALL use a darker purple color scheme as the default theme across all pages
+2. THE Theme_Settings in the Settings_Page Appearance section SHALL allow the user to select from at least 4 predefined color themes
+3. WHEN a user selects a new color theme in Settings, THE Frontend SHALL immediately apply the selected theme across all pages
+4. WHEN a user returns to the app after selecting a custom theme, THE Frontend SHALL persist and restore the user's selected theme preference
+
+### Requirement 15: Settings Page - Full Feature Configuration
+
+**User Story:** As a student, I want all Settings features to be usable, so that I can fully customize my experience including appearance, notifications, privacy, accessibility, profile details, and AI preferences.
+
+#### Acceptance Criteria
+
+1. THE Settings_Page SHALL provide functional sections for: Appearance, Notifications, Privacy & Security, Accessibility, Profile, and AI Preferences
+2. WHEN a user updates Appearance settings (theme color, font size preference), THE Frontend SHALL persist the changes and apply them immediately
+3. WHEN a user updates Notification settings (enable/disable push notifications, email notifications), THE CramCircle_App SHALL persist the preferences and respect them for future notifications
+4. WHEN a user updates Privacy & Security settings (profile visibility, data sharing preferences), THE CramCircle_App SHALL persist and enforce the selected privacy rules
+5. WHEN a user updates Accessibility settings (high contrast mode, reduced motion), THE Frontend SHALL persist the preferences and apply the corresponding visual adjustments
+6. WHEN a user updates Profile settings (display name, avatar, course/program), THE CramCircle_App SHALL persist the profile changes and reflect them across the application
+7. WHEN a user updates AI Preferences (response style, planning aggressiveness), THE CramCircle_App SHALL persist the preferences and pass them to the Kiro_API for subsequent AI interactions
+
+### Requirement 16: Profile Page - Animated Study Character
+
+**User Story:** As a student, I want an improved animated study character on my profile page, so that the app feels more engaging and personalized.
+
+#### Acceptance Criteria
+
+1. THE Profile page SHALL display an animated Profile_Character using a more expressive character design scheme than a static image
+2. THE Profile_Character SHALL use Motion animations for idle, studying, and celebration states
+3. WHEN a user completes a task or achieves a milestone, THE Profile_Character SHALL play a celebration animation
+4. THE Profile_Character design SHALL follow an animated character scheme with expressive features and smooth transitions
+
+### Requirement 17: Workato Backend Integration - Google Calendar Sync
+
+**User Story:** As a student, I want my CramCircle timetable to sync with Google Calendar via Workato, so that my academic schedule is accessible from Google Calendar on any device.
+
+#### Acceptance Criteria
+
+1. WHEN a user connects their Google Calendar account through Settings, THE Workato_Backend SHALL establish a sync connection between CramCircle timetable and Google Calendar
+2. WHEN a user adds, edits, or deletes a class in the Timetable_Page, THE Workato_Backend SHALL propagate the change to the user's connected Google Calendar within 60 seconds
+3. THE Workato_Backend SHALL map CramCircle class fields (title, module code, location, day, start time, end time) to corresponding Google Calendar event fields
+4. IF the Workato_Backend fails to sync a timetable change to Google Calendar, THEN THE CramCircle_App SHALL display a notification indicating the sync failure
+5. WHEN a user disconnects their Google Calendar account, THE Workato_Backend SHALL stop syncing timetable changes and remove the connection
+

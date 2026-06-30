@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Run CramCircle Tasks",
+  "description": "Automatically starts executing the cram-circle implementation tasks from .kiro/specs/cram-circle/tasks.md when triggered. Reads the task list, queues all tasks, and dispatches them to sub-agents for implementation.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Execute all tasks in the cram-circle spec by reading .kiro/specs/cram-circle/tasks.md, queuing all not-started tasks, and dispatching them wave by wave to sub-agents for implementation. The existing frontend is at SyncCircle/apps/frontend/ and is already working — focus on making features functional. Use the task execution orchestrator pattern: get summary, queue all, then execute loop dispatching ready tasks to spec-task-execution sub-agents."
+  }
+}

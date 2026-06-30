@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { useNavigate } from "react-router";
 import { 
   Clock, 
   Users, 
@@ -7,46 +8,102 @@ import {
   Calendar,
   Sparkles,
   ChevronRight,
-  Flame,
   Target,
   Award,
+  CheckSquare,
+  MessageSquare,
 } from "lucide-react";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-const todaysClasses = [
-  { id: 1, name: "Data Structures", time: "10:00 AM", room: "CS-201", color: "#b8a4d4", minutesUntil: 45 },
-  { id: 2, name: "Calculus II", time: "2:00 PM", room: "MATH-104", color: "#d4e8f4", minutesUntil: 285 },
-  { id: 3, name: "Machine Learning", time: "4:00 PM", room: "CS-305", color: "#f4b8d0", minutesUntil: 405 },
-];
-
-const friendStatuses = [
-  { id: 1, name: "Sarah Chen", status: "Studying at Library", avatar: "SC", online: true, color: "#d4f4e8" },
-  { id: 2, name: "Jake Park", status: "In class - CS-201", avatar: "JP", online: true, color: "#d4e8f4" },
-  { id: 3, name: "Maya Patel", status: "Free until 3 PM", avatar: "MP", online: true, color: "#fef4d4" },
-  { id: 4, name: "Alex Kim", status: "Offline", avatar: "AK", online: false, color: "#f0e6f6" },
-];
-
-const upcomingSessions = [
-  { id: 1, title: "Group Study: Algorithms Exam", time: "Tomorrow, 5:00 PM", participants: 4, color: "#b8a4d4" },
-  { id: 2, title: "Calculus Problem Set Review", time: "Sat, 2:00 PM", participants: 3, color: "#d4e8f4" },
-];
-
-const sharedNotes = [
-  { id: 1, title: "ML Week 5 - Neural Networks", author: "Sarah Chen", subject: "Machine Learning", color: "#f4b8d0", updated: "2h ago" },
-  { id: 2, title: "Calculus Cheat Sheet - Integration", author: "Jake Park", subject: "Calculus II", color: "#d4e8f4", updated: "5h ago" },
-];
-
-const productivityData = [
-  { day: 'Mon', hours: 3.5 },
-  { day: 'Tue', hours: 4.2 },
-  { day: 'Wed', hours: 5.1 },
-  { day: 'Thu', hours: 4.8 },
-  { day: 'Fri', hours: 6.2 },
-  { day: 'Sat', hours: 7.5 },
-  { day: 'Sun', hours: 5.8 },
-];
+import { getClasses, getTasks, getFriends, getMessages, getNotes, getUser } from "../lib/storage";
+import type { TimetableClass, Task, ChatMessage } from "../types";
 
 export function Dashboard() {
+  const navigate = useNavigate();
+
+  // Load data from localStorage
+  const user = getUser();
+  const allClasses = getClasses();
+  const allTasks = getTasks();
+  const friends = getFriends();
+  const messages = getMessages();
+  const notes = getNotes();
+
+  // --- Today's Classes ---
+  // Map JS Date.getDay() (0=Sun,1=Mon,...6=Sat) to TimetableClass dayOfWeek (0=Mon,...4=Fri)
+  const jsDay = new Date().getDay(); // 0=Sun, 1=Mon, ... 6=Sat
+  const timetableDay = jsDay === 0 ? -1 : jsDay - 1; // -1 for Sunday (no classes)
+  const todaysClasses: TimetableClass[] = allClasses
+    .filter((cls) => cls.dayOfWeek === timetableDay)
+    .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+  // --- Upcoming Tasks (incomplete, sorted by due date) ---
+  const upcomingTasks: Task[] = allTasks
+    .filter((t) => !t.completed)
+    .sort((a, b) => {
+      if (!a.dueDate && !b.dueDate) return 0;
+      if (!a.dueDate) return 1;
+      if (!b.dueDate) return -1;
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+    })
+    .slice(0, 5);
+
+  // --- Recent Messages (latest 4) ---
+  const recentMessages: ChatMessage[] = [...messages]
+    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    .slice(0, 4);
+
+  // --- Stats ---
+  const incompleteTasks = allTasks.filter((t) => !t.completed).length;
+  const friendCount = friends.length;
+  const notesCount = notes.length;
+  const completedTasks = allTasks.filter((t) => t.completed).length;
+
+  // --- Greeting ---
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const displayName = user?.displayName || "Student";
+  const today = new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+  // --- Helpers ---
+  const formatTime = (time: string) => {
+    const [h, m] = time.split(":").map(Number);
+    const ampm = h >= 12 ? "PM" : "AM";
+    const hour12 = h % 12 || 12;
+    return `${hour12}:${m.toString().padStart(2, "0")} ${ampm}`;
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "High": return "#f4b8d0";
+      case "Medium": return "#d4e8f4";
+      case "Low": return "#d4f4e8";
+      default: return "#b8a4d4";
+    }
+  };
+
+  const formatRelativeDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = date.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays < 0) return "Overdue";
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Tomorrow";
+    if (diffDays <= 7) return `In ${diffDays} days`;
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  };
+
+  const formatMessageTime = (timestamp: string) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Welcome Card */}
@@ -61,20 +118,26 @@ export function Dashboard() {
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-6 h-6" />
-            <span className="text-sm font-medium opacity-90">Friday, June 26, 2026</span>
+            <span className="text-sm font-medium opacity-90">{today}</span>
           </div>
-          <h1 className="text-4xl font-bold mb-2">Good morning, Emma! ☀️</h1>
-          <p className="text-lg opacity-90">You have 3 classes today and 2 upcoming study sessions. Let's make it productive!</p>
+          <h1 className="text-4xl font-bold mb-2">{greeting}, {displayName}! ☀️</h1>
+          <p className="text-lg opacity-90">
+            {todaysClasses.length > 0
+              ? `You have ${todaysClasses.length} class${todaysClasses.length > 1 ? "es" : ""} today${upcomingTasks.length > 0 ? ` and ${upcomingTasks.length} pending task${upcomingTasks.length > 1 ? "s" : ""}` : ""}. Let's make it productive!`
+              : upcomingTasks.length > 0
+                ? `No classes today, but you have ${upcomingTasks.length} pending task${upcomingTasks.length > 1 ? "s" : ""}. Time to get ahead!`
+                : "No classes or tasks today. Enjoy your free time!"}
+          </p>
         </div>
       </motion.div>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-4 gap-4">
         {[
-          { label: "Study Streak", value: "12 days", icon: Flame, color: "#f4b8d0" },
-          { label: "This Week", value: "37.1 hrs", icon: Clock, color: "#d4e8f4" },
-          { label: "Study Friends", value: "24", icon: Users, color: "#b8a4d4" },
-          { label: "Notes Shared", value: "156", icon: BookOpen, color: "#d4f4e8" },
+          { label: "Pending Tasks", value: String(incompleteTasks), icon: CheckSquare, color: "#f4b8d0" },
+          { label: "Completed", value: String(completedTasks), icon: Target, color: "#d4e8f4" },
+          { label: "Study Friends", value: String(friendCount), icon: Users, color: "#b8a4d4" },
+          { label: "Notes", value: String(notesCount), icon: BookOpen, color: "#d4f4e8" },
         ].map((stat, index) => (
           <motion.div
             key={stat.label}
@@ -115,46 +178,58 @@ export function Dashboard() {
               </div>
               <div>
                 <h2 className="text-xl font-bold">Today's Classes</h2>
-                <p className="text-sm text-muted-foreground">3 classes scheduled</p>
+                <p className="text-sm text-muted-foreground">
+                  {todaysClasses.length > 0
+                    ? `${todaysClasses.length} class${todaysClasses.length > 1 ? "es" : ""} scheduled`
+                    : "No classes today"}
+                </p>
               </div>
             </div>
           </div>
 
           <div className="space-y-3">
-            {todaysClasses.map((cls, index) => (
-              <motion.div
-                key={cls.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + index * 0.1 }}
-                className="flex items-center gap-4 p-4 rounded-xl hover:bg-accent/50 transition-all cursor-pointer"
-                style={{ 
-                  borderLeft: `4px solid ${cls.color}`,
-                  background: `linear-gradient(90deg, ${cls.color}10 0%, transparent 100%)`,
-                }}
-              >
-                <div className="flex-1">
-                  <h3 className="font-semibold mb-1">{cls.name}</h3>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {cls.time}
-                    </span>
-                    <span>{cls.room}</span>
+            {todaysClasses.length > 0 ? (
+              todaysClasses.map((cls, index) => (
+                <motion.div
+                  key={cls.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                  className="flex items-center gap-4 p-4 rounded-xl hover:bg-accent/50 transition-all cursor-pointer"
+                  style={{ 
+                    borderLeft: `4px solid ${cls.color}`,
+                    background: `linear-gradient(90deg, ${cls.color}10 0%, transparent 100%)`,
+                  }}
+                  onClick={() => navigate("/timetable")}
+                >
+                  <div className="flex-1">
+                    <h3 className="font-semibold mb-1">{cls.title}</h3>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {formatTime(cls.startTime)} - {formatTime(cls.endTime)}
+                      </span>
+                      <span>{cls.location}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm font-medium" style={{ color: cls.color }}>
-                    {cls.minutesUntil < 60 ? `${cls.minutesUntil}m` : `${Math.floor(cls.minutesUntil / 60)}h ${cls.minutesUntil % 60}m`}
+                  <div className="text-right">
+                    <div className="text-sm font-medium" style={{ color: cls.color }}>
+                      {cls.moduleCode}
+                    </div>
                   </div>
-                  <div className="text-xs text-muted-foreground">until class</div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Calendar className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p className="font-medium">No classes scheduled today</p>
+                <p className="text-sm mt-1">Enjoy your free day or catch up on tasks!</p>
+              </div>
+            )}
           </div>
         </motion.div>
 
-        {/* Friend Statuses */}
+        {/* Upcoming Tasks */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -162,52 +237,77 @@ export function Dashboard() {
           className="bg-card rounded-2xl p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-[#d4f4e8]/20 flex items-center justify-center">
-              <Users className="w-5 h-5 text-[#d4f4e8]" />
+            <div className="w-10 h-10 rounded-xl bg-[#f4b8d0]/20 flex items-center justify-center">
+              <CheckSquare className="w-5 h-5 text-[#f4b8d0]" />
             </div>
             <div>
-              <h2 className="text-xl font-bold">Friends</h2>
-              <p className="text-sm text-muted-foreground">3 online now</p>
+              <h2 className="text-xl font-bold">Upcoming Tasks</h2>
+              <p className="text-sm text-muted-foreground">
+                {upcomingTasks.length > 0
+                  ? `${upcomingTasks.length} pending`
+                  : "All caught up!"}
+              </p>
             </div>
           </div>
 
           <div className="space-y-3">
-            {friendStatuses.map((friend, index) => (
-              <motion.div
-                key={friend.id}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + index * 0.1 }}
-                className="flex items-center gap-3 p-3 rounded-xl hover:bg-accent/50 transition-all cursor-pointer"
-              >
-                <div className="relative">
-                  <div 
-                    className="w-10 h-10 rounded-full flex items-center justify-center font-medium"
-                    style={{ backgroundColor: friend.color }}
-                  >
-                    {friend.avatar}
+            {upcomingTasks.length > 0 ? (
+              upcomingTasks.map((task, index) => (
+                <motion.div
+                  key={task.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 + index * 0.1 }}
+                  className="p-3 rounded-xl hover:bg-accent/50 transition-all cursor-pointer"
+                  style={{
+                    borderLeft: `3px solid ${getPriorityColor(task.priority)}`,
+                    background: `linear-gradient(90deg, ${getPriorityColor(task.priority)}10 0%, transparent 100%)`,
+                  }}
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{task.title}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span
+                        className="text-xs px-2 py-0.5 rounded-md"
+                        style={{
+                          backgroundColor: `${getPriorityColor(task.priority)}30`,
+                          color: getPriorityColor(task.priority),
+                        }}
+                      >
+                        {task.priority}
+                      </span>
+                      {task.dueDate && (
+                        <span className="text-xs text-muted-foreground">
+                          {formatRelativeDate(task.dueDate)}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  {friend.online && (
-                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-card"></div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{friend.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{friend.status}</p>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <CheckSquare className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p className="font-medium">No pending tasks</p>
+                <p className="text-sm mt-1">You're all caught up!</p>
+              </div>
+            )}
           </div>
 
-          <button className="w-full mt-4 py-2 text-sm text-primary hover:bg-accent rounded-xl transition-colors flex items-center justify-center gap-2">
-            View all friends
-            <ChevronRight className="w-4 h-4" />
-          </button>
+          {upcomingTasks.length > 0 && (
+            <button
+              className="w-full mt-4 py-2 text-sm text-primary hover:bg-accent rounded-xl transition-colors flex items-center justify-center gap-2"
+              onClick={() => navigate("/timetable")}
+            >
+              View all tasks
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
         </motion.div>
       </div>
 
       <div className="grid grid-cols-3 gap-6">
-        {/* Productivity Chart */}
+        {/* Recent Collaboration Activity */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -216,39 +316,47 @@ export function Dashboard() {
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl bg-[#d4e8f4]/20 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-[#d4e8f4]" />
+              <MessageSquare className="w-5 h-5 text-[#d4e8f4]" />
             </div>
             <div>
-              <h2 className="text-xl font-bold">Productivity This Week</h2>
-              <p className="text-sm text-muted-foreground">Study hours per day</p>
+              <h2 className="text-xl font-bold">Recent Activity</h2>
+              <p className="text-sm text-muted-foreground">Latest group messages</p>
             </div>
           </div>
 
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={productivityData}>
-              <defs>
-                <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#b8a4d4" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#b8a4d4" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.3} />
-              <XAxis dataKey="day" stroke="#9088a0" />
-              <YAxis stroke="#9088a0" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#ffffff', 
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '12px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                }}
-              />
-              <Area type="monotone" dataKey="hours" stroke="#b8a4d4" strokeWidth={3} fill="url(#colorHours)" />
-            </AreaChart>
-          </ResponsiveContainer>
+          <div className="space-y-3">
+            {recentMessages.length > 0 ? (
+              recentMessages.map((msg, index) => (
+                <motion.div
+                  key={msg.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 + index * 0.1 }}
+                  className="flex items-start gap-3 p-4 rounded-xl hover:bg-accent/50 transition-all"
+                >
+                  <div className="w-9 h-9 rounded-full bg-[#b8a4d4]/20 flex items-center justify-center flex-shrink-0 text-sm font-medium text-[#b8a4d4]">
+                    {msg.senderName.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm">{msg.senderName}</span>
+                      <span className="text-xs text-muted-foreground">{formatMessageTime(msg.timestamp)}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground truncate mt-0.5">{msg.content}</p>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p className="font-medium">No recent activity</p>
+                <p className="text-sm mt-1">Join a study group to start collaborating!</p>
+              </div>
+            )}
+          </div>
         </motion.div>
 
-        {/* Upcoming Study Sessions */}
+        {/* Friends Overview */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -256,39 +364,72 @@ export function Dashboard() {
           className="bg-card rounded-2xl p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-[#f4b8d0]/20 flex items-center justify-center">
-              <Target className="w-5 h-5 text-[#f4b8d0]" />
+            <div className="w-10 h-10 rounded-xl bg-[#d4f4e8]/20 flex items-center justify-center">
+              <Users className="w-5 h-5 text-[#d4f4e8]" />
             </div>
             <div>
-              <h2 className="text-xl font-bold">Study Sessions</h2>
-              <p className="text-sm text-muted-foreground">Upcoming</p>
+              <h2 className="text-xl font-bold">Friends</h2>
+              <p className="text-sm text-muted-foreground">
+                {friends.length > 0
+                  ? `${friends.filter((f) => f.status === "online").length} online now`
+                  : "No friends yet"}
+              </p>
             </div>
           </div>
 
           <div className="space-y-3">
-            {upcomingSessions.map((session, index) => (
-              <motion.div
-                key={session.id}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
-                className="p-4 rounded-xl hover:shadow-md transition-all cursor-pointer"
-                style={{ 
-                  background: `linear-gradient(135deg, ${session.color}15 0%, transparent 100%)`,
-                  border: `1px solid ${session.color}30`
-                }}
-              >
-                <h3 className="font-medium mb-2">{session.title}</h3>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">{session.time}</span>
-                  <div className="flex items-center gap-1 text-muted-foreground">
-                    <Users className="w-3 h-3" />
-                    <span>{session.participants}</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+            {friends.length > 0 ? (
+              friends.slice(0, 4).map((friend, index) => {
+                const statusColors: Record<string, string> = {
+                  online: "#d4f4e8",
+                  studying: "#fef4d4",
+                  offline: "#f0e6f6",
+                };
+                const bgColor = statusColors[friend.status] || "#f0e6f6";
+                return (
+                  <motion.div
+                    key={friend.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 + index * 0.1 }}
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-accent/50 transition-all cursor-pointer"
+                  >
+                    <div className="relative">
+                      <div 
+                        className="w-10 h-10 rounded-full flex items-center justify-center font-medium text-sm"
+                        style={{ backgroundColor: bgColor }}
+                      >
+                        {friend.displayName.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                      </div>
+                      {friend.status === "online" && (
+                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-card"></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium truncate">{friend.displayName}</p>
+                      <p className="text-xs text-muted-foreground truncate capitalize">{friend.status}</p>
+                    </div>
+                  </motion.div>
+                );
+              })
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p className="font-medium">No friends added yet</p>
+                <p className="text-sm mt-1">Add friends to compare schedules!</p>
+              </div>
+            )}
           </div>
+
+          {friends.length > 0 && (
+            <button
+              className="w-full mt-4 py-2 text-sm text-primary hover:bg-accent rounded-xl transition-colors flex items-center justify-center gap-2"
+              onClick={() => navigate("/friends")}
+            >
+              View all friends
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
         </motion.div>
       </div>
 
@@ -306,42 +447,46 @@ export function Dashboard() {
               <BookOpen className="w-5 h-5 text-[#d4f4e8]" />
             </div>
             <div>
-              <h2 className="text-xl font-bold">Recently Shared Notes</h2>
-              <p className="text-sm text-muted-foreground">From your study group</p>
+              <h2 className="text-xl font-bold">Recent Notes</h2>
+              <p className="text-sm text-muted-foreground">Your latest notes</p>
             </div>
           </div>
 
           <div className="space-y-3">
-            {sharedNotes.map((note, index) => (
-              <motion.div
-                key={note.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.7 + index * 0.1 }}
-                className="p-4 rounded-xl hover:shadow-md transition-all cursor-pointer"
-                style={{ 
-                  background: `linear-gradient(135deg, ${note.color}15 0%, transparent 100%)`,
-                  borderLeft: `3px solid ${note.color}`
-                }}
-              >
-                <h3 className="font-medium mb-1">{note.title}</h3>
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <span>By {note.author}</span>
-                  <span>{note.updated}</span>
-                </div>
-                <div className="mt-2">
-                  <span 
-                    className="text-xs px-2 py-1 rounded-lg"
-                    style={{ 
-                      backgroundColor: `${note.color}20`,
-                      color: note.color
-                    }}
-                  >
-                    {note.subject}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
+            {notes.length > 0 ? (
+              [...notes]
+                .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+                .slice(0, 3)
+                .map((note, index) => {
+                  const noteColors = ["#f4b8d0", "#d4e8f4", "#b8a4d4", "#d4f4e8"];
+                  const color = noteColors[index % noteColors.length];
+                  return (
+                    <motion.div
+                      key={note.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.7 + index * 0.1 }}
+                      className="p-4 rounded-xl hover:shadow-md transition-all cursor-pointer"
+                      style={{ 
+                        background: `linear-gradient(135deg, ${color}15 0%, transparent 100%)`,
+                        borderLeft: `3px solid ${color}`
+                      }}
+                      onClick={() => navigate("/notes")}
+                    >
+                      <h3 className="font-medium mb-1 truncate">{note.title}</h3>
+                      <div className="flex items-center justify-between text-sm text-muted-foreground">
+                        <span className="truncate">{note.content.slice(0, 50)}{note.content.length > 50 ? "..." : ""}</span>
+                      </div>
+                    </motion.div>
+                  );
+                })
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p className="font-medium">No notes yet</p>
+                <p className="text-sm mt-1">Create your first note to get started!</p>
+              </div>
+            )}
           </div>
         </motion.div>
 
@@ -369,9 +514,11 @@ export function Dashboard() {
                   <Calendar className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-medium mb-1">Best time to meet with study group</h4>
+                  <h4 className="font-medium mb-1">Schedule Overview</h4>
                   <p className="text-sm text-muted-foreground">
-                    Based on everyone's schedule, tomorrow at 5 PM works best for all 4 members.
+                    {todaysClasses.length > 0
+                      ? `You have ${todaysClasses.length} class${todaysClasses.length > 1 ? "es" : ""} today. First one starts at ${formatTime(todaysClasses[0].startTime)}.`
+                      : "No classes today — a great day to review notes or work on tasks."}
                   </p>
                 </div>
               </div>
@@ -383,9 +530,13 @@ export function Dashboard() {
                   <Award className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-medium mb-1">You're on track for a personal best!</h4>
+                  <h4 className="font-medium mb-1">Task Progress</h4>
                   <p className="text-sm text-muted-foreground">
-                    Keep it up! 3 more days to beat your longest study streak of 14 days.
+                    {incompleteTasks > 0
+                      ? `You have ${incompleteTasks} pending task${incompleteTasks > 1 ? "s" : ""}. ${completedTasks > 0 ? `Great work completing ${completedTasks} so far!` : "Let's get started!"}`
+                      : completedTasks > 0
+                        ? `Amazing! You've completed all ${completedTasks} task${completedTasks > 1 ? "s" : ""}. Keep it up!`
+                        : "Add some tasks to start tracking your progress."}
                   </p>
                 </div>
               </div>
@@ -394,12 +545,14 @@ export function Dashboard() {
             <div className="p-4 bg-white/50 rounded-xl backdrop-blur-sm">
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-lg bg-[#d4e8f4] flex items-center justify-center flex-shrink-0">
-                  <BookOpen className="w-4 h-4 text-[#d4e8f4]" />
+                  <TrendingUp className="w-4 h-4 text-[#d4e8f4]" />
                 </div>
                 <div>
-                  <h4 className="font-medium mb-1">Review ML notes before Monday's exam</h4>
+                  <h4 className="font-medium mb-1">Collaboration Tip</h4>
                   <p className="text-sm text-muted-foreground">
-                    Sarah's neural networks notes from Week 5 might be helpful. Check them out!
+                    {friends.length > 0
+                      ? `Compare timetables with your ${friends.length} friend${friends.length > 1 ? "s" : ""} to find study time together.`
+                      : "Add friends to compare schedules and find study time together!"}
                   </p>
                 </div>
               </div>
