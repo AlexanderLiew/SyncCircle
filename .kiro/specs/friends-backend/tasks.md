@@ -6,8 +6,8 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
 
 ## Tasks
 
-- [ ] 1. Set up project structure and shared types package
-  - [ ] 1.1 Create shared types package at packages/shared/
+- [x] 1. Set up project structure and shared types package
+  - [x] 1.1 Create shared types package at packages/shared/
     - Create `packages/shared/package.json` and `packages/shared/tsconfig.json`
     - Create `packages/shared/src/types/user-profile.ts` with UserProfile interface
     - Create `packages/shared/src/types/friend-request.ts` with FriendRequest interface and status enum
@@ -16,14 +16,14 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Create `packages/shared/src/index.ts` barrel export with JSDoc documentation comments and code examples
     - _Requirements: 20.1, 20.2, 20.3_
 
-  - [ ] 1.2 Set up backend project structure and dependencies
+  - [x] 1.2 Set up backend project structure and dependencies
     - Create `apps/backend/package.json` with dependencies: aws-sdk v3 clients, uuid, aws-cdk-lib, constructs, vitest, fast-check
     - Create `apps/backend/tsconfig.json` configured for Node.js 20 ESM
     - Create directory structure: `src/handlers/`, `src/services/`, `src/repositories/`, `src/utils/`, `src/types/`, `cdk/bin/`, `cdk/lib/`, `tests/`
     - Wire workspace references so backend imports from `@synccircle/shared`
     - _Requirements: 1.1, 22.1_
 
-  - [ ] 1.3 Implement core utility modules
+  - [x] 1.3 Implement core utility modules
     - Create `src/utils/canonical-pair.ts` with `canonicalPair(userA, userB)` function (lexicographic ordering)
     - Create `src/utils/response.ts` with HTTP response helpers (success, created, error responses following ErrorResponse interface)
     - Create `src/utils/logger.ts` with structured JSON logger that strips PII (no emails, tokens, passwords in logs)
@@ -34,8 +34,8 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Test that `canonicalPair(A, B) === canonicalPair(B, A)` and lower ID is always `userIdLow`
     - **Validates: Requirements 9.3, 1.4**
 
-- [ ] 2. Implement validation and token services
-  - [ ] 2.1 Implement validation service
+- [x] 2. Implement validation and token services
+  - [x] 2.1 Implement validation service
     - Create `src/services/validation.service.ts`
     - Validate email format (max 254 chars, RFC-compliant regex)
     - Validate displayName (1-100 chars, non-empty)
@@ -67,7 +67,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Generate name pairs with varying case/whitespace and verify match logic
     - **Validates: Requirements 4.2**
 
-  - [ ] 2.6 Implement token service
+  - [x] 2.6 Implement token service
     - Create `src/services/token.service.ts`
     - Generate cryptographically secure token (32+ bytes using `crypto.randomBytes`)
     - Hash token using SHA-256 (`crypto.createHash('sha256')`)
@@ -90,11 +90,11 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Generate random strings and verify they don't validate against stored hashes
     - **Validates: Requirements 7.7**
 
-- [ ] 3. Checkpoint - Ensure utilities and services compile and tests pass
+- [x] 3. Checkpoint - Ensure utilities and services compile and tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 4. Implement DynamoDB repository layer
-  - [ ] 4.1 Implement UserProfile repository
+- [x] 4. Implement DynamoDB repository layer
+  - [x] 4.1 Implement UserProfile repository
     - Create `src/repositories/user-profile.repo.ts`
     - Implement `createProfile(profile)` using PutItem
     - Implement `getByUserId(userId)` using GetItem
@@ -103,7 +103,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Implement `updateProfile(userId, updates)` using UpdateItem with updatedAt
     - _Requirements: 3.1, 3.2, 3.3, 4.1_
 
-  - [ ] 4.2 Implement FriendRequest repository
+  - [x] 4.2 Implement FriendRequest repository
     - Create `src/repositories/friend-request.repo.ts`
     - Implement `create(request)` using PutItem
     - Implement `getById(requestId)` using GetItem
@@ -116,7 +116,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Implement `setReceiverUserId(requestId, userId)` for registration attachment
     - _Requirements: 5.1, 5.5, 8.2, 12.1, 12.2_
 
-  - [ ] 4.3 Implement Friendship repository
+  - [x] 4.3 Implement Friendship repository
     - Create `src/repositories/friendship.repo.ts`
     - Implement `create(friendship)` using PutItem with condition (prevent duplicate)
     - Implement `getByCanonicalPair(userIdLow, userIdHigh)` using Query
@@ -125,8 +125,8 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Implement `transactAccept(requestUpdate, friendshipCreate)` using TransactWriteItems
     - _Requirements: 9.2, 9.3, 13.1, 14.1_
 
-- [ ] 5. Implement email service
-  - [ ] 5.1 Implement email service
+- [x] 5. Implement email service
+  - [x] 5.1 Implement email service
     - Create `src/services/email.service.ts`
     - Compose invitation email with: sender display name, app name "SyncCircle", invitation link, 7-day expiry note, login/register instructions, ignore note
     - Construct invitation link from configured base URL + token as query parameter
@@ -140,8 +140,8 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Verify email contains sender name, "SyncCircle", invitation link with token, 7-day expiry, HTML + plain text
     - **Validates: Requirements 6.2, 6.3, 6.6**
 
-- [ ] 6. Implement Lambda handlers - Search and Friend Requests
-  - [ ] 6.1 Implement search handler
+- [x] 6. Implement Lambda handlers - Search and Friend Requests
+  - [x] 6.1 Implement search handler
     - Create `src/handlers/search.ts`
     - Validate input (email format, displayName length)
     - Check self-search (reject if sender email matches)
@@ -150,7 +150,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Return appropriate status: found, name_mismatch, not_registered, already_friends, pending_request, self_search
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.10_
 
-  - [ ] 6.2 Implement create friend request handler
+  - [x] 6.2 Implement create friend request handler
     - Create `src/handlers/friend-requests/create.ts`
     - Validate input (email, displayName)
     - Check self-request
@@ -163,7 +163,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Return 201 with requestId, status, emailSent flag
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 5.10, 5.11_
 
-  - [ ] 6.3 Implement accept friend request handler
+  - [x] 6.3 Implement accept friend request handler
     - Create `src/handlers/friend-requests/accept.ts`
     - Get request by ID (404 if not found)
     - Verify caller is receiverUserId (403 if not)
@@ -172,7 +172,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Handle conditional write failures (race conditions)
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 16.1_
 
-  - [ ] 6.4 Implement reject friend request handler
+  - [x] 6.4 Implement reject friend request handler
     - Create `src/handlers/friend-requests/reject.ts`
     - Get request by ID (404 if not found)
     - Verify caller is receiverUserId (403 if not)
@@ -180,7 +180,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Update status to "rejected", set respondedAt
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 16.2_
 
-  - [ ] 6.5 Implement cancel friend request handler
+  - [x] 6.5 Implement cancel friend request handler
     - Create `src/handlers/friend-requests/cancel.ts`
     - Get request by ID (404 if not found)
     - Verify caller is senderUserId (403 if not)
@@ -188,13 +188,13 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Update status to "cancelled"
     - _Requirements: 11.1, 11.2, 11.3, 11.4, 16.3_
 
-  - [ ] 6.6 Implement list incoming/outgoing handlers
+  - [x] 6.6 Implement list incoming/outgoing handlers
     - Create `src/handlers/friend-requests/incoming.ts` — query by receiverUserId, filter status="pending", sort descending, max 100
     - Create `src/handlers/friend-requests/outgoing.ts` — query by senderUserId, mark expired tokens, sort descending, max 100
     - Enrich incoming requests with sender display names via UserProfile batch get
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6_
 
-  - [ ] 6.7 Implement validate-token handler
+  - [x] 6.7 Implement validate-token handler
     - Create `src/handlers/friend-requests/validate-token.ts`
     - Hash incoming token, query by tokenHash-index
     - Check expiry (410 if expired)
@@ -203,22 +203,22 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Return sender display name and createdAt
     - _Requirements: 7.3, 7.4, 7.5, 7.6, 7.7, 7.8_
 
-- [ ] 7. Implement Lambda handlers - Friends and Relationship
-  - [ ] 7.1 Implement list friends handler
+- [x] 7. Implement Lambda handlers - Friends and Relationship
+  - [x] 7.1 Implement list friends handler
     - Create `src/handlers/friends/list.ts`
     - Query Friendships by userId (both GSIs), filter status="active"
     - Enrich with friend display names via UserProfile batch get
     - Return friends array with friendId, displayName, createdAt
     - _Requirements: 13.1, 13.2, 13.3, 13.4_
 
-  - [ ] 7.2 Implement remove friend handler
+  - [x] 7.2 Implement remove friend handler
     - Create `src/handlers/friends/remove.ts`
     - Get friendship by ID
     - Verify caller is one of the two users in canonical pair (403 if not)
     - Update status to "removed", set updatedAt
     - _Requirements: 14.1, 14.2, 14.3, 14.4_
 
-  - [ ] 7.3 Implement relationship query handler
+  - [x] 7.3 Implement relationship query handler
     - Create `src/handlers/friends/relationship.ts`
     - Query Friendships table for canonical pair
     - Query FriendRequests for pending between users
@@ -226,7 +226,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Set isActiveFriend = true only when status is "active"
     - _Requirements: 15.1, 15.2, 15.3, 15.4_
 
-  - [ ] 7.4 Implement post-confirmation trigger
+  - [x] 7.4 Implement post-confirmation trigger
     - Create `src/handlers/triggers/post-confirmation.ts`
     - Create UserProfile record from Cognito event data
     - Query FriendRequests by normalizedEmail (status="pending")
@@ -274,23 +274,23 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Generate mismatched emails and verify rejection with wrong-recipient error
     - **Validates: Requirements 7.8**
 
-- [ ] 8. Checkpoint - Ensure all handler logic compiles and tests pass
+- [x] 8. Checkpoint - Ensure all handler logic compiles and tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 9. Implement CDK infrastructure
-  - [ ] 9.1 Create CDK app entry and main stack
+- [x] 9. Implement CDK infrastructure
+  - [x] 9.1 Create CDK app entry and main stack
     - Create `cdk/bin/app.ts` with CDK App instantiation
     - Create `cdk/lib/friends-stack.ts` as the main stack composing all constructs
     - _Requirements: 1.1_
 
-  - [ ] 9.2 Create DynamoDB construct
+  - [x] 9.2 Create DynamoDB construct
     - Create `cdk/lib/dynamodb-construct.ts`
     - Define UserProfiles table (PK: userId, GSI: normalizedEmail-index, on-demand billing)
     - Define FriendRequests table (PK: requestId, GSIs: senderUserId-createdAt-index, receiverUserId-createdAt-index, normalizedReceiverEmail-index, tokenHash-index, on-demand billing)
     - Define Friendships table (PK: friendshipId, GSIs: userIdLow-index, userIdHigh-index, on-demand billing)
     - _Requirements: 1.2, 1.3, 1.4_
 
-  - [ ] 9.3 Create Cognito construct
+  - [x] 9.3 Create Cognito construct
     - Create `cdk/lib/cognito-construct.ts`
     - Define user pool with email sign-in, auto-verify email, password policy (min 8, uppercase, lowercase, number, special)
     - Configure custom attributes (displayName, course)
@@ -298,14 +298,14 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Attach post-confirmation Lambda trigger
     - _Requirements: 2.1, 2.2, 2.3, 2.6_
 
-  - [ ] 9.4 Create Lambda construct
+  - [x] 9.4 Create Lambda construct
     - Create `cdk/lib/lambda-construct.ts`
     - Define all Lambda functions (Node.js 20 runtime, appropriate timeout/memory)
     - Assign least-privilege IAM policies per function (specific DynamoDB actions on specific table ARNs, SES SendEmail)
     - Set environment variables (table names, SES sender, frontend base URL)
     - _Requirements: 1.5, 1.6_
 
-  - [ ] 9.5 Create API Gateway construct
+  - [x] 9.5 Create API Gateway construct
     - Create `cdk/lib/api-construct.ts`
     - Define REST API with Cognito authorizer
     - Configure all routes matching the API design (search, friend-requests CRUD, friends CRUD, relationship)
@@ -314,12 +314,12 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Configure rate limiting (10 requests per 10s per user on specified endpoints)
     - _Requirements: 2.4, 2.5, 17.1, 17.3, 17.4, 17.5_
 
-  - [ ] 9.6 Create SES construct
+  - [x] 9.6 Create SES construct
     - Create `cdk/lib/ses-construct.ts`
     - Configure verified sender identity from environment variable
     - _Requirements: 6.5_
 
-  - [ ] 9.7 Configure CloudWatch logging
+  - [x] 9.7 Configure CloudWatch logging
     - Enable CloudWatch logs for all Lambdas and API Gateway
     - Set 14-day retention period
     - _Requirements: 1.6_
@@ -332,11 +332,11 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Verify CloudWatch log retention
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
 
-- [ ] 10. Checkpoint - Ensure CDK synthesizes and infrastructure tests pass
+- [x] 10. Checkpoint - Ensure CDK synthesizes and infrastructure tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 11. Implement frontend API client and hooks
-  - [ ] 11.1 Create authenticated API client
+- [x] 11. Implement frontend API client and hooks
+  - [x] 11.1 Create authenticated API client
     - Create `apps/frontend/src/app/lib/api-client.ts`
     - Implement fetch wrapper that attaches Cognito JWT as `Authorization: Bearer {token}`
     - Handle 401 responses (trigger re-auth)
@@ -344,21 +344,21 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Configure base URL from environment variable
     - _Requirements: 18.1, 21.1_
 
-  - [ ] 11.2 Implement auth hook
+  - [x] 11.2 Implement auth hook
     - Create `apps/frontend/src/app/hooks/useAuth.ts`
     - Integrate with Cognito for login, register, confirm, refresh
     - Expose authenticated user state and JWT token
     - _Requirements: 2.1, 2.2, 2.3_
 
-  - [ ] 11.3 Implement friends API hooks
+  - [x] 11.3 Implement friends API hooks
     - Create `apps/frontend/src/app/hooks/useFriendsApi.ts` — list friends, remove friend
     - Create `apps/frontend/src/app/hooks/useFriendRequests.ts` — send request, list incoming/outgoing, accept, reject, cancel
     - Use API client, handle loading/error states
     - Remove all localStorage usage for friend-related operations
     - _Requirements: 18.1, 21.1, 21.2, 21.3_
 
-- [ ] 12. Implement frontend pages
-  - [ ] 12.1 Update Friends page
+- [x] 12. Implement frontend pages
+  - [x] 12.1 Update Friends page
     - Update `apps/frontend/src/app/pages/Friends.tsx` (or create if not exists)
     - Display four sections: Current Friends, Incoming Requests, Sent Requests, Add Friend form
     - Show loading indicators during API calls
@@ -371,7 +371,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - No localStorage fallback — show error on API failure
     - _Requirements: 18.1, 18.2, 18.3, 18.4, 18.5, 18.6, 18.7, 18.8, 18.9, 21.1, 21.2, 21.3_
 
-  - [ ] 12.2 Implement Invitation page
+  - [x] 12.2 Implement Invitation page
     - Create `apps/frontend/src/app/pages/Invitation.tsx`
     - Route: `/invite/{token}`
     - If unauthenticated: redirect to auth page preserving token URL
@@ -404,7 +404,7 @@ This plan implements the SyncCircle Friends Backend as an AWS serverless system 
     - Verify responses don't contain tokenHash, internal keys, or unauthorized emails
     - **Validates: Requirements 17.6, 17.7, 1.6**
 
-- [ ] 13. Final checkpoint - Ensure all tests pass and project builds
+- [x] 13. Final checkpoint - Ensure all tests pass and project builds
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes

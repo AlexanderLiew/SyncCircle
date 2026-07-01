@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { Eye, EyeOff, Sparkles, ArrowLeft, BookOpen, Users, Brain } from "lucide-react";
-import { useNavigate } from "react-router";
-import { validateEmail, validatePassword } from "../lib/validators";
-import { getUser, saveUser } from "../lib/storage";
-import { STORAGE_KEYS, type User } from "../types";
+import { Eye, EyeOff, Sparkles, ArrowLeft, BookOpen, Users, Brain, Loader2 } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
-type AuthView = "login" | "signup" | "forgot";
+type AuthView = "login" | "signup" | "confirm" | "forgot";
 
 export function Auth() {
   const [view, setView] = useState<AuthView>("login");
@@ -14,58 +12,93 @@ export function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [confirmCode, setConfirmCode] = useState("");
   const [forgotSent, setForgotSent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/';
+  const { login, register, confirmRegistration } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+    setIsSubmitting(true);
 
-    const storedUser = getUser();
-    const storedPassword = localStorage.getItem("synccircle_password");
-
-    if (
-      storedUser &&
-      storedPassword &&
-      storedUser.email === email.trim() &&
-      storedPassword === password
-    ) {
-      localStorage.setItem(STORAGE_KEYS.AUTH, "true");
-      navigate("/");
-    } else {
-      setErrors({ login: "Invalid credentials" });
+    try {
+      await login(email.trim(), password);
+      localStorage.setItem("synccircle_auth", "true");
+      navigate(redirectTo);
+    } catch (err: any) {
+      const message = err?.message || 'Login failed';
+      if (message.includes('Incorrect username or password') || message.includes('User does not exist')) {
+        setErrors({ login: "Invalid email or password" });
+      } else if (message.includes('User is not confirmed')) {
+        setErrors({ login: "Please verify your email first" });
+        setView("confirm");
+      } else {
+        setErrors({ login: message });
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
-    const emailResult = validateEmail(email);
-    const passwordResult = validatePassword(password);
-
-    const fieldErrors: Record<string, string> = {
-      ...emailResult.errors,
-      ...passwordResult.errors,
-    };
-
-    if (Object.keys(fieldErrors).length > 0) {
-      setErrors(fieldErrors);
+    if (!name.trim()) {
+      setErrors({ name: "Name is required" });
+      return;
+    }
+    if (!email.trim()) {
+      setErrors({ email: "Email is required" });
+      return;
+    }
+    if (password.length < 8) {
+      setErrors({ password: "Password must be at least 8 characters" });
       return;
     }
 
-    const user: User = {
-      id: crypto.randomUUID(),
-      email: email.trim(),
-      displayName: name.trim(),
-      createdAt: new Date().toISOString(),
-    };
+    setIsSubmitting(true);
 
-    saveUser(user);
-    localStorage.setItem("synccircle_password", password);
-    localStorage.setItem(STORAGE_KEYS.AUTH, "true");
-    navigate("/");
+    try {
+      await register(email.trim(), password, name.trim());
+      // After successful registration, go to confirmation view
+      setView("confirm");
+    } catch (err: any) {
+      const message = err?.message || 'Registration failed';
+      if (message.includes('email')) {
+        setErrors({ email: message });
+      } else if (message.includes('password') || message.includes('Password')) {
+        setErrors({ password: message });
+      } else {
+        setErrors({ signup: message });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleConfirm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+    setIsSubmitting(true);
+
+    try {
+      await confirmRegistration(email.trim(), confirmCode.trim());
+      // After confirmation, log them in automatically
+      await login(email.trim(), password);
+      localStorage.setItem("synccircle_auth", "true");
+      navigate(redirectTo);
+    } catch (err: any) {
+      const message = err?.message || 'Confirmation failed';
+      setErrors({ confirm: message });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleForgot = (e: React.FormEvent) => {
@@ -172,7 +205,7 @@ export function Auth() {
 
               <form onSubmit={handleLogin} className="space-y-5">
                 {errors.login && (
-                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm">
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
                     {errors.login}
                   </div>
                 )}
@@ -221,31 +254,13 @@ export function Auth() {
 
                 <motion.button
                   type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] text-white font-semibold shadow-lg hover:shadow-xl transition-all"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-70 flex items-center justify-center gap-2"
                 >
+                  {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                   Sign In
-                </motion.button>
-
-                <div className="relative flex items-center gap-4 my-2">
-                  <div className="flex-1 h-px bg-border" />
-                  <span className="text-xs text-muted-foreground">or</span>
-                  <div className="flex-1 h-px bg-border" />
-                </div>
-
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.01 }}
-                  className="w-full py-3 rounded-xl bg-card border border-border font-medium hover:bg-accent transition-all flex items-center justify-center gap-3"
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
-                  Continue with Google
                 </motion.button>
               </form>
 
@@ -265,6 +280,12 @@ export function Auth() {
               <p className="text-muted-foreground mb-8">Create your account and start collaborating ✨</p>
 
               <form onSubmit={handleSignup} className="space-y-5">
+                {errors.signup && (
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
+                    {errors.signup}
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-medium mb-2">Full Name</label>
                   <input
@@ -273,12 +294,13 @@ export function Auth() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Emma Wilson"
                     required
-                    className="w-full px-4 py-3 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all"
+                    className={`w-full px-4 py-3 rounded-xl bg-input-background border ${errors.name ? 'border-red-400' : 'border-border'} focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all`}
                   />
+                  {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">University Email</label>
+                  <label className="block text-sm font-medium mb-2">Email</label>
                   <input
                     type="email"
                     value={email}
@@ -287,9 +309,7 @@ export function Auth() {
                     required
                     className={`w-full px-4 py-3 rounded-xl bg-input-background border ${errors.email ? 'border-red-400' : 'border-border'} focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all`}
                   />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-                  )}
+                  {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                 </div>
 
                 <div>
@@ -299,7 +319,7 @@ export function Auth() {
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Min 8 characters"
+                      placeholder="Min 8 chars, uppercase, lowercase, number, symbol"
                       required
                       minLength={8}
                       className={`w-full px-4 py-3 pr-12 rounded-xl bg-input-background border ${errors.password ? 'border-red-400' : 'border-border'} focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all`}
@@ -312,26 +332,18 @@ export function Auth() {
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
-                  {errors.password && (
-                    <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-                  )}
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <input type="checkbox" required id="terms" className="mt-1 accent-[#b8a4d4]" />
-                  <label htmlFor="terms" className="text-sm text-muted-foreground">
-                    I agree to the{" "}
-                    <span className="text-primary cursor-pointer hover:underline">Terms of Service</span> and{" "}
-                    <span className="text-primary cursor-pointer hover:underline">Privacy Policy</span>
-                  </label>
+                  {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
+                  <p className="mt-1 text-xs text-muted-foreground">Must include uppercase, lowercase, number, and special character</p>
                 </div>
 
                 <motion.button
                   type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] text-white font-semibold shadow-lg hover:shadow-xl transition-all"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-70 flex items-center justify-center gap-2"
                 >
+                  {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                   Create Account
                 </motion.button>
               </form>
@@ -341,6 +353,52 @@ export function Auth() {
                 <button onClick={() => { setErrors({}); setView("login"); }} className="text-primary font-medium hover:underline">
                   Sign in
                 </button>
+              </p>
+            </motion.div>
+          )}
+
+          {/* — CONFIRM EMAIL — */}
+          {view === "confirm" && (
+            <motion.div key="confirm" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <h2 className="text-3xl font-bold mb-1">Verify your email</h2>
+              <p className="text-muted-foreground mb-8">
+                We sent a verification code to <strong>{email}</strong> 📧
+              </p>
+
+              <form onSubmit={handleConfirm} className="space-y-5">
+                {errors.confirm && (
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
+                    {errors.confirm}
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Verification Code</label>
+                  <input
+                    type="text"
+                    value={confirmCode}
+                    onChange={(e) => setConfirmCode(e.target.value)}
+                    placeholder="Enter 6-digit code"
+                    required
+                    maxLength={6}
+                    className="w-full px-4 py-3 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all text-center text-2xl tracking-widest"
+                  />
+                </div>
+
+                <motion.button
+                  type="submit"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-70 flex items-center justify-center gap-2"
+                >
+                  {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Verify & Sign In
+                </motion.button>
+              </form>
+
+              <p className="text-center text-sm text-muted-foreground mt-6">
+                Didn&apos;t receive the code? Check your spam folder.
               </p>
             </motion.div>
           )}

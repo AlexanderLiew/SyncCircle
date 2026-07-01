@@ -1,0 +1,5047 @@
+{
+ "Description": "SyncCircle Friends Backend - Cognito, API Gateway, Lambda, DynamoDB, SES, CloudWatch",
+ "Resources": {
+  "DynamoDbUserProfilesTable56C9F6F1": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "normalizedEmail",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "normalizedEmail-index",
+      "KeySchema": [
+       {
+        "AttributeName": "normalizedEmail",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "userId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "TableName": "UserProfiles"
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/DynamoDb/UserProfilesTable/Resource"
+   }
+  },
+  "DynamoDbFriendRequestsTableAE7598AF": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "requestId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "senderUserId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "receiverUserId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "normalizedReceiverEmail",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "tokenHash",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "senderUserId-createdAt-index",
+      "KeySchema": [
+       {
+        "AttributeName": "senderUserId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "receiverUserId-createdAt-index",
+      "KeySchema": [
+       {
+        "AttributeName": "receiverUserId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "normalizedReceiverEmail-index",
+      "KeySchema": [
+       {
+        "AttributeName": "normalizedReceiverEmail",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "tokenHash-index",
+      "KeySchema": [
+       {
+        "AttributeName": "tokenHash",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "requestId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "TableName": "FriendRequests"
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/DynamoDb/FriendRequestsTable/Resource"
+   }
+  },
+  "DynamoDbFriendshipsTable71E5A0A1": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "friendshipId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "userIdLow",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "userIdHigh",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "userIdLow-index",
+      "KeySchema": [
+       {
+        "AttributeName": "userIdLow",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "userIdHigh-index",
+      "KeySchema": [
+       {
+        "AttributeName": "userIdHigh",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "friendshipId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "TableName": "Friendships"
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/DynamoDb/FriendshipsTable/Resource"
+   }
+  },
+  "SesSenderIdentity1B72E79E": {
+   "Type": "AWS::SES::EmailIdentity",
+   "Properties": {
+    "EmailIdentity": "noreply@synccircle.com"
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Ses/SenderIdentity/Resource"
+   }
+  },
+  "LambdasSearchHandlerServiceRole3F692372": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/SearchHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasSearchHandlerServiceRoleDefaultPolicyAC74E46C": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbUserProfilesTable56C9F6F1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbUserProfilesTable56C9F6F1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendshipsTable71E5A0A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendshipsTable71E5A0A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasSearchHandlerServiceRoleDefaultPolicyAC74E46C",
+    "Roles": [
+     {
+      "Ref": "LambdasSearchHandlerServiceRole3F692372"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/SearchHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasSearchHandler24194496": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "d3259905639fa97b12d016804a0e48b3ee3e0d254f7a5959104ad6a9d048bbe4.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-Search",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasSearchHandlerServiceRole3F692372",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasSearchHandlerServiceRoleDefaultPolicyAC74E46C",
+    "LambdasSearchHandlerServiceRole3F692372"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/SearchHandler/Resource",
+    "aws:asset:path": "asset.d3259905639fa97b12d016804a0e48b3ee3e0d254f7a5959104ad6a9d048bbe4",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasSearchHandlerLogRetention2A2A521D": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasSearchHandler24194496"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/SearchHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasCreateFriendRequestHandlerServiceRole68A536FE": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/CreateFriendRequestHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasCreateFriendRequestHandlerServiceRoleDefaultPolicyC341D60A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:PutItem",
+        "dynamodb:Query"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbUserProfilesTable56C9F6F1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbUserProfilesTable56C9F6F1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendshipsTable71E5A0A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendshipsTable71E5A0A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "ses:SendEmail",
+       "Condition": {
+        "StringEquals": {
+         "ses:FromAddress": "noreply@synccircle.com"
+        }
+       },
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasCreateFriendRequestHandlerServiceRoleDefaultPolicyC341D60A",
+    "Roles": [
+     {
+      "Ref": "LambdasCreateFriendRequestHandlerServiceRole68A536FE"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/CreateFriendRequestHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasCreateFriendRequestHandlerF9C97C45": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "5bf32eb0f7678c9b6c6a4cd8e76da085c50e936e993cf9b6fba93d52d04dfab3.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-CreateRequest",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasCreateFriendRequestHandlerServiceRole68A536FE",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasCreateFriendRequestHandlerServiceRoleDefaultPolicyC341D60A",
+    "LambdasCreateFriendRequestHandlerServiceRole68A536FE"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/CreateFriendRequestHandler/Resource",
+    "aws:asset:path": "asset.5bf32eb0f7678c9b6c6a4cd8e76da085c50e936e993cf9b6fba93d52d04dfab3",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasCreateFriendRequestHandlerLogRetentionC2324D0F": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasCreateFriendRequestHandlerF9C97C45"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/CreateFriendRequestHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasAcceptHandlerServiceRoleBCABC0D3": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/AcceptHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasAcceptHandlerServiceRoleDefaultPolicy9BA3F994": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "dynamodb:PutItem",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendshipsTable71E5A0A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendshipsTable71E5A0A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasAcceptHandlerServiceRoleDefaultPolicy9BA3F994",
+    "Roles": [
+     {
+      "Ref": "LambdasAcceptHandlerServiceRoleBCABC0D3"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/AcceptHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasAcceptHandler8A348375": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "7a0341090918b4422e7ede5cd724c5c9fef55585a19fc7fa1b6286d5fa152265.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-Accept",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasAcceptHandlerServiceRoleBCABC0D3",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasAcceptHandlerServiceRoleDefaultPolicy9BA3F994",
+    "LambdasAcceptHandlerServiceRoleBCABC0D3"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/AcceptHandler/Resource",
+    "aws:asset:path": "asset.7a0341090918b4422e7ede5cd724c5c9fef55585a19fc7fa1b6286d5fa152265",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasAcceptHandlerLogRetention8F665FAC": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasAcceptHandler8A348375"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/AcceptHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasRejectHandlerServiceRole4E676483": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RejectHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasRejectHandlerServiceRoleDefaultPolicyF94E6485": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasRejectHandlerServiceRoleDefaultPolicyF94E6485",
+    "Roles": [
+     {
+      "Ref": "LambdasRejectHandlerServiceRole4E676483"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RejectHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasRejectHandlerF5B1A8CC": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "ad5025caae5c8e1666807c4b93ae76b59ceaf4f08c9b716a7ca13727762be66a.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-Reject",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasRejectHandlerServiceRole4E676483",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasRejectHandlerServiceRoleDefaultPolicyF94E6485",
+    "LambdasRejectHandlerServiceRole4E676483"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RejectHandler/Resource",
+    "aws:asset:path": "asset.ad5025caae5c8e1666807c4b93ae76b59ceaf4f08c9b716a7ca13727762be66a",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasRejectHandlerLogRetention9BC118ED": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasRejectHandlerF5B1A8CC"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RejectHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasCancelHandlerServiceRole070604ED": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/CancelHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasCancelHandlerServiceRoleDefaultPolicy558902CC": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasCancelHandlerServiceRoleDefaultPolicy558902CC",
+    "Roles": [
+     {
+      "Ref": "LambdasCancelHandlerServiceRole070604ED"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/CancelHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasCancelHandler4E117CC4": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "742539fcfd30a59a212862c5aa1f9c294d6ab8f9e035963fea5d14dfd1e23ab1.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-Cancel",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasCancelHandlerServiceRole070604ED",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasCancelHandlerServiceRoleDefaultPolicy558902CC",
+    "LambdasCancelHandlerServiceRole070604ED"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/CancelHandler/Resource",
+    "aws:asset:path": "asset.742539fcfd30a59a212862c5aa1f9c294d6ab8f9e035963fea5d14dfd1e23ab1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasCancelHandlerLogRetention06490B44": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasCancelHandler4E117CC4"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/CancelHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasIncomingHandlerServiceRoleCD5F990B": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/IncomingHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasIncomingHandlerServiceRoleDefaultPolicyD3F4839C": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "dynamodb:BatchGetItem",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbUserProfilesTable56C9F6F1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbUserProfilesTable56C9F6F1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasIncomingHandlerServiceRoleDefaultPolicyD3F4839C",
+    "Roles": [
+     {
+      "Ref": "LambdasIncomingHandlerServiceRoleCD5F990B"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/IncomingHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasIncomingHandlerEE5BF439": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "10e8d97e2aacf6abe1fb790f1eeeb7f81edf760db5aaf1a639e335c51fb23bf5.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-Incoming",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasIncomingHandlerServiceRoleCD5F990B",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasIncomingHandlerServiceRoleDefaultPolicyD3F4839C",
+    "LambdasIncomingHandlerServiceRoleCD5F990B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/IncomingHandler/Resource",
+    "aws:asset:path": "asset.10e8d97e2aacf6abe1fb790f1eeeb7f81edf760db5aaf1a639e335c51fb23bf5",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasIncomingHandlerLogRetention2C603B2C": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasIncomingHandlerEE5BF439"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/IncomingHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasOutgoingHandlerServiceRoleA531DDE7": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/OutgoingHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasOutgoingHandlerServiceRoleDefaultPolicy83280AD4": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasOutgoingHandlerServiceRoleDefaultPolicy83280AD4",
+    "Roles": [
+     {
+      "Ref": "LambdasOutgoingHandlerServiceRoleA531DDE7"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/OutgoingHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasOutgoingHandler7956AFB4": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "6dd2d014f1c6b244b809b7de472a45aa28e9349ff213d1345b6d8c60fea8c8d4.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-Outgoing",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasOutgoingHandlerServiceRoleA531DDE7",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasOutgoingHandlerServiceRoleDefaultPolicy83280AD4",
+    "LambdasOutgoingHandlerServiceRoleA531DDE7"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/OutgoingHandler/Resource",
+    "aws:asset:path": "asset.6dd2d014f1c6b244b809b7de472a45aa28e9349ff213d1345b6d8c60fea8c8d4",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasOutgoingHandlerLogRetention0A2E2709": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasOutgoingHandler7956AFB4"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/OutgoingHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasValidateTokenHandlerServiceRoleDE741691": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/ValidateTokenHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasValidateTokenHandlerServiceRoleDefaultPolicy04D96BC4": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "dynamodb:GetItem",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbUserProfilesTable56C9F6F1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbUserProfilesTable56C9F6F1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasValidateTokenHandlerServiceRoleDefaultPolicy04D96BC4",
+    "Roles": [
+     {
+      "Ref": "LambdasValidateTokenHandlerServiceRoleDE741691"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/ValidateTokenHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasValidateTokenHandler57F64CBE": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "f28fa1da82a50e4752c36301a4de8633171e257f2b9bc25332d3aa944a8c328a.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-ValidateToken",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasValidateTokenHandlerServiceRoleDE741691",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasValidateTokenHandlerServiceRoleDefaultPolicy04D96BC4",
+    "LambdasValidateTokenHandlerServiceRoleDE741691"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/ValidateTokenHandler/Resource",
+    "aws:asset:path": "asset.f28fa1da82a50e4752c36301a4de8633171e257f2b9bc25332d3aa944a8c328a",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasValidateTokenHandlerLogRetention8DD4EFD9": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasValidateTokenHandler57F64CBE"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/ValidateTokenHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasListFriendsHandlerServiceRole827F3DC3": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/ListFriendsHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasListFriendsHandlerServiceRoleDefaultPolicyFB2DA305": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendshipsTable71E5A0A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendshipsTable71E5A0A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "dynamodb:BatchGetItem",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbUserProfilesTable56C9F6F1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbUserProfilesTable56C9F6F1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasListFriendsHandlerServiceRoleDefaultPolicyFB2DA305",
+    "Roles": [
+     {
+      "Ref": "LambdasListFriendsHandlerServiceRole827F3DC3"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/ListFriendsHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasListFriendsHandlerE98427B4": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "a5227bdad3af55a594a1074ca94d3d92bf65f21ea4fa77a2502dc7ea33e6303c.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-List",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasListFriendsHandlerServiceRole827F3DC3",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasListFriendsHandlerServiceRoleDefaultPolicyFB2DA305",
+    "LambdasListFriendsHandlerServiceRole827F3DC3"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/ListFriendsHandler/Resource",
+    "aws:asset:path": "asset.a5227bdad3af55a594a1074ca94d3d92bf65f21ea4fa77a2502dc7ea33e6303c",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasListFriendsHandlerLogRetention54EEED04": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasListFriendsHandlerE98427B4"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/ListFriendsHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasRemoveFriendHandlerServiceRoleA6CE47F6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RemoveFriendHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasRemoveFriendHandlerServiceRoleDefaultPolicyC81DFF2E": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendshipsTable71E5A0A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendshipsTable71E5A0A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasRemoveFriendHandlerServiceRoleDefaultPolicyC81DFF2E",
+    "Roles": [
+     {
+      "Ref": "LambdasRemoveFriendHandlerServiceRoleA6CE47F6"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RemoveFriendHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasRemoveFriendHandlerD84228FF": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "afaa651b68046535611e52d749ef7572fc610d8e3b4b31af1232943f08d775b1.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-Remove",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasRemoveFriendHandlerServiceRoleA6CE47F6",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasRemoveFriendHandlerServiceRoleDefaultPolicyC81DFF2E",
+    "LambdasRemoveFriendHandlerServiceRoleA6CE47F6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RemoveFriendHandler/Resource",
+    "aws:asset:path": "asset.afaa651b68046535611e52d749ef7572fc610d8e3b4b31af1232943f08d775b1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasRemoveFriendHandlerLogRetention07B21904": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasRemoveFriendHandlerD84228FF"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RemoveFriendHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasRelationshipHandlerServiceRoleF79E09F0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RelationshipHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasRelationshipHandlerServiceRoleDefaultPolicy35119ADC": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendshipsTable71E5A0A1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendshipsTable71E5A0A1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasRelationshipHandlerServiceRoleDefaultPolicy35119ADC",
+    "Roles": [
+     {
+      "Ref": "LambdasRelationshipHandlerServiceRoleF79E09F0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RelationshipHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasRelationshipHandler6BB6F2A1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "0d24bbb4a794f2a953d75736bf15346f48d9149f6f13fafaac9289f1cca5b65b.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-Relationship",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasRelationshipHandlerServiceRoleF79E09F0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasRelationshipHandlerServiceRoleDefaultPolicy35119ADC",
+    "LambdasRelationshipHandlerServiceRoleF79E09F0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RelationshipHandler/Resource",
+    "aws:asset:path": "asset.0d24bbb4a794f2a953d75736bf15346f48d9149f6f13fafaac9289f1cca5b65b",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasRelationshipHandlerLogRetention2BBCAF31": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasRelationshipHandler6BB6F2A1"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/RelationshipHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasPostConfirmationHandlerServiceRole869B942D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/PostConfirmationHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasPostConfirmationHandlerServiceRoleDefaultPolicy9BD1A471": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:PutItem",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbUserProfilesTable56C9F6F1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbUserProfilesTable56C9F6F1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:Query",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbFriendRequestsTableAE7598AF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbFriendRequestsTableAE7598AF",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasPostConfirmationHandlerServiceRoleDefaultPolicy9BD1A471",
+    "Roles": [
+     {
+      "Ref": "LambdasPostConfirmationHandlerServiceRole869B942D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/PostConfirmationHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasPostConfirmationHandlerB89F574E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "804efb267ecde6ba7aa5d26244791badecad77b35d44453fbf11921b96abdd7f.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "FRIEND_REQUESTS_TABLE": {
+       "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      },
+      "FRIENDSHIPS_TABLE": {
+       "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      },
+      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "FRONTEND_BASE_URL": "http://localhost:5173"
+     }
+    },
+    "FunctionName": "SyncCircle-Friends-PostConfirmation",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasPostConfirmationHandlerServiceRole869B942D",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 60
+   },
+   "DependsOn": [
+    "LambdasPostConfirmationHandlerServiceRoleDefaultPolicy9BD1A471",
+    "LambdasPostConfirmationHandlerServiceRole869B942D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/PostConfirmationHandler/Resource",
+    "aws:asset:path": "asset.804efb267ecde6ba7aa5d26244791badecad77b35d44453fbf11921b96abdd7f",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasPostConfirmationHandlerLogRetentionEB5C4881": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasPostConfirmationHandlerB89F574E"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/PostConfirmationHandler/LogRetention/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:PutRetentionPolicy",
+        "logs:DeleteRetentionPolicy"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "Roles": [
+     {
+      "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Handler": "index.handler",
+    "Runtime": "nodejs24.x",
+    "Timeout": 900,
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+    "aws:asset:path": "asset.2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CognitoUserPoolPostConfirmationCognitoE814E87C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasPostConfirmationHandlerB89F574E",
+      "Arn"
+     ]
+    },
+    "Principal": "cognito-idp.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "CognitoUserPool279BBD48",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Cognito/UserPool/PostConfirmationCognito"
+   }
+  },
+  "CognitoUserPool279BBD48": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_phone_number",
+       "Priority": 1
+      },
+      {
+       "Name": "verified_email",
+       "Priority": 2
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": false
+    },
+    "AutoVerifiedAttributes": [
+     "email"
+    ],
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "LambdaConfig": {
+     "PostConfirmation": {
+      "Fn::GetAtt": [
+       "LambdasPostConfirmationHandlerB89F574E",
+       "Arn"
+      ]
+     }
+    },
+    "Policies": {
+     "PasswordPolicy": {
+      "MinimumLength": 8,
+      "RequireLowercase": true,
+      "RequireNumbers": true,
+      "RequireSymbols": true,
+      "RequireUppercase": true
+     }
+    },
+    "Schema": [
+     {
+      "AttributeDataType": "String",
+      "Mutable": true,
+      "Name": "displayName"
+     },
+     {
+      "AttributeDataType": "String",
+      "Mutable": true,
+      "Name": "course"
+     }
+    ],
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "UsernameAttributes": [
+     "email"
+    ],
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Cognito/UserPool/Resource"
+   }
+  },
+  "CognitoUserPoolUserPoolClient1E6BF456": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AccessTokenValidity": 60,
+    "AllowedOAuthFlows": [
+     "implicit",
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "profile",
+     "phone",
+     "email",
+     "openid",
+     "aws.cognito.signin.user.admin"
+    ],
+    "CallbackURLs": [
+     "https://example.com"
+    ],
+    "ExplicitAuthFlows": [
+     "ALLOW_USER_PASSWORD_AUTH",
+     "ALLOW_USER_SRP_AUTH",
+     "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    "RefreshTokenValidity": 43200,
+    "SupportedIdentityProviders": [
+     "COGNITO"
+    ],
+    "TokenValidityUnits": {
+     "AccessToken": "minutes",
+     "RefreshToken": "minutes"
+    },
+    "UserPoolId": {
+     "Ref": "CognitoUserPool279BBD48"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Cognito/UserPool/UserPoolClient/Resource"
+   }
+  },
+  "ApiApiAccessLogs4EAA4C13": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": "/aws/apigateway/SyncCircle-Friends-API",
+    "RetentionInDays": 14
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/ApiAccessLogs/Resource"
+   }
+  },
+  "ApiFriendsApi19C890F1": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "REST API for the SyncCircle Friends Backend",
+    "Name": "SyncCircle Friends API"
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Resource"
+   }
+  },
+  "ApiFriendsApiCloudWatchRoleC7A7A139": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/CloudWatchRole/Resource"
+   }
+  },
+  "ApiFriendsApiAccountE0B7F335": {
+   "Type": "AWS::ApiGateway::Account",
+   "Properties": {
+    "CloudWatchRoleArn": {
+     "Fn::GetAtt": [
+      "ApiFriendsApiCloudWatchRoleC7A7A139",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "ApiFriendsApi19C890F1"
+   ],
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Account"
+   }
+  },
+  "ApiFriendsApiDeploymentA8F32162493057d844e1f7af730571944434a7fe": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "REST API for the SyncCircle Friends Backend",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "DependsOn": [
+    "ApiBodyValidatorB3E71016",
+    "ApiFriendsApiAccessDeniedC4A21480",
+    "ApiFriendsApiCreateFriendRequestModel97F7BC10",
+    "ApiFriendsApifriendrequestsrequestIdacceptOPTIONS14553CB8",
+    "ApiFriendsApifriendrequestsrequestIdacceptPOST32A38BE1",
+    "ApiFriendsApifriendrequestsrequestIdaccept4D7BB420",
+    "ApiFriendsApifriendrequestsrequestIdcancelOPTIONSC9BE4402",
+    "ApiFriendsApifriendrequestsrequestIdcancelPOST3D70C93D",
+    "ApiFriendsApifriendrequestsrequestIdcancelA94D3012",
+    "ApiFriendsApifriendrequestsrequestIdOPTIONS22724636",
+    "ApiFriendsApifriendrequestsrequestIdrejectOPTIONSB328E7EC",
+    "ApiFriendsApifriendrequestsrequestIdrejectPOST9E9CD733",
+    "ApiFriendsApifriendrequestsrequestIdreject633021DE",
+    "ApiFriendsApifriendrequestsrequestIdB4F0B187",
+    "ApiFriendsApifriendrequestsincomingGET6C118AAD",
+    "ApiFriendsApifriendrequestsincomingOPTIONS986F7C72",
+    "ApiFriendsApifriendrequestsincoming6DC9679C",
+    "ApiFriendsApifriendrequestsinvitetokenGETEB5947BD",
+    "ApiFriendsApifriendrequestsinvitetokenOPTIONSC627C5B4",
+    "ApiFriendsApifriendrequestsinvitetoken8EB76D6B",
+    "ApiFriendsApifriendrequestsinviteOPTIONS3B8FF749",
+    "ApiFriendsApifriendrequestsinvite883B86A0",
+    "ApiFriendsApifriendrequestsOPTIONS323B38A2",
+    "ApiFriendsApifriendrequestsoutgoingGET271550E2",
+    "ApiFriendsApifriendrequestsoutgoingOPTIONS24D80188",
+    "ApiFriendsApifriendrequestsoutgoing24638E84",
+    "ApiFriendsApifriendrequestsPOST18E470DD",
+    "ApiFriendsApifriendrequests977032EF",
+    "ApiFriendsApifriendsfriendIdDELETE59110770",
+    "ApiFriendsApifriendsfriendIdOPTIONSA62A591A",
+    "ApiFriendsApifriendsfriendIdrelationshipGETE9F0FA72",
+    "ApiFriendsApifriendsfriendIdrelationshipOPTIONSC0B7EDC4",
+    "ApiFriendsApifriendsfriendIdrelationship638F7DB8",
+    "ApiFriendsApifriendsfriendIdDDDD4129",
+    "ApiFriendsApifriendsGETDC0B6AE2",
+    "ApiFriendsApifriendsOPTIONSD351AFB8",
+    "ApiFriendsApifriends173BDCB9",
+    "ApiFriendsApifriendssearchOPTIONSCF53BAB0",
+    "ApiFriendsApifriendssearchPOST0FEE2487",
+    "ApiFriendsApifriendssearchC053DB02",
+    "ApiFriendsApiOPTIONSBB1AD3D4",
+    "ApiFriendsApiDefault4XXF423441C",
+    "ApiFriendsApiDefault5XXF0912E0C",
+    "ApiFriendsApiSearchModelA95E27E5",
+    "ApiFriendsApiUnauthorized2C1ED6F3"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Deployment/Resource",
+    "aws:cdk:do-not-refactor": true
+   }
+  },
+  "ApiFriendsApiDeploymentStageprodE329F81B": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "AccessLogSetting": {
+     "DestinationArn": {
+      "Fn::GetAtt": [
+       "ApiApiAccessLogs4EAA4C13",
+       "Arn"
+      ]
+     },
+     "Format": "{\"requestId\":\"$context.requestId\",\"ip\":\"$context.identity.sourceIp\",\"requestTime\":\"$context.requestTime\",\"httpMethod\":\"$context.httpMethod\",\"resourcePath\":\"$context.resourcePath\",\"status\":\"$context.status\",\"protocol\":\"$context.protocol\",\"responseLength\":\"$context.responseLength\"}"
+    },
+    "DeploymentId": {
+     "Ref": "ApiFriendsApiDeploymentA8F32162493057d844e1f7af730571944434a7fe"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    },
+    "StageName": "prod"
+   },
+   "DependsOn": [
+    "ApiFriendsApiAccountE0B7F335"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "ApiFriendsApiOPTIONSBB1AD3D4": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "ApiFriendsApi19C890F1",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriends173BDCB9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ApiFriendsApi19C890F1",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "friends",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/Resource"
+   }
+  },
+  "ApiFriendsApifriendsOPTIONSD351AFB8": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriends173BDCB9"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendssearchC053DB02": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriends173BDCB9"
+    },
+    "PathPart": "search",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/search/Resource"
+   }
+  },
+  "ApiFriendsApifriendssearchOPTIONSCF53BAB0": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendssearchC053DB02"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/search/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendssearchPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendssearch40099706": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasSearchHandler24194496",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/POST/friends/search"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/search/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friends.search"
+   }
+  },
+  "ApiFriendsApifriendssearchPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendssearch60979D76": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasSearchHandler24194496",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/POST/friends/search"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/search/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friends.search"
+   }
+  },
+  "ApiFriendsApifriendssearchPOST0FEE2487": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasSearchHandler24194496",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "RequestModels": {
+     "application/json": {
+      "Ref": "ApiFriendsApiSearchModelA95E27E5"
+     }
+    },
+    "RequestValidatorId": {
+     "Ref": "ApiBodyValidatorB3E71016"
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendssearchC053DB02"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/search/POST/Resource"
+   }
+  },
+  "ApiFriendsApifriendsGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendsFD094961": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasListFriendsHandlerE98427B4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/GET/friends"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friends"
+   }
+  },
+  "ApiFriendsApifriendsGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriends2A5892F5": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasListFriendsHandlerE98427B4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/GET/friends"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friends"
+   }
+  },
+  "ApiFriendsApifriendsGETDC0B6AE2": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasListFriendsHandlerE98427B4",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriends173BDCB9"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/GET/Resource"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdDDDD4129": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriends173BDCB9"
+    },
+    "PathPart": "{friendId}",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/Resource"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdOPTIONSA62A591A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendsfriendIdDDDD4129"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdDELETEApiPermissionFriendsStackApiFriendsApi009D4584DELETEfriendsfriendId64BFA9D1": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasRemoveFriendHandlerD84228FF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/DELETE/friends/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/DELETE/ApiPermission.FriendsStackApiFriendsApi009D4584.DELETE..friends.{friendId}"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdDELETEApiPermissionTestFriendsStackApiFriendsApi009D4584DELETEfriendsfriendId3A1C0EF0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasRemoveFriendHandlerD84228FF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/DELETE/friends/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/DELETE/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.DELETE..friends.{friendId}"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdDELETE59110770": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "DELETE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasRemoveFriendHandlerD84228FF",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendsfriendIdDDDD4129"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/DELETE/Resource"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdrelationship638F7DB8": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriendsfriendIdDDDD4129"
+    },
+    "PathPart": "relationship",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/Resource"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdrelationshipOPTIONSC0B7EDC4": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendsfriendIdrelationship638F7DB8"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdrelationshipGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendsfriendIdrelationship2B830FC5": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasRelationshipHandler6BB6F2A1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/GET/friends/*/relationship"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friends.{friendId}.relationship"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdrelationshipGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriendsfriendIdrelationshipF51EF670": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasRelationshipHandler6BB6F2A1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/GET/friends/*/relationship"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friends.{friendId}.relationship"
+   }
+  },
+  "ApiFriendsApifriendsfriendIdrelationshipGETE9F0FA72": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasRelationshipHandler6BB6F2A1",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendsfriendIdrelationship638F7DB8"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/GET/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequests977032EF": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ApiFriendsApi19C890F1",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "friend-requests",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsOPTIONS323B38A2": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequests977032EF"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendrequests0FE14B1C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasCreateFriendRequestHandlerF9C97C45",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/POST/friend-requests"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friend-requests"
+   }
+  },
+  "ApiFriendsApifriendrequestsPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendrequestsAF403C6A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasCreateFriendRequestHandlerF9C97C45",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/POST/friend-requests"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friend-requests"
+   }
+  },
+  "ApiFriendsApifriendrequestsPOST18E470DD": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasCreateFriendRequestHandlerF9C97C45",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "RequestModels": {
+     "application/json": {
+      "Ref": "ApiFriendsApiCreateFriendRequestModel97F7BC10"
+     }
+    },
+    "RequestValidatorId": {
+     "Ref": "ApiBodyValidatorB3E71016"
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequests977032EF"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/POST/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsincoming6DC9679C": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriendrequests977032EF"
+    },
+    "PathPart": "incoming",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsincomingOPTIONS986F7C72": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsincoming6DC9679C"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsincomingGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendrequestsincomingAA6B4758": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasIncomingHandlerEE5BF439",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/GET/friend-requests/incoming"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friend-requests.incoming"
+   }
+  },
+  "ApiFriendsApifriendrequestsincomingGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriendrequestsincomingDF3BEDB5": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasIncomingHandlerEE5BF439",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/GET/friend-requests/incoming"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friend-requests.incoming"
+   }
+  },
+  "ApiFriendsApifriendrequestsincomingGET6C118AAD": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasIncomingHandlerEE5BF439",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsincoming6DC9679C"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/GET/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsoutgoing24638E84": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriendrequests977032EF"
+    },
+    "PathPart": "outgoing",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsoutgoingOPTIONS24D80188": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsoutgoing24638E84"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsoutgoingGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendrequestsoutgoingD556CB26": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasOutgoingHandler7956AFB4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/GET/friend-requests/outgoing"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friend-requests.outgoing"
+   }
+  },
+  "ApiFriendsApifriendrequestsoutgoingGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriendrequestsoutgoing8A2B7AC2": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasOutgoingHandler7956AFB4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/GET/friend-requests/outgoing"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friend-requests.outgoing"
+   }
+  },
+  "ApiFriendsApifriendrequestsoutgoingGET271550E2": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasOutgoingHandler7956AFB4",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsoutgoing24638E84"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/GET/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsinvite883B86A0": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriendrequests977032EF"
+    },
+    "PathPart": "invite",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/invite/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsinviteOPTIONS3B8FF749": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsinvite883B86A0"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/invite/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsinvitetoken8EB76D6B": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriendrequestsinvite883B86A0"
+    },
+    "PathPart": "{token}",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsinvitetokenOPTIONSC627C5B4": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsinvitetoken8EB76D6B"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsinvitetokenGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendrequestsinvitetoken4B6EDFC2": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasValidateTokenHandler57F64CBE",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/GET/friend-requests/invite/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friend-requests.invite.{token}"
+   }
+  },
+  "ApiFriendsApifriendrequestsinvitetokenGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriendrequestsinvitetokenFA84E061": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasValidateTokenHandler57F64CBE",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/GET/friend-requests/invite/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friend-requests.invite.{token}"
+   }
+  },
+  "ApiFriendsApifriendrequestsinvitetokenGETEB5947BD": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasValidateTokenHandler57F64CBE",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsinvitetoken8EB76D6B"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/GET/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdB4F0B187": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriendrequests977032EF"
+    },
+    "PathPart": "{requestId}",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdOPTIONS22724636": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdB4F0B187"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdaccept4D7BB420": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdB4F0B187"
+    },
+    "PathPart": "accept",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdacceptOPTIONS14553CB8": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdaccept4D7BB420"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdacceptPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdaccept41E116F6": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasAcceptHandler8A348375",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/POST/friend-requests/*/accept"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.accept"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdacceptPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdacceptF7117337": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasAcceptHandler8A348375",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/POST/friend-requests/*/accept"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.accept"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdacceptPOST32A38BE1": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasAcceptHandler8A348375",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdaccept4D7BB420"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/POST/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdreject633021DE": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdB4F0B187"
+    },
+    "PathPart": "reject",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdrejectOPTIONSB328E7EC": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdreject633021DE"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdrejectPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdrejectEDB0343C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasRejectHandlerF5B1A8CC",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/POST/friend-requests/*/reject"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.reject"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdrejectPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdreject5D515226": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasRejectHandlerF5B1A8CC",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/POST/friend-requests/*/reject"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.reject"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdrejectPOST9E9CD733": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasRejectHandlerF5B1A8CC",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdreject633021DE"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/POST/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdcancelA94D3012": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdB4F0B187"
+    },
+    "PathPart": "cancel",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdcancelOPTIONSC9BE4402": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdcancelA94D3012"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdcancelPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdcancel2D2AEED2": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasCancelHandler4E117CC4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/POST/friend-requests/*/cancel"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.cancel"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdcancelPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdcancel0CF99926": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasCancelHandler4E117CC4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/POST/friend-requests/*/cancel"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.cancel"
+   }
+  },
+  "ApiFriendsApifriendrequestsrequestIdcancelPOST3D70C93D": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasCancelHandler4E117CC4",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApifriendrequestsrequestIdcancelA94D3012"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/POST/Resource"
+   }
+  },
+  "ApiFriendsApiUnauthorized2C1ED6F3": {
+   "Type": "AWS::ApiGateway::GatewayResponse",
+   "Properties": {
+    "ResponseParameters": {
+     "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+     "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'"
+    },
+    "ResponseTemplates": {
+     "application/json": "{\"error\":\"Unauthorized\",\"code\":\"UNAUTHORIZED\"}"
+    },
+    "ResponseType": "UNAUTHORIZED",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Unauthorized/Resource"
+   }
+  },
+  "ApiFriendsApiAccessDeniedC4A21480": {
+   "Type": "AWS::ApiGateway::GatewayResponse",
+   "Properties": {
+    "ResponseParameters": {
+     "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+     "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'"
+    },
+    "ResponseTemplates": {
+     "application/json": "{\"error\":\"Access denied\",\"code\":\"FORBIDDEN\"}"
+    },
+    "ResponseType": "ACCESS_DENIED",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/AccessDenied/Resource"
+   }
+  },
+  "ApiFriendsApiDefault4XXF423441C": {
+   "Type": "AWS::ApiGateway::GatewayResponse",
+   "Properties": {
+    "ResponseParameters": {
+     "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+     "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+     "gatewayresponse.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+    },
+    "ResponseType": "DEFAULT_4XX",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default4XX/Resource"
+   }
+  },
+  "ApiFriendsApiDefault5XXF0912E0C": {
+   "Type": "AWS::ApiGateway::GatewayResponse",
+   "Properties": {
+    "ResponseParameters": {
+     "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+     "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+     "gatewayresponse.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+    },
+    "ResponseType": "DEFAULT_5XX",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default5XX/Resource"
+   }
+  },
+  "ApiFriendsApiSearchModelA95E27E5": {
+   "Type": "AWS::ApiGateway::Model",
+   "Properties": {
+    "ContentType": "application/json",
+    "Name": "SearchModel",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    },
+    "Schema": {
+     "type": "object",
+     "required": [
+      "email",
+      "displayName"
+     ],
+     "properties": {
+      "email": {
+       "type": "string",
+       "maxLength": 254
+      },
+      "displayName": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      }
+     },
+     "$schema": "http://json-schema.org/draft-04/schema#"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/SearchModel/Resource"
+   }
+  },
+  "ApiFriendsApiCreateFriendRequestModel97F7BC10": {
+   "Type": "AWS::ApiGateway::Model",
+   "Properties": {
+    "ContentType": "application/json",
+    "Name": "CreateFriendRequestModel",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    },
+    "Schema": {
+     "type": "object",
+     "required": [
+      "recipientEmail",
+      "recipientDisplayName"
+     ],
+     "properties": {
+      "recipientEmail": {
+       "type": "string",
+       "maxLength": 254
+      },
+      "recipientDisplayName": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 100
+      }
+     },
+     "$schema": "http://json-schema.org/draft-04/schema#"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/CreateFriendRequestModel/Resource"
+   }
+  },
+  "ApiFriendsApiFriendsApiUsagePlan352155BF": {
+   "Type": "AWS::ApiGateway::UsagePlan",
+   "Properties": {
+    "ApiStages": [
+     {
+      "ApiId": {
+       "Ref": "ApiFriendsApi19C890F1"
+      },
+      "Stage": {
+       "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+      },
+      "Throttle": {}
+     }
+    ],
+    "Description": "Rate limiting for SyncCircle Friends API",
+    "Throttle": {
+     "BurstLimit": 10,
+     "RateLimit": 10
+    },
+    "UsagePlanName": "FriendsApiUsagePlan"
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/FriendsApiUsagePlan/Resource"
+   }
+  },
+  "ApiCognitoAuthorizer23B91BA2": {
+   "Type": "AWS::ApiGateway::Authorizer",
+   "Properties": {
+    "IdentitySource": "method.request.header.Authorization",
+    "Name": "FriendsStackApiCognitoAuthorizer025C5B0A",
+    "ProviderARNs": [
+     {
+      "Fn::GetAtt": [
+       "CognitoUserPool279BBD48",
+       "Arn"
+      ]
+     }
+    ],
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    },
+    "Type": "COGNITO_USER_POOLS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/CognitoAuthorizer/Resource"
+   }
+  },
+  "ApiBodyValidatorB3E71016": {
+   "Type": "AWS::ApiGateway::RequestValidator",
+   "Properties": {
+    "Name": "body-validator",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    },
+    "ValidateRequestBody": true,
+    "ValidateRequestParameters": false
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/BodyValidator/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12S3W7bMAyFn6X3ipalxbDbNNuKAu0WuOtuA0ZiXCWy6JnUgkzQuw+W8tPsih957CMe2TM9+zTV0xvY88TY3cS7tU4vAmanYM+rZA8BOrJrnX7C2qNabEKBrBhZp68dOP9oMYiTwyheDbLy0K0trAJZ3LL+Xsq3GIw4CspBp1ND1bXUJXlnik+lrPh2BcworOdjUXyr76PZodwD49Fep8UmnF3Hl3HoHLOjkJWnlnV6orZBGbeioJ6ofRgo9uOjJ87KUBuckE6vjMOSyI/ymU+w8A6DvJfqJCvoXQuCezjo1CDLvHcl1wXnxlAMor5g7+nQHX3edS8CbbmMCg0yxcFgifqM8kZ2FI90Uo+HVH6oGzTIPQUu2v+jZ7JYslV4ZWhx6SHUTOem3sYpJM+jvNHg/uJQkly6Bn9HZPkF3lkQGuo617OcL9uWzzjmc6G9Wn2xCT+i9FGyGn8XveUPf2Z3+uNnPb3ZsnOTIQZxHeqm1n9v0OP1ugIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ApiFriendsApiEndpoint61C5388D": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ApiFriendsApi19C890F1"
+      },
+      ".execute-api.ap-southeast-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "ApiApiUrlF2D81078": {
+   "Description": "SyncCircle Friends API URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ApiFriendsApi19C890F1"
+      },
+      ".execute-api.ap-southeast-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+      },
+      "/"
+     ]
+    ]
+   },
+   "Export": {
+    "Name": "FriendsApiUrl"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

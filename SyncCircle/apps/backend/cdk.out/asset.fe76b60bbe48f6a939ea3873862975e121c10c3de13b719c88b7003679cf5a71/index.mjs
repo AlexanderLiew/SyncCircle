@@ -1,0 +1,62 @@
+var s=[];for(let e=0;e<256;++e)s.push((e+256).toString(16).slice(1));function k(e,t=0){return(s[e[t+0]]+s[e[t+1]]+s[e[t+2]]+s[e[t+3]]+"-"+s[e[t+4]]+s[e[t+5]]+"-"+s[e[t+6]]+s[e[t+7]]+"-"+s[e[t+8]]+s[e[t+9]]+"-"+s[e[t+10]]+s[e[t+11]]+s[e[t+12]]+s[e[t+13]]+s[e[t+14]]+s[e[t+15]]).toLowerCase()}import{randomFillSync as se}from"crypto";var x=new Uint8Array(256),y=x.length;function T(){return y>x.length-16&&(se(x),y=0),x.slice(y,y+=16)}import{randomUUID as ie}from"crypto";var w={randomUUID:ie};function oe(e,t,r){if(w.randomUUID&&!t&&!e)return w.randomUUID();e=e||{};let n=e.random??e.rng?.()??T();if(n.length<16)throw new Error("Random bytes length must be >= 16");if(n[6]=n[6]&15|64,n[8]=n[8]&63|128,t){if(r=r||0,r<0||r+16>t.length)throw new RangeError(`UUID byte range ${r}:${r+15} is out of buffer bounds`);for(let i=0;i<16;++i)t[r+i]=n[i];return t}return k(n)}var _=oe;var m={PENDING:"pending",ACCEPTED:"accepted",REJECTED:"rejected",EXPIRED:"expired",CANCELLED:"cancelled"};var D={ACTIVE:"active",REMOVED:"removed",BLOCKED:"blocked"};var a={VALIDATION_ERROR:"VALIDATION_ERROR",UNAUTHORIZED:"UNAUTHORIZED",FORBIDDEN:"FORBIDDEN",NOT_FOUND:"NOT_FOUND",CONFLICT:"CONFLICT",RATE_LIMITED:"RATE_LIMITED",SELF_REQUEST:"SELF_REQUEST",ALREADY_FRIENDS:"ALREADY_FRIENDS",PENDING_EXISTS:"PENDING_EXISTS",TOKEN_EXPIRED:"TOKEN_EXPIRED",TOKEN_USED:"TOKEN_USED",TOKEN_INVALID:"TOKEN_INVALID",WRONG_RECIPIENT:"WRONG_RECIPIENT",INTERNAL_ERROR:"INTERNAL_ERROR"};var ae=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;function q(e){let t=[];if(typeof e!="string"||e.trim().length===0)return t.push({field:"email",message:"Email is required"}),{valid:!1,errors:t};let r=e.trim();return r.length>254?(t.push({field:"email",message:"Email must not exceed 254 characters"}),{valid:!1,errors:t}):ae.test(r)?{valid:!0,errors:[]}:(t.push({field:"email",message:"Email format is invalid"}),{valid:!1,errors:t})}function H(e){let t=[];if(typeof e!="string"||e.trim().length===0)return t.push({field:"displayName",message:"Display name is required"}),{valid:!1,errors:t};let r=e.trim();return r.length<1?(t.push({field:"displayName",message:"Display name must be at least 1 character(s)"}),{valid:!1,errors:t}):r.length>100?(t.push({field:"displayName",message:"Display name must not exceed 100 characters"}),{valid:!1,errors:t}):{valid:!0,errors:[]}}function A(e){return e.trim().toLowerCase()}function M(e,t){return A(e)===A(t)}import{randomBytes as de,createHash as le}from"crypto";var ce=32,ue=7*24*60*60*1e3;function V(){let e=de(ce).toString("hex"),t=pe(e),r=new Date(Date.now()+ue).toISOString();return{token:e,tokenHash:t,expiresAt:r}}function pe(e){return le("sha256").update(e).digest("hex")}import{SESClient as ge,SendEmailCommand as fe}from"@aws-sdk/client-ses";var me=new Set(["email","normalizedemail","normalizedreceiveremail","receiveremail","recipientemail","token","tokenhash","password","secret","authorization","accesstoken","refreshtoken","idtoken"]),Ee="[REDACTED]";function v(e){if(e==null)return e;if(Array.isArray(e))return e.map(v);if(typeof e=="object"){let t={};for(let[r,n]of Object.entries(e))me.has(r.toLowerCase())?t[r]=Ee:t[r]=v(n);return t}return e}function h(e,t,r){let n={level:e,message:t,timestamp:new Date().toISOString(),...r?v(r):{}};console.log(JSON.stringify(n))}var u={info(e,t){h("info",e,t)},warn(e,t){h("warn",e,t)},error(e,t){h("error",e,t)},debug(e,t){h("debug",e,t)}};var Re=process.env.SES_SENDER_EMAIL??"noreply@synccircle.com",Ie=process.env.FRONTEND_BASE_URL??"https://app.synccircle.com",ye=process.env.EMAIL_ADAPTER??"",c="SyncCircle",B=7,b=null;function xe(){return b||(b=new ge({})),b}function Ae(e){return`${Ie}/invite/${e}`}function he(e,t){return[`You've been invited to connect on ${c}!`,"",`${e} would like to add you as a friend on ${c}.`,"","Click the link below to respond to this invitation:",t,"",`This invitation link will expire in ${B} days.`,"",`If you already have a ${c} account, log in to respond.`,"If you don't have an account yet, register with this email address to accept the invitation.","",`If you don't know ${e} or don't wish to connect, you can safely ignore this email.`].join(`
+`)}function Ne(e,t){return`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friend Invitation - ${c}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f4f4f7; color: #333333;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f4f4f7; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #4f46e5; padding: 32px 40px; text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">${c}</h1>
+            </td>
+          </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding: 40px;">
+              <h2 style="margin: 0 0 16px; font-size: 20px; color: #1a1a2e;">You've been invited to connect!</h2>
+              <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #4a4a68;">
+                <strong>${e}</strong> would like to add you as a friend on ${c}.
+              </p>
+              <!-- CTA Button -->
+              <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 0 auto 24px;">
+                <tr>
+                  <td align="center" style="border-radius: 6px; background-color: #4f46e5;">
+                    <a href="${t}" target="_blank" style="display: inline-block; padding: 14px 32px; font-size: 16px; font-weight: 600; color: #ffffff; text-decoration: none; border-radius: 6px;">
+                      View Invitation
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin: 0 0 16px; font-size: 14px; line-height: 1.5; color: #6b6b80;">
+                This invitation link will expire in <strong>${B} days</strong>.
+              </p>
+              <p style="margin: 0 0 16px; font-size: 14px; line-height: 1.5; color: #6b6b80;">
+                If you already have a ${c} account, log in to respond. If you don't have an account yet, register with this email address to accept the invitation.
+              </p>
+              <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6b6b80;">
+                If you don't know ${e} or don't wish to connect, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 24px 40px; background-color: #f9fafb; text-align: center; border-top: 1px solid #e5e7eb;">
+              <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                &copy; ${new Date().getFullYear()} ${c}. You received this email because someone invited you to connect.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`}async function G(e){let{recipientEmail:t,senderDisplayName:r,token:n}=e,i=Ae(n),E=`${r} wants to connect with you on ${c}`,g=he(r,i),f=Ne(r,i);if(ye.toLowerCase()==="local")return u.info("Local email adapter: invitation email composed",{recipient:t,subject:E,plainTextBody:g,htmlBody:f,invitationLink:i}),{emailSent:!0};try{let p=xe(),l=new fe({Source:Re,Destination:{ToAddresses:[t]},Message:{Subject:{Data:E,Charset:"UTF-8"},Body:{Text:{Data:g,Charset:"UTF-8"},Html:{Data:f,Charset:"UTF-8"}}}});return await p.send(l),u.info("Invitation email sent successfully",{recipient:t}),{emailSent:!0}}catch(p){let l=p instanceof Error?p.message:String(p);return u.error("Failed to send invitation email via SES",{errorMessage:l,recipient:t}),{emailSent:!1}}}import{DynamoDBClient as Se}from"@aws-sdk/client-dynamodb";import{DynamoDBDocumentClient as Te,PutCommand as At,GetCommand as ht,QueryCommand as we,BatchGetCommand as Nt,UpdateCommand as St}from"@aws-sdk/lib-dynamodb";var _e=new Se({}),De=Te.from(_e),ve=process.env.USER_PROFILES_TABLE??"UserProfiles",be="normalizedEmail-index";async function K(e){return(await De.send(new we({TableName:ve,IndexName:be,KeyConditionExpression:"normalizedEmail = :email",ExpressionAttributeValues:{":email":e},Limit:1}))).Items?.[0]}import{DynamoDBDocumentClient as Ue,PutCommand as Pe,GetCommand as wt,QueryCommand as z,UpdateCommand as _t}from"@aws-sdk/lib-dynamodb";import{DynamoDBClient as Fe}from"@aws-sdk/client-dynamodb";var Le=new Fe({}),C=Ue.from(Le),U=process.env.FRIEND_REQUESTS_TABLE;async function $(e){await C.send(new Pe({TableName:U,Item:e}))}async function j(e,t){let[r,n]=await Promise.all([C.send(new z({TableName:U,IndexName:"senderUserId-createdAt-index",KeyConditionExpression:"senderUserId = :sender",FilterExpression:"receiverUserId = :receiver AND #status = :pending",ExpressionAttributeValues:{":sender":e,":receiver":t,":pending":m.PENDING},ExpressionAttributeNames:{"#status":"status"}})),C.send(new z({TableName:U,IndexName:"senderUserId-createdAt-index",KeyConditionExpression:"senderUserId = :sender",FilterExpression:"receiverUserId = :receiver AND #status = :pending",ExpressionAttributeValues:{":sender":t,":receiver":e,":pending":m.PENDING},ExpressionAttributeNames:{"#status":"status"}}))]);return[...r.Items??[],...n.Items??[]]}import{DynamoDBDocumentClient as ke,PutCommand as Ct,QueryCommand as qe,UpdateCommand as Ut,TransactWriteCommand as Pt}from"@aws-sdk/lib-dynamodb";import{DynamoDBClient as He}from"@aws-sdk/client-dynamodb";var Me=new He({}),Ve=ke.from(Me),Be=process.env.FRIENDSHIPS_TABLE,Lt=process.env.FRIEND_REQUESTS_TABLE;async function Q(e,t){return(await Ve.send(new qe({TableName:Be,IndexName:"userIdLow-index",KeyConditionExpression:"userIdLow = :low",FilterExpression:"userIdHigh = :high",ExpressionAttributeValues:{":low":e,":high":t}}))).Items?.[0]}function X(e,t){return e<t?{userIdLow:e,userIdHigh:t}:{userIdLow:t,userIdHigh:e}}var Y={"Content-Type":"application/json","Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"Content-Type,Authorization","Access-Control-Allow-Methods":"GET,POST,PUT,DELETE,OPTIONS"};function Z(e){return{statusCode:201,headers:Y,body:JSON.stringify(e)}}function d(e,t,r,n){let i={error:r,code:t,...n!==void 0&&{field:n}};return{statusCode:e,headers:Y,body:JSON.stringify(i)}}async function $t(e){try{let t=e.requestContext.authorizer?.claims;if(!t)return d(401,a.UNAUTHORIZED,"Missing authentication");let r=t.sub,n=t.email;if(!e.body)return d(400,a.VALIDATION_ERROR,"Request body is required");let i;try{i=JSON.parse(e.body)}catch{return d(400,a.VALIDATION_ERROR,"Invalid JSON body")}let{email:E,displayName:g,recipientEmail:f,recipientDisplayName:p}=i,l=E||f,N=g||p,P=q(l);if(!P.valid){let o=P.errors[0];return d(400,a.VALIDATION_ERROR,o.message,o.field)}let F=H(N);if(!F.valid){let o=F.errors[0];return d(400,a.VALIDATION_ERROR,o.message,o.field)}if(M(n,l))return d(400,a.SELF_REQUEST,"Cannot send a friend request to yourself");let L=A(l),R=await K(L);if(R){let{userIdLow:o,userIdHigh:ne}=X(r,R.userId),O=await Q(o,ne);if(O&&O.status===D.ACTIVE)return d(409,a.ALREADY_FRIENDS,"You are already friends with this user");if((await j(r,R.userId)).length>0)return d(409,a.PENDING_EXISTS,"A pending friend request already exists between you and this user")}let{token:J,tokenHash:W,expiresAt:ee}=V(),te=new Date().toISOString(),I=_(),re={requestId:I,senderUserId:r,receiverUserId:R?.userId??"",receiverEmail:l,normalizedReceiverEmail:L,senderDisplayName:N,status:m.PENDING,tokenHash:W,tokenExpiresAt:ee,createdAt:te};await $(re);let S=!1;try{S=(await G({recipientEmail:l,senderDisplayName:N,token:J})).emailSent}catch(o){u.error("Failed to send invitation email",{errorMessage:o instanceof Error?o.message:String(o),requestId:I}),S=!1}return u.info("Friend request created successfully",{requestId:I}),Z({requestId:I,status:m.PENDING,emailSent:S})}catch(t){return u.error("Unexpected error in createFriendRequest handler",{errorMessage:t instanceof Error?t.message:String(t)}),d(500,a.INTERNAL_ERROR,"An unexpected error occurred")}}export{$t as handler};
+//# sourceMappingURL=index.mjs.map

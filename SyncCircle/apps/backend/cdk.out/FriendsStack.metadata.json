@@ -1,0 +1,2162 @@
+{
+  "/FriendsStack": [
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "....pnpm...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/FriendsStack/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "....pnpm...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/FriendsStack/DynamoDb/UserProfilesTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      }
+    }
+  ],
+  "/FriendsStack/DynamoDb/FriendRequestsTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "DynamoDbFriendRequestsTableAE7598AF"
+      }
+    }
+  ],
+  "/FriendsStack/DynamoDb/FriendshipsTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "DynamoDbFriendshipsTable71E5A0A1"
+      }
+    }
+  ],
+  "/FriendsStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:95:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/ApiUrl": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiApiUrlF2D81078"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:320:5)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...App.synth in .pnpm...",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:20:5)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/DynamoDb/UserProfilesTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DynamoDbUserProfilesTable56C9F6F1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Table2 in .pnpm...",
+        "new DynamoDbConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:26:30)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/DynamoDb/FriendRequestsTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DynamoDbFriendRequestsTableAE7598AF"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Table2 in .pnpm...",
+        "new DynamoDbConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:41:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/DynamoDb/FriendshipsTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DynamoDbFriendshipsTable71E5A0A1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Table2 in .pnpm...",
+        "new DynamoDbConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:76:29)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Ses/SenderIdentity/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "SesSenderIdentity1B72E79E"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new EmailIdentity2 in .pnpm...",
+        "new SesConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\ses-construct.ts:23:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:38:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/SearchHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasSearchHandler24194496"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:95:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/CreateFriendRequestHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasCreateFriendRequestHandlerF9C97C45"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:112:39)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/AcceptHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasAcceptHandler8A348375"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:137:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RejectHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRejectHandlerF5B1A8CC"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:152:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/CancelHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasCancelHandler4E117CC4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:166:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/IncomingHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasIncomingHandlerEE5BF439"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:180:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/OutgoingHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasOutgoingHandler7956AFB4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:195:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/ValidateTokenHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasValidateTokenHandler57F64CBE"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:209:33)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/ListFriendsHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasListFriendsHandlerE98427B4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:224:31)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RemoveFriendHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRemoveFriendHandlerD84228FF"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:239:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RelationshipHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRelationshipHandler6BB6F2A1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:253:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/PostConfirmationHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasPostConfirmationHandlerB89F574E"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:269:36)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:95:26)"
+      ]
+    }
+  ],
+  "/FriendsStack/Cognito/UserPool/PostConfirmationCognito": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CognitoUserPoolPostConfirmationCognitoE814E87C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new UserPool2 in .pnpm...",
+        "new CognitoConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\cognito-construct.ts:32:21)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:53:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Cognito/UserPool/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CognitoUserPool279BBD48"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new UserPool2 in .pnpm...",
+        "new CognitoConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\cognito-construct.ts:32:21)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:53:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/ApiAccessLogs/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiApiAccessLogs4EAA4C13"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new LogGroup2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:51:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApi19C890F1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new RestApi2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:57:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Account": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiAccountE0B7F335"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new RestApi2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:57:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Endpoint": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiEndpoint61C5388D"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new RestApi2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:57:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/CognitoAuthorizer/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiCognitoAuthorizer23B91BA2"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new CognitoUserPoolsAuthorizer2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:91:24)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/BodyValidator/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiBodyValidatorB3E71016"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new RequestValidator2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:148:27)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/SearchHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasSearchHandlerServiceRole3F692372"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:95:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/SearchHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasSearchHandlerLogRetention2A2A521D"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:95:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/CreateFriendRequestHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasCreateFriendRequestHandlerServiceRole68A536FE"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:112:39)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/CreateFriendRequestHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasCreateFriendRequestHandlerLogRetentionC2324D0F"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:112:39)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/AcceptHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasAcceptHandlerServiceRoleBCABC0D3"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:137:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/AcceptHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasAcceptHandlerLogRetention8F665FAC"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:137:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RejectHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRejectHandlerServiceRole4E676483"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:152:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RejectHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRejectHandlerLogRetention9BC118ED"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:152:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/CancelHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasCancelHandlerServiceRole070604ED"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:166:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/CancelHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasCancelHandlerLogRetention06490B44"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:166:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/IncomingHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasIncomingHandlerServiceRoleCD5F990B"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:180:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/IncomingHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasIncomingHandlerLogRetention2C603B2C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:180:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/OutgoingHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasOutgoingHandlerServiceRoleA531DDE7"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:195:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/OutgoingHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasOutgoingHandlerLogRetention0A2E2709"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:195:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/ValidateTokenHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasValidateTokenHandlerServiceRoleDE741691"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:209:33)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/ValidateTokenHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasValidateTokenHandlerLogRetention8DD4EFD9"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:209:33)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/ListFriendsHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasListFriendsHandlerServiceRole827F3DC3"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:224:31)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/ListFriendsHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasListFriendsHandlerLogRetention54EEED04"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:224:31)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RemoveFriendHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRemoveFriendHandlerServiceRoleA6CE47F6"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:239:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RemoveFriendHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRemoveFriendHandlerLogRetention07B21904"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:239:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RelationshipHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRelationshipHandlerServiceRoleF79E09F0"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:253:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RelationshipHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRelationshipHandlerLogRetention2BBCAF31"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:253:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/PostConfirmationHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasPostConfirmationHandlerServiceRole869B942D"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:269:36)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/PostConfirmationHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasPostConfirmationHandlerLogRetentionEB5C4881"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:269:36)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "....pnpm...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/FriendsStack/Cognito/UserPool/UserPoolClient/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CognitoUserPoolUserPoolClient1E6BF456"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addClient in .pnpm...",
+        "new CognitoConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\cognito-construct.ts:56:41)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:53:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/CloudWatchRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiCloudWatchRoleC7A7A139"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new RestApi2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:57:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Deployment/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiDeploymentA8F32162493057d844e1f7af730571944434a7fe"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new RestApi2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:57:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/DeploymentStage.prod/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiDeploymentStageprodE329F81B"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new RestApi2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:57:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Unauthorized/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiUnauthorized2C1ED6F3"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addGatewayResponse in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:107:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/AccessDenied/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiAccessDeniedC4A21480"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addGatewayResponse in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:118:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default4XX/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiDefault4XXF423441C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addGatewayResponse in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:129:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default5XX/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiDefault5XXF0912E0C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addGatewayResponse in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:138:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/SearchModel/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiSearchModelA95E27E5"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.<anonymous> in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:160:34)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/CreateFriendRequestModel/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiCreateFriendRequestModel97F7BC10"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.<anonymous> in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:180:47)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/FriendsApiUsagePlan/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiFriendsApiUsagePlan352155BF"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addUsagePlan in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:306:27)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/SearchHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasSearchHandlerServiceRoleDefaultPolicyAC74E46C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:103:23)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/CreateFriendRequestHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasCreateFriendRequestHandlerServiceRoleDefaultPolicyC341D60A"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:120:25)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/AcceptHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasAcceptHandlerServiceRoleDefaultPolicy9BA3F994"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:145:25)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RejectHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRejectHandlerServiceRoleDefaultPolicyF94E6485"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:160:25)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/CancelHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasCancelHandlerServiceRoleDefaultPolicy558902CC"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:174:25)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/IncomingHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasIncomingHandlerServiceRoleDefaultPolicyD3F4839C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:188:25)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/OutgoingHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasOutgoingHandlerServiceRoleDefaultPolicy83280AD4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:203:25)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/ValidateTokenHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasValidateTokenHandlerServiceRoleDefaultPolicy04D96BC4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:217:25)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/ListFriendsHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasListFriendsHandlerServiceRoleDefaultPolicyFB2DA305"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:232:22)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RemoveFriendHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRemoveFriendHandlerServiceRoleDefaultPolicyC81DFF2E"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:247:22)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/RelationshipHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasRelationshipHandlerServiceRoleDefaultPolicy35119ADC"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:261:22)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/PostConfirmationHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasPostConfirmationHandlerServiceRoleDefaultPolicy9BD1A471"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:278:23)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiOPTIONSBB1AD3D4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new RestApi2 in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:57:16)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriends173BDCB9"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...RootResource.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:206:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequests977032EF"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...RootResource.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:219:42)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsOPTIONSD351AFB8"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...RootResource.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:206:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/search/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendssearchC053DB02"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:207:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friends": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendsFD094961"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:283:13)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friends": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriends2A5892F5"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:283:13)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsGETDC0B6AE2"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:283:13)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdDDDD4129"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:290:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsOPTIONS323B38A2"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...RootResource.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:219:42)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friend-requests": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendrequests0FE14B1C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:220:20)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friend-requests": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendrequestsAF403C6A"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:220:20)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/POST/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsPOST18E470DD"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:220:20)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsincoming6DC9679C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:231:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsoutgoing24638E84"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:239:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/invite/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsinvite883B86A0"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:247:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdB4F0B187"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:256:40)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/search/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendssearchOPTIONSCF53BAB0"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:207:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/search/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friends.search": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendssearchPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendssearch40099706"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:208:19)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/search/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friends.search": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendssearchPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendssearch60979D76"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:208:19)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/search/POST/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendssearchPOST0FEE2487"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:208:19)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdOPTIONSA62A591A"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:290:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/DELETE/ApiPermission.FriendsStackApiFriendsApi009D4584.DELETE..friends.{friendId}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdDELETEApiPermissionFriendsStackApiFriendsApi009D4584DELETEfriendsfriendId64BFA9D1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:291:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/DELETE/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.DELETE..friends.{friendId}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdDELETEApiPermissionTestFriendsStackApiFriendsApi009D4584DELETEfriendsfriendId3A1C0EF0"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:291:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/DELETE/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdDELETE59110770"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:291:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdrelationship638F7DB8"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:298:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsincomingOPTIONS986F7C72"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:231:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friend-requests.incoming": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsincomingGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendrequestsincomingAA6B4758"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:232:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friend-requests.incoming": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsincomingGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriendrequestsincomingDF3BEDB5"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:232:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/incoming/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsincomingGET6C118AAD"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:232:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsoutgoingOPTIONS24D80188"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:239:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friend-requests.outgoing": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsoutgoingGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendrequestsoutgoingD556CB26"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:240:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friend-requests.outgoing": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsoutgoingGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriendrequestsoutgoing8A2B7AC2"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:240:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/outgoing/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsoutgoingGET271550E2"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:240:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/invite/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsinviteOPTIONS3B8FF749"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:247:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsinvitetoken8EB76D6B"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:248:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdOPTIONS22724636"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:256:40)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdaccept4D7BB420"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:259:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdreject633021DE"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:267:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdcancelA94D3012"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:275:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdrelationshipOPTIONSC0B7EDC4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:298:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friends.{friendId}.relationship": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdrelationshipGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendsfriendIdrelationship2B830FC5"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:299:18)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friends.{friendId}.relationship": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdrelationshipGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriendsfriendIdrelationshipF51EF670"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:299:18)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friends/{friendId}/relationship/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendsfriendIdrelationshipGETE9F0FA72"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:299:18)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsinvitetokenOPTIONSC627C5B4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:248:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..friend-requests.invite.{token}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsinvitetokenGETApiPermissionFriendsStackApiFriendsApi009D4584GETfriendrequestsinvitetoken4B6EDFC2"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:249:17)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..friend-requests.invite.{token}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsinvitetokenGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETfriendrequestsinvitetokenFA84E061"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:249:17)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/invite/{token}/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsinvitetokenGETEB5947BD"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:249:17)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdacceptOPTIONS14553CB8"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:259:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.accept": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdacceptPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdaccept41E116F6"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:260:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.accept": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdacceptPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdacceptF7117337"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:260:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/accept/POST/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdacceptPOST32A38BE1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:260:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdrejectOPTIONSB328E7EC"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:267:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.reject": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdrejectPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdrejectEDB0343C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:268:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.reject": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdrejectPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdreject5D515226"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:268:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/reject/POST/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdrejectPOST9E9CD733"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:268:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdcancelOPTIONSC9BE4402"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:275:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.cancel": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdcancelPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdcancel2D2AEED2"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:276:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..friend-requests.{requestId}.cancel": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdcancelPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTfriendrequestsrequestIdcancel0CF99926"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:276:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/friend-requests/{requestId}/cancel/POST/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApifriendrequestsrequestIdcancelPOST3D70C93D"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:276:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:59:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ]
+}
