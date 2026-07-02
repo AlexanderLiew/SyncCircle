@@ -5,9 +5,7 @@ import {
   BookOpen,
   Sparkles,
   Users,
-  MessageSquare,
   User,
-  Settings as SettingsIcon,
   Search,
   Bell,
   LogOut,
@@ -17,6 +15,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useWorkato } from "../hooks/useWorkato";
 import { useTaskNotifications } from "../hooks/useTaskNotifications";
 import { getTasks } from "../lib/storage";
+import { useAuth } from "../hooks/useAuth";
 import type { Task } from "../types";
 
 const navItems = [
@@ -25,17 +24,25 @@ const navItems = [
   { path: "/notes", label: "Notes", icon: BookOpen },
   { path: "/ai-planner", label: "AI Planner", icon: Sparkles },
   { path: "/friends", label: "Friends", icon: Users },
-  { path: "/group-chat", label: "Group Chat", icon: MessageSquare },
   { path: "/profile", label: "Profile", icon: User },
-  { path: "/settings", label: "Settings", icon: SettingsIcon },
 ];
 
 export function Layout() {
   const navigate = useNavigate();
   const { retryPendingSyncs } = useWorkato();
   const { pendingCount, checkNow } = useTaskNotifications();
+  const { user, logout } = useAuth();
   const [bellOpen, setBellOpen] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
+
+  // Derive user display info
+  const displayName = user?.displayName || "User";
+  const initials = displayName
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 
   // Close bell dropdown when clicking outside
   useEffect(() => {
@@ -64,6 +71,7 @@ export function Layout() {
   })();
 
   const handleLogout = () => {
+    logout();
     localStorage.removeItem("synccircle_auth");
     navigate("/login");
   };
@@ -82,11 +90,11 @@ export function Layout() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold text-primary">
                   SyncCircle
                 </h1>
                 <p className="text-xs text-muted-foreground">Sync your study circle</p>
@@ -132,7 +140,7 @@ export function Layout() {
               <span className="text-lg">✨</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium truncate">Emma Wilson</p>
+              <p className="font-medium truncate">{displayName}</p>
               <p className="text-xs text-muted-foreground">🔥 12 day streak</p>
             </div>
             <button
@@ -254,8 +262,8 @@ export function Layout() {
             </div>
 
             {/* Avatar */}
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] flex items-center justify-center cursor-pointer hover:shadow-lg transition-shadow">
-              <span className="text-white">EW</span>
+            <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center cursor-pointer hover:shadow-lg transition-shadow">
+              <span className="text-white text-sm font-medium">{initials}</span>
             </div>
           </div>
         </header>

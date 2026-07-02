@@ -73,6 +73,7 @@ export class FriendsStack extends Stack {
       relationshipHandler: lambdas.relationshipHandler,
       putTimetableHandler: lambdas.putTimetableHandler,
       getFriendTimetableHandler: lambdas.getFriendTimetableHandler,
+      getUsersHandler: lambdas.getUsersHandler,
     });
   }
 }

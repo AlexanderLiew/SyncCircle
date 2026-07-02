@@ -1,2 +1,6 @@
 {
+    "kiroAgent.experiments": {
+
+    },
+    "chat.tools.terminal.ignoreDefaultAutoApproveRules": true
 }

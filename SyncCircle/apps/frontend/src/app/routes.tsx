@@ -8,7 +8,7 @@ import { Notes } from "./pages/Notes";
 import { AIPlanner } from "./pages/AIPlanner";
 import { Friends } from "./pages/Friends";
 import { Invitation } from "./pages/Invitation";
-import { GroupChat } from "./pages/GroupChat";
+
 import { Profile } from "./pages/Profile";
 import { Settings } from "./pages/Settings";
 import { Loader2 } from "lucide-react";
@@ -61,7 +61,6 @@ export const router = createBrowserRouter([
           { path: "notes", Component: Notes },
           { path: "ai-planner", Component: AIPlanner },
           { path: "friends", Component: Friends },
-          { path: "group-chat", Component: GroupChat },
           { path: "profile", Component: Profile },
           { path: "settings", Component: Settings },
         ],

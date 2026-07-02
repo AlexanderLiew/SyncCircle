@@ -82,5 +82,6 @@ export type {
   AcceptRejectCancelResponse,
   TokenValidationResponse,
   FriendsListResponse,
+  UsersListResponse,
   ErrorResponse,
 } from './types/api';

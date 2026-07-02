@@ -3,7 +3,7 @@
     {
       "type": "aws:cdk:creationStack",
       "data": [
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -75,9 +75,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:104:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:105:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)"
       ]
     }
   ],
@@ -89,9 +89,9 @@
     {
       "type": "aws:cdk:creationStack",
       "data": [
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:338:5)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:347:5)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -105,7 +105,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...App.synth in .pnpm...",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:20:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:20:5)",
         "...node internals..."
       ]
     }
@@ -119,9 +119,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new Table2 in .pnpm...",
-        "new DynamoDbConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:27:30)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new DynamoDbConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:27:30)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -135,9 +135,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new Table2 in .pnpm...",
-        "new DynamoDbConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:42:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new DynamoDbConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:42:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -151,9 +151,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new Table2 in .pnpm...",
-        "new DynamoDbConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:77:29)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new DynamoDbConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:77:29)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -167,9 +167,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new Table2 in .pnpm...",
-        "new DynamoDbConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:98:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new DynamoDbConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\dynamodb-construct.ts:98:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:35:22)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -183,9 +183,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new EmailIdentity2 in .pnpm...",
-        "new SesConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\ses-construct.ts:23:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:38:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new SesConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\ses-construct.ts:23:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:38:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -199,9 +199,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:104:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:105:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -215,9 +215,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:121:39)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:122:39)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -231,9 +231,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:146:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:147:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -247,9 +247,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:161:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:162:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -263,9 +263,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:175:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:176:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -279,9 +279,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:189:28)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:190:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -295,9 +295,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:204:28)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:205:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -311,9 +311,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:218:33)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:219:33)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -327,9 +327,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:233:31)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:234:31)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -343,9 +343,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:248:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:249:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -359,9 +359,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:262:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:263:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -375,9 +375,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:278:36)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:279:36)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -391,9 +391,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:294:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:295:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -407,9 +407,25 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:308:38)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:309:38)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/GetUsersHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasGetUsersHandler27EB67C1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:324:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -423,7 +439,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:104:26)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:105:26)"
       ]
     }
   ],
@@ -436,9 +452,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new UserPool2 in .pnpm...",
-        "new CognitoConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\cognito-construct.ts:32:21)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:54:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new CognitoConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\cognito-construct.ts:32:21)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:54:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -452,9 +468,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new UserPool2 in .pnpm...",
-        "new CognitoConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\cognito-construct.ts:32:21)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:54:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new CognitoConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\cognito-construct.ts:32:21)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:54:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -468,9 +484,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new LogGroup2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:53:28)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:54:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -484,9 +500,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new RestApi2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:59:16)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:60:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -500,9 +516,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new RestApi2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:59:16)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:60:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -516,9 +532,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new RestApi2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:59:16)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:60:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -532,9 +548,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new CognitoUserPoolsAuthorizer2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:93:24)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:94:24)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -548,9 +564,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new RequestValidator2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:150:27)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:151:27)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -564,9 +580,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:104:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:105:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -580,9 +596,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:104:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:105:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -596,9 +612,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:121:39)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:122:39)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -612,9 +628,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:121:39)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:122:39)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -628,9 +644,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:146:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:147:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -644,9 +660,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:146:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:147:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -660,9 +676,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:161:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:162:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -676,9 +692,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:161:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:162:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -692,9 +708,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:175:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:176:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -708,9 +724,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:175:26)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:176:26)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -724,9 +740,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:189:28)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:190:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -740,9 +756,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:189:28)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:190:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -756,9 +772,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:204:28)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:205:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -772,9 +788,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:204:28)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:205:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -788,9 +804,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:218:33)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:219:33)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -804,9 +820,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:218:33)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:219:33)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -820,9 +836,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:233:31)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:234:31)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -836,9 +852,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:233:31)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:234:31)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -852,9 +868,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:248:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:249:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -868,9 +884,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:248:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:249:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -884,9 +900,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:262:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:263:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -900,9 +916,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:262:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:263:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -916,9 +932,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:278:36)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:279:36)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -932,9 +948,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:278:36)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:279:36)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -948,9 +964,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:294:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:295:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -964,9 +980,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:294:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:295:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -980,9 +996,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:308:38)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:309:38)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -996,9 +1012,41 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new NodejsFunction in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:308:38)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:309:38)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/GetUsersHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasGetUsersHandlerServiceRoleB942D32D"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:324:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/GetUsersHandler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasGetUsersHandlerLogRetentionEC0B7BC4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new NodejsFunction in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:324:28)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:44:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1025,9 +1073,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addClient in .pnpm...",
-        "new CognitoConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\cognito-construct.ts:56:41)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:54:21)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new CognitoConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\cognito-construct.ts:56:41)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:54:21)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1041,9 +1089,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new RestApi2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:59:16)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:60:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1051,15 +1099,15 @@
   "/FriendsStack/Api/FriendsApi/Deployment/Resource": [
     {
       "type": "aws:cdk:logicalId",
-      "data": "ApiFriendsApiDeploymentA8F321622a6a3b44860b33011cfd6c654f3f4305"
+      "data": "ApiFriendsApiDeploymentA8F321622b88d2831a45619e0c4e7e571d8c688c"
     },
     {
       "type": "aws:cdk:creationStack",
       "data": [
         "...new RestApi2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:59:16)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:60:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1073,9 +1121,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new RestApi2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:59:16)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:60:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1089,9 +1137,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addGatewayResponse in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:109:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:110:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1105,9 +1153,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addGatewayResponse in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:120:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:121:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1121,9 +1169,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addGatewayResponse in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:131:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:132:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1137,9 +1185,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addGatewayResponse in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:140:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:141:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1153,9 +1201,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.<anonymous> in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:162:34)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:163:34)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1169,9 +1217,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.<anonymous> in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:182:47)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:183:47)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1185,9 +1233,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addUsagePlan in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:324:27)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:333:27)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1201,7 +1249,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:112:23)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:113:23)"
       ]
     }
   ],
@@ -1214,7 +1262,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:129:25)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:130:25)"
       ]
     }
   ],
@@ -1227,7 +1275,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:154:25)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:155:25)"
       ]
     }
   ],
@@ -1240,7 +1288,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:169:25)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:170:25)"
       ]
     }
   ],
@@ -1253,7 +1301,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:183:25)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:184:25)"
       ]
     }
   ],
@@ -1266,7 +1314,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:197:25)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:198:25)"
       ]
     }
   ],
@@ -1279,7 +1327,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:212:25)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:213:25)"
       ]
     }
   ],
@@ -1292,7 +1340,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:226:25)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:227:25)"
       ]
     }
   ],
@@ -1305,7 +1353,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:241:22)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:242:22)"
       ]
     }
   ],
@@ -1318,7 +1366,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:256:22)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:257:22)"
       ]
     }
   ],
@@ -1331,7 +1379,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:270:22)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:271:22)"
       ]
     }
   ],
@@ -1344,7 +1392,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:287:23)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:288:23)"
       ]
     }
   ],
@@ -1357,7 +1405,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:302:25)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:303:25)"
       ]
     }
   ],
@@ -1370,7 +1418,20 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.grant in .pnpm...",
-        "new LambdaConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:316:25)"
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:317:25)"
+      ]
+    }
+  ],
+  "/FriendsStack/Lambdas/GetUsersHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdasGetUsersHandlerServiceRoleDefaultPolicy506ACED7"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.grant in .pnpm...",
+        "new LambdaConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\lambda-construct.ts:332:23)"
       ]
     }
   ],
@@ -1383,7 +1444,7 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...new RestApi2 in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:59:16)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:60:16)"
       ]
     }
   ],
@@ -1396,9 +1457,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...RootResource.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:208:35)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:209:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1412,9 +1473,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...RootResource.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:221:42)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:222:42)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1428,9 +1489,25 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...RootResource.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:308:37)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:309:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/users/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiusers3C61B91B"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...RootResource.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:325:33)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1444,8 +1521,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...RootResource.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:208:35)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:209:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -1458,9 +1535,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:209:35)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:210:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1474,9 +1551,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:285:13)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:286:13)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1490,9 +1567,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:285:13)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:286:13)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1506,9 +1583,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:285:13)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:286:13)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1522,9 +1599,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:292:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:293:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1538,8 +1615,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...RootResource.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:221:42)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:222:42)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -1552,9 +1629,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:222:20)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:223:20)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1568,9 +1645,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:222:20)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:223:20)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1584,9 +1661,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:222:20)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:223:20)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1600,9 +1677,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:233:37)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:234:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1616,9 +1693,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:241:37)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:242:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1632,9 +1709,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:249:35)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:250:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1648,9 +1725,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:258:40)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:259:40)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1664,8 +1741,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...RootResource.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:308:37)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:309:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -1678,9 +1755,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:309:15)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:310:15)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1694,9 +1771,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:309:15)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:310:15)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1710,9 +1787,71 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:309:15)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:310:15)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/users/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiusersOPTIONSFCD3921D"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...RootResource.addResource in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:325:33)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/users/GET/ApiPermission.FriendsStackApiFriendsApi009D4584.GET..users": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiusersGETApiPermissionFriendsStackApiFriendsApi009D4584GETusers2154D720"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:326:11)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/users/GET/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.GET..users": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiusersGETApiPermissionTestFriendsStackApiFriendsApi009D4584GETusers9BE727DF"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:326:11)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/FriendsStack/Api/FriendsApi/Default/users/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiFriendsApiusersGETDEF3BA49"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...WrappedClass.addMethod in .pnpm...",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:326:11)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1726,8 +1865,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:209:35)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:210:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -1740,9 +1879,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:210:19)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:211:19)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1756,9 +1895,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:210:19)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:211:19)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1772,9 +1911,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:210:19)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:211:19)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1788,8 +1927,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:292:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:293:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -1802,9 +1941,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:293:16)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:294:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1818,9 +1957,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:293:16)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:294:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1834,9 +1973,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:293:16)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:294:16)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1850,9 +1989,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:300:37)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:301:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1866,9 +2005,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:316:40)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:317:40)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1882,8 +2021,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:233:37)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:234:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -1896,9 +2035,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:234:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:235:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1912,9 +2051,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:234:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:235:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1928,9 +2067,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:234:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:235:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1944,8 +2083,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:241:37)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:242:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -1958,9 +2097,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:242:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:243:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1974,9 +2113,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:242:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:243:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -1990,9 +2129,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:242:14)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:243:14)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2006,8 +2145,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:249:35)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:250:35)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -2020,9 +2159,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:250:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:251:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2036,8 +2175,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:258:40)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:259:40)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -2050,9 +2189,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:261:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:262:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2066,9 +2205,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:269:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:270:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2082,9 +2221,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:277:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:278:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2098,8 +2237,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:300:37)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:301:37)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -2112,9 +2251,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:301:18)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:302:18)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2128,9 +2267,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:301:18)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:302:18)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2144,9 +2283,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:301:18)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:302:18)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2160,8 +2299,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:316:40)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:317:40)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -2174,9 +2313,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:317:21)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:318:21)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2190,9 +2329,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:317:21)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:318:21)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2206,9 +2345,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:317:21)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:318:21)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2222,8 +2361,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:250:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:251:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -2236,9 +2375,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:251:17)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:252:17)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2252,9 +2391,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:251:17)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:252:17)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2268,9 +2407,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:251:17)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:252:17)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2284,8 +2423,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:261:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:262:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -2298,9 +2437,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:262:12)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:263:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2314,9 +2453,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:262:12)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:263:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2330,9 +2469,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:262:12)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:263:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2346,8 +2485,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:269:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:270:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -2360,9 +2499,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:270:12)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:271:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2376,9 +2515,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:270:12)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:271:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2392,9 +2531,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:270:12)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:271:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2408,8 +2547,8 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addResource in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:277:32)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:278:32)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)"
       ]
     }
   ],
@@ -2422,9 +2561,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:278:12)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:279:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2438,9 +2577,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:278:12)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:279:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }
@@ -2454,9 +2593,9 @@
       "type": "aws:cdk:creationStack",
       "data": [
         "...WrappedClass.addMethod in .pnpm...",
-        "new ApiConstruct (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:278:12)",
-        "new FriendsStack (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
-        "<anonymous> (C:\\Users\\Harry\\Desktop\\SIT\\AWS KIRO\\Actl proj\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
+        "new ApiConstruct (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\api-construct.ts:279:12)",
+        "new FriendsStack (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\lib\\friends-stack.ts:60:5)",
+        "<anonymous> (C:\\Users\\heyalexahh\\Documents\\SITCoding\\AWS Hack\\CramCircle\\SyncCircle\\apps\\backend\\cdk\\bin\\app.ts:7:1)",
         "...node internals..."
       ]
     }

@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router";
 import { motion } from "motion/react";
 import {
   User,
@@ -11,7 +12,7 @@ import {
   Target,
   Star,
   Trophy,
-  Edit,
+  Settings as SettingsIcon,
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
@@ -58,39 +59,43 @@ function StudyCharacter({ cfg }: { cfg: CharConfig }) {
 
   const HairShapes: Record<HairStyle, JSX.Element> = {
     short: (
-      <ellipse cx="60" cy="52" rx="34" ry="20" fill={hair} />
+      <ellipse cx="60" cy="38" rx="30" ry="16" fill={hair} />
     ),
     bob: (
-      <path d="M26 70 Q26 38 60 36 Q94 38 94 70 Q94 82 84 86 Q60 92 36 86 Q26 82 26 70Z" fill={hair} />
+      <>
+        <ellipse cx="60" cy="38" rx="32" ry="18" fill={hair} />
+        <rect x="30" y="44" width="12" height="28" rx="6" fill={hair} />
+        <rect x="78" y="44" width="12" height="28" rx="6" fill={hair} />
+      </>
     ),
     long: (
       <>
-        <ellipse cx="60" cy="50" rx="34" ry="22" fill={hair} />
-        <rect x="26" y="66" width="10" height="48" rx="5" fill={hair} />
-        <rect x="84" y="66" width="10" height="48" rx="5" fill={hair} />
+        <ellipse cx="60" cy="38" rx="32" ry="18" fill={hair} />
+        <rect x="28" y="44" width="11" height="56" rx="5" fill={hair} />
+        <rect x="81" y="44" width="11" height="56" rx="5" fill={hair} />
       </>
     ),
     ponytail: (
       <>
-        <ellipse cx="60" cy="50" rx="34" ry="22" fill={hair} />
-        <ellipse cx="95" cy="58" rx="7" ry="22" fill={hair} />
-        <circle cx="88" cy="58" r="5" fill={hair} />
+        <ellipse cx="60" cy="38" rx="30" ry="16" fill={hair} />
+        <circle cx="88" cy="36" r="10" fill={hair} />
+        <rect x="82" y="36" width="6" height="24" rx="3" fill={hair} />
       </>
     ),
     bun: (
       <>
-        <ellipse cx="60" cy="54" rx="34" ry="20" fill={hair} />
-        <circle cx="60" cy="32" r="15" fill={hair} />
+        <ellipse cx="60" cy="38" rx="30" ry="16" fill={hair} />
+        <circle cx="60" cy="20" r="12" fill={hair} />
       </>
     ),
     curly: (
       <>
-        <ellipse cx="60" cy="50" rx="34" ry="22" fill={hair} />
-        {[0, 1, 2, 3, 4].map(i => (
-          <circle key={i} cx={28 + i * 16} cy={44} r="10" fill={hair} />
+        <ellipse cx="60" cy="38" rx="32" ry="18" fill={hair} />
+        {[0, 1, 2, 3].map(i => (
+          <circle key={i} cx={34 + i * 18} cy={32} r="8" fill={hair} />
         ))}
-        <circle cx="24" cy="60" r="8" fill={hair} />
-        <circle cx="96" cy="60" r="8" fill={hair} />
+        <circle cx="30" cy="52" r="7" fill={hair} />
+        <circle cx="90" cy="52" r="7" fill={hair} />
       </>
     ),
   };
@@ -131,44 +136,56 @@ function StudyCharacter({ cfg }: { cfg: CharConfig }) {
 
   return (
     <svg viewBox="0 0 120 180" width="140" height="180" className="drop-shadow-lg">
-      {/* Body */}
-      <ellipse cx="60" cy="145" rx="32" ry="36" fill={outfit} />
-      {/* Outfit details */}
-      <ellipse cx="60" cy="115" rx="20" ry="14" fill={outfit} opacity="0.85" />
-      <rect x="44" y="112" width="32" height="8" rx="4" fill="white" opacity="0.3" />
+      {/* Body / Shirt */}
+      <path d="M38 112 Q38 104 60 102 Q82 104 82 112 L86 170 Q86 176 60 176 Q34 176 34 170 Z" fill={outfit} />
+      {/* Shirt collar */}
+      <path d="M50 104 L60 112 L70 104" fill="none" stroke="white" strokeWidth="2" opacity="0.6" />
+      {/* Shirt center line */}
+      <line x1="60" y1="112" x2="60" y2="170" stroke="white" strokeWidth="1" opacity="0.2" />
+      {/* Shirt buttons */}
+      <circle cx="60" cy="124" r="2" fill="white" opacity="0.4" />
+      <circle cx="60" cy="138" r="2" fill="white" opacity="0.4" />
+      <circle cx="60" cy="152" r="2" fill="white" opacity="0.4" />
+
+      {/* Arms (sleeves) */}
+      <path d="M38 114 Q28 124 24 142 Q22 148 28 150" fill="none" stroke={outfit} strokeWidth="12" strokeLinecap="round" />
+      <path d="M82 114 Q92 124 96 142 Q98 148 92 150" fill="none" stroke={outfit} strokeWidth="12" strokeLinecap="round" />
+      {/* Hands */}
+      <circle cx="28" cy="150" r="7" fill={skin} />
+      <circle cx="92" cy="150" r="7" fill={skin} />
 
       {/* Neck */}
-      <rect x="52" y="106" width="16" height="12" rx="4" fill={skin} />
+      <rect x="53" y="94" width="14" height="12" rx="5" fill={skin} />
 
       {/* Head */}
-      <circle cx="60" cy="72" r="36" fill={skin} />
+      <ellipse cx="60" cy="60" rx="30" ry="36" fill={skin} />
 
-      {/* Hair base */}
+      {/* Hair (positioned on TOP of head, not covering face) */}
       {HairShapes[cfg.hairStyle]}
 
-      {/* Face — eyes */}
-      <circle cx="48" cy="74" r="5" fill="#2C1810" />
-      <circle cx="72" cy="74" r="5" fill="#2C1810" />
-      <circle cx="50" cy="72" r="2" fill="white" />
-      <circle cx="74" cy="72" r="2" fill="white" />
+      {/* Eyes — positioned clearly below hair */}
+      <ellipse cx="48" cy="64" rx="4" ry="5" fill="#2C1810" />
+      <ellipse cx="72" cy="64" rx="4" ry="5" fill="#2C1810" />
+      {/* Eye highlights */}
+      <circle cx="50" cy="62" r="2" fill="white" />
+      <circle cx="74" cy="62" r="2" fill="white" />
+
+      {/* Eyebrows */}
+      <path d="M42 54 Q48 51 54 54" fill="none" stroke="#5a4a3a" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+      <path d="M66 54 Q72 51 78 54" fill="none" stroke="#5a4a3a" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+
+      {/* Nose */}
+      <ellipse cx="60" cy="72" rx="2" ry="2.5" fill={skin} stroke="#d4a88a" strokeWidth="0.5" />
 
       {/* Cheeks */}
-      <circle cx="40" cy="82" r="6" fill="#f4b8d0" opacity="0.5" />
-      <circle cx="80" cy="82" r="6" fill="#f4b8d0" opacity="0.5" />
+      <ellipse cx="40" cy="74" rx="5" ry="3.5" fill="#ffb4b4" opacity="0.35" />
+      <ellipse cx="80" cy="74" rx="5" ry="3.5" fill="#ffb4b4" opacity="0.35" />
 
-      {/* Mouth */}
-      <path d="M52 88 Q60 96 68 88" fill="none" stroke="#c07090" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Mouth — friendly smile */}
+      <path d="M53 80 Q60 86 67 80" fill="none" stroke="#c07070" strokeWidth="2" strokeLinecap="round" />
 
-      {/* Accessory */}
+      {/* Accessory (on top of everything) */}
       {AccessoryShapes[cfg.accessory]}
-
-      {/* Arms */}
-      <ellipse cx="28" cy="140" rx="8" ry="18" fill={outfit} opacity="0.9" />
-      <ellipse cx="92" cy="140" rx="8" ry="18" fill={outfit} opacity="0.9" />
-
-      {/* Book in hands */}
-      <rect x="30" y="152" width="56" height="10" rx="3" fill="#b8a4d4" opacity="0.8" />
-      <rect x="55" y="152" width="2" height="10" fill="#9080b8" opacity="0.6" />
     </svg>
   );
 }
@@ -244,14 +261,22 @@ const recentActivity = [
 ];
 
 export function Profile() {
-  const [charConfig, setCharConfig] = useState<CharConfig>({
-    skinIdx: 0,
-    hairColorIdx: 0,
-    hairStyle: "bob",
-    outfitIdx: 0,
-    accessory: "none",
+  const navigate = useNavigate();
+  const [charConfig, setCharConfig] = useState<CharConfig>(() => {
+    try {
+      const saved = localStorage.getItem("synccircle_character");
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {
+      skinIdx: 0,
+      hairColorIdx: 0,
+      hairStyle: "bob" as HairStyle,
+      outfitIdx: 0,
+      accessory: "none" as Accessory,
+    };
   });
   const [characterState, setCharacterState] = useState<CharacterState>("idle");
+  const [charSaved, setCharSaved] = useState(false);
 
   // Load user profile info from localStorage
   const user = useMemo(() => getUser(), []);
@@ -301,7 +326,7 @@ export function Profile() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] rounded-3xl p-8 text-white relative overflow-hidden"
+        className="bg-primary rounded-3xl p-8 text-white relative overflow-hidden"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
@@ -343,9 +368,9 @@ export function Profile() {
               </div>
             </div>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm transition-all">
-            <Edit className="w-4 h-4" />
-            Edit Profile
+          <button onClick={() => navigate('/settings')} className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm transition-all">
+            <SettingsIcon className="w-4 h-4" />
+            Settings
           </button>
         </div>
       </motion.div>
@@ -591,8 +616,15 @@ export function Profile() {
 
             {/* Save button */}
             <div className="flex flex-col items-center justify-end gap-2">
-              <button className="px-5 py-2 rounded-xl bg-primary text-primary-foreground hover:shadow-lg transition-all text-sm font-medium">
-                Save Character
+              <button
+                onClick={() => {
+                  localStorage.setItem("synccircle_character", JSON.stringify(charConfig));
+                  setCharSaved(true);
+                  setTimeout(() => setCharSaved(false), 2000);
+                }}
+                className="px-5 py-2 rounded-xl bg-primary text-primary-foreground hover:shadow-lg transition-all text-sm font-medium"
+              >
+                {charSaved ? "✓ Saved!" : "Save Character"}
               </button>
             </div>
           </div>

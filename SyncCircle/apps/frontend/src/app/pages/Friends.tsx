@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Users,
@@ -18,25 +18,8 @@ import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 import { useFriends } from "../hooks/useFriendsApi";
 import { useFriendRequests } from "../hooks/useFriendRequests";
-
-// ─── Validation Helpers ──────────────────────────────────────────────────────
-
-function validateDisplayName(name: string): string | null {
-  const trimmed = name.trim();
-  if (!trimmed) return "Display name is required";
-  if (trimmed.length > 100) return "Display name must be 100 characters or less";
-  return null;
-}
-
-function validateEmail(email: string): string | null {
-  const trimmed = email.trim();
-  if (!trimmed) return "Email is required";
-  // Basic email regex validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(trimmed)) return "Please enter a valid email address";
-  if (trimmed.length > 254) return "Email must be 254 characters or less";
-  return null;
-}
+import { useUsersDiscovery } from "../hooks/useUsersDiscovery";
+import { DiscoveryPopup } from "../components/DiscoveryPopup";
 
 // ─── Status Badge Component ──────────────────────────────────────────────────
 
@@ -81,14 +64,10 @@ export function Friends() {
     rejectRequest,
     cancelRequest,
   } = useFriendRequests();
+  const { users: discoveryUsers } = useUsersDiscovery();
 
-  // Add Friend form state
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [newFriendName, setNewFriendName] = useState("");
-  const [newFriendEmail, setNewFriendEmail] = useState("");
-  const [nameError, setNameError] = useState<string | null>(null);
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [isSending, setIsSending] = useState(false);
+  // Discovery popup state
+  const [showDiscovery, setShowDiscovery] = useState(false);
 
   // Remove friend confirmation state
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
@@ -99,28 +78,36 @@ export function Friends() {
 
   const isLoading = friendsLoading || requestsLoading;
 
-  // ─── Handlers ────────────────────────────────────────────────────────────────
-
-  const handleSendRequest = async () => {
-    const nameErr = validateDisplayName(newFriendName);
-    const emailErr = validateEmail(newFriendEmail);
-    setNameError(nameErr);
-    setEmailError(emailErr);
-
-    if (nameErr || emailErr) return;
-
-    setIsSending(true);
-    try {
-      await sendRequest(newFriendEmail.trim(), newFriendName.trim());
-      toast.success("Friend request sent successfully!");
-      setNewFriendName("");
-      setNewFriendEmail("");
-      setShowAddForm(false);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to send friend request");
-    } finally {
-      setIsSending(false);
+  // Build friendIds set by matching friend displayNames against discovery users
+  const friendIdsSet = useMemo(() => {
+    const friendNames = new Set(friends.map((f) => f.displayName.toLowerCase()));
+    const ids = new Set<string>();
+    for (const user of discoveryUsers) {
+      if (friendNames.has(user.displayName.toLowerCase())) {
+        ids.add(user.userId);
+      }
     }
+    return ids;
+  }, [friends, discoveryUsers]);
+
+  // Build pendingRequestUserIds by matching outgoing recipientEmail against discovery user emails
+  const pendingUserIdsSet = useMemo(() => {
+    const pendingEmails = new Set(
+      outgoing.filter((r) => r.status === "pending").map((r) => r.recipientEmail)
+    );
+    const ids = new Set<string>();
+    for (const user of discoveryUsers) {
+      if (pendingEmails.has(user.email)) {
+        ids.add(user.userId);
+      }
+    }
+    return ids;
+  }, [outgoing, discoveryUsers]);
+
+  // Handler for DiscoveryPopup onSendRequest
+  const handleDiscoverySend = async (_userId: string, displayName: string, email: string) => {
+    await sendRequest(email, displayName);
+    toast.success("Friend request sent successfully!");
   };
 
   const handleRemoveFriend = async (friendId: string) => {
@@ -232,7 +219,7 @@ export function Friends() {
         </div>
 
         <button
-          onClick={() => setShowAddForm(true)}
+          onClick={() => setShowDiscovery(true)}
           className="px-4 py-2 rounded-xl bg-primary text-primary-foreground hover:shadow-lg transition-all flex items-center gap-2"
         >
           <UserPlus className="w-4 h-4" />
@@ -240,84 +227,14 @@ export function Friends() {
         </button>
       </motion.div>
 
-      {/* ─── Add Friend Form ────────────────────────────────────────────────── */}
-      <AnimatePresence>
-        {showAddForm && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="bg-card rounded-2xl border border-border p-6"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold flex items-center gap-2">
-                <UserPlus className="w-5 h-5 text-primary" />
-                Send a Friend Request
-              </h2>
-              <button
-                onClick={() => {
-                  setShowAddForm(false);
-                  setNameError(null);
-                  setEmailError(null);
-                }}
-                className="p-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="flex flex-col md:flex-row items-start gap-4">
-              <div className="flex-1 w-full">
-                <label className="text-sm text-muted-foreground mb-1 block">
-                  Display Name *
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter friend's name"
-                  value={newFriendName}
-                  onChange={(e) => {
-                    setNewFriendName(e.target.value);
-                    if (nameError) setNameError(null);
-                  }}
-                  className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20 transition-all"
-                />
-                {nameError && (
-                  <p className="text-xs text-red-500 mt-1">{nameError}</p>
-                )}
-              </div>
-              <div className="flex-1 w-full">
-                <label className="text-sm text-muted-foreground mb-1 block">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  placeholder="Enter friend's email"
-                  value={newFriendEmail}
-                  onChange={(e) => {
-                    setNewFriendEmail(e.target.value);
-                    if (emailError) setEmailError(null);
-                  }}
-                  className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20 transition-all"
-                />
-                {emailError && (
-                  <p className="text-xs text-red-500 mt-1">{emailError}</p>
-                )}
-              </div>
-              <button
-                onClick={handleSendRequest}
-                disabled={isSending}
-                className="px-6 py-2 mt-5 rounded-xl bg-primary text-primary-foreground hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                {isSending ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Send className="w-4 h-4" />
-                )}
-                Send
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ─── Discovery Popup ───────────────────────────────────────────────── */}
+      <DiscoveryPopup
+        isOpen={showDiscovery}
+        onClose={() => setShowDiscovery(false)}
+        friendIds={friendIdsSet}
+        pendingRequestUserIds={pendingUserIdsSet}
+        onSendRequest={handleDiscoverySend}
+      />
 
       {/* ─── Incoming Requests ──────────────────────────────────────────────── */}
       <motion.div
@@ -457,7 +374,7 @@ export function Friends() {
               Send a friend request to start studying together!
             </p>
             <button
-              onClick={() => setShowAddForm(true)}
+              onClick={() => setShowDiscovery(true)}
               className="px-6 py-3 rounded-xl bg-primary text-primary-foreground hover:shadow-lg transition-all inline-flex items-center gap-2"
             >
               <UserPlus className="w-4 h-4" />

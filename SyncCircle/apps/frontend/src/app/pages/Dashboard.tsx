@@ -13,17 +13,18 @@ import {
   CheckSquare,
   MessageSquare,
 } from "lucide-react";
-import { getClasses, getTasks, getFriends, getMessages, getNotes, getUser } from "../lib/storage";
+import { getClasses, getTasks, getMessages, getNotes, getUser } from "../lib/storage";
+import { useFriends } from "../hooks/useFriendsApi";
 import type { TimetableClass, Task, ChatMessage } from "../types";
 
 export function Dashboard() {
   const navigate = useNavigate();
+  const { friends: apiFriends } = useFriends();
 
   // Load data from localStorage
   const user = getUser();
   const allClasses = getClasses();
   const allTasks = getTasks();
-  const friends = getFriends();
   const messages = getMessages();
   const notes = getNotes();
 
@@ -53,7 +54,7 @@ export function Dashboard() {
 
   // --- Stats ---
   const incompleteTasks = allTasks.filter((t) => !t.completed).length;
-  const friendCount = friends.length;
+  const friendCount = apiFriends.length;
   const notesCount = notes.length;
   const completedTasks = allTasks.filter((t) => t.completed).length;
 
@@ -110,7 +111,7 @@ export function Dashboard() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] rounded-3xl p-8 text-white relative overflow-hidden"
+        className="bg-primary rounded-3xl p-8 text-white relative overflow-hidden"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
@@ -370,25 +371,19 @@ export function Dashboard() {
             <div>
               <h2 className="text-xl font-bold">Friends</h2>
               <p className="text-sm text-muted-foreground">
-                {friends.length > 0
-                  ? `${friends.filter((f) => f.status === "online").length} online now`
+                {apiFriends.length > 0
+                  ? `${apiFriends.length} friends`
                   : "No friends yet"}
               </p>
             </div>
           </div>
 
           <div className="space-y-3">
-            {friends.length > 0 ? (
-              friends.slice(0, 4).map((friend, index) => {
-                const statusColors: Record<string, string> = {
-                  online: "#d4f4e8",
-                  studying: "#fef4d4",
-                  offline: "#f0e6f6",
-                };
-                const bgColor = statusColors[friend.status] || "#f0e6f6";
+            {apiFriends.length > 0 ? (
+              apiFriends.slice(0, 4).map((friend, index) => {
                 return (
                   <motion.div
-                    key={friend.id}
+                    key={friend.friendId}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.6 + index * 0.1 }}
@@ -396,18 +391,15 @@ export function Dashboard() {
                   >
                     <div className="relative">
                       <div 
-                        className="w-10 h-10 rounded-full flex items-center justify-center font-medium text-sm"
-                        style={{ backgroundColor: bgColor }}
+                        className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center font-medium text-sm text-primary"
                       >
-                        {friend.displayName.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                        {friend.displayName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
                       </div>
-                      {friend.status === "online" && (
-                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-card"></div>
-                      )}
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-card"></div>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">{friend.displayName}</p>
-                      <p className="text-xs text-muted-foreground truncate capitalize">{friend.status}</p>
+                      <p className="text-xs text-muted-foreground truncate">Friend</p>
                     </div>
                   </motion.div>
                 );
@@ -421,7 +413,7 @@ export function Dashboard() {
             )}
           </div>
 
-          {friends.length > 0 && (
+          {apiFriends.length > 0 && (
             <button
               className="w-full mt-4 py-2 text-sm text-primary hover:bg-accent rounded-xl transition-colors flex items-center justify-center gap-2"
               onClick={() => navigate("/friends")}
@@ -550,8 +542,8 @@ export function Dashboard() {
                 <div>
                   <h4 className="font-medium mb-1">Collaboration Tip</h4>
                   <p className="text-sm text-muted-foreground">
-                    {friends.length > 0
-                      ? `Compare timetables with your ${friends.length} friend${friends.length > 1 ? "s" : ""} to find study time together.`
+                    {apiFriends.length > 0
+                      ? `Compare timetables with your ${apiFriends.length} friend${apiFriends.length > 1 ? "s" : ""} to find study time together.`
                       : "Add friends to compare schedules and find study time together!"}
                   </p>
                 </div>

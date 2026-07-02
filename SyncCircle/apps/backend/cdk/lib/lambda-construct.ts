@@ -52,6 +52,7 @@ export class LambdaConstruct extends Construct {
   public readonly postConfirmationHandler: nodejs.NodejsFunction;
   public readonly putTimetableHandler: nodejs.NodejsFunction;
   public readonly getFriendTimetableHandler: nodejs.NodejsFunction;
+  public readonly getUsersHandler: nodejs.NodejsFunction;
 
   constructor(scope: Construct, id: string, props: LambdaConstructProps) {
     super(scope, id);
@@ -253,7 +254,7 @@ export class LambdaConstruct extends Construct {
       environment: commonEnv,
     });
 
-    friendshipsTable.grant(this.removeFriendHandler, 'dynamodb:GetItem', 'dynamodb:UpdateItem');
+    friendshipsTable.grant(this.removeFriendHandler, 'dynamodb:GetItem', 'dynamodb:UpdateItem', 'dynamodb:Query');
 
     // -------------------------------------------------------------------
     // Relationship Handler
@@ -315,5 +316,19 @@ export class LambdaConstruct extends Construct {
 
     userTimetablesTable.grant(this.getFriendTimetableHandler, 'dynamodb:GetItem');
     friendshipsTable.grant(this.getFriendTimetableHandler, 'dynamodb:Query');
+
+    // -------------------------------------------------------------------
+    // Get Users Handler
+    // Needs: UserProfiles (Scan) — returns all registered users for discovery
+    // -------------------------------------------------------------------
+    this.getUsersHandler = new nodejs.NodejsFunction(this, 'GetUsersHandler', {
+      ...defaultFunctionProps,
+      entry: path.join(handlersDir, 'users', 'get-users.ts'),
+      handler: 'handler',
+      functionName: 'SyncCircle-Users-GetUsers',
+      environment: commonEnv,
+    });
+
+    userProfilesTable.grant(this.getUsersHandler, 'dynamodb:Scan');
   }
 }

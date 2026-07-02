@@ -48,6 +48,9 @@ export const API_PATHS = {
 
   /** GET — Fetch a friend's timetable (append /{friendId}/timetable) */
   FRIENDS_TIMETABLE: '/friends/:friendId/timetable',
+
+  /** GET — List all registered users for friend discovery */
+  USERS: '/users',
 } as const;
 
 // ─── Auth Header Format ──────────────────────────────────────────────────────
@@ -206,6 +209,15 @@ export interface FriendsListResponse {
     friendId: string;
     displayName: string;
     createdAt: string;
+  }>;
+}
+
+/** GET /users — response body */
+export interface UsersListResponse {
+  users: Array<{
+    userId: string;
+    displayName: string;
+    email: string;
   }>;
 }
 

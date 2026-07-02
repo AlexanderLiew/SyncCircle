@@ -29,6 +29,7 @@ export interface ApiConstructProps {
   relationshipHandler: lambda.IFunction;
   putTimetableHandler: lambda.IFunction;
   getFriendTimetableHandler: lambda.IFunction;
+  getUsersHandler: lambda.IFunction;
 }
 
 /**
@@ -317,6 +318,14 @@ export class ApiConstruct extends Construct {
     friendTimetable.addMethod(
       'GET',
       new apigateway.LambdaIntegration(props.getFriendTimetableHandler),
+      authorizerOptions,
+    );
+
+    // GET /users (user discovery)
+    const users = this.api.root.addResource('users');
+    users.addMethod(
+      'GET',
+      new apigateway.LambdaIntegration(props.getUsersHandler),
       authorizerOptions,
     );
 
