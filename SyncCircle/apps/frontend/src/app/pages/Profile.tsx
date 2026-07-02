@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import { motion } from "motion/react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   User,
   Flame,
@@ -18,12 +18,17 @@ import {
   Users,
   StickyNote,
   Sparkles,
+  Upload,
+  ChevronDown,
+  ChevronUp,
+  Loader2,
 } from "lucide-react";
 import {
-  AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  RadarChart, PolarGrid, PolarAngleAxis, Radar,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  RadarChart, PolarGrid, PolarAngleAxis, Radar, Legend,
+  AreaChart, Area,
 } from "recharts";
-import { ProfileCharacter, type CharacterState } from "../components/ProfileCharacter";
+import { ProfileCharacter, type CharacterState, getEvolutionLevel, EVOLUTION_LEVELS, type EvolutionLevel } from "../components/ProfileCharacter";
 import { getUser, getSettings, getTasks, getFriends, getNotes } from "../lib/storage";
 
 // ——— Character customizer data ———
@@ -215,21 +220,249 @@ const weeklyData = [
   { day: "Mon", hours: 4.5 }, { day: "Tue", hours: 6.2 }, { day: "Wed", hours: 5.8 },
   { day: "Thu", hours: 7.1 }, { day: "Fri", hours: 6.5 }, { day: "Sat", hours: 8.2 }, { day: "Sun", hours: 5.9 },
 ];
-const modulePerformance = [
-  { subject: "ML", score: 92 }, { subject: "DS", score: 88 },
-  { subject: "Calc", score: 85 }, { subject: "DB", score: 90 }, { subject: "Physics", score: 82 },
-];
+
+// --- Module Grade Types ---
+interface ModuleGrade {
+  module: string;
+  currentGrade: number;
+  targetGrade: number;
+}
+
+interface AIInsight {
+  module: string;
+  gap: number;
+  suggestion: string;
+  priority: 'high' | 'medium' | 'low';
+  studyPlan: {
+    hoursPerWeek: number;
+    bestDays: string[];
+    strategy: string;
+  };
+}
+
+const GRADES_STORAGE_KEY = 'synccircle_module_grades';
+const TARGET_GRADE = 85; // default target
+
+function loadGrades(): ModuleGrade[] {
+  try {
+    const raw = localStorage.getItem(GRADES_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveGrades(grades: ModuleGrade[]): void {
+  localStorage.setItem(GRADES_STORAGE_KEY, JSON.stringify(grades));
+}
+
+function generateAIInsights(grades: ModuleGrade[]): AIInsight[] {
+  // Analyze weekly study patterns to recommend optimal study schedule
+  const totalWeeklyHours = weeklyData.reduce((sum, d) => sum + d.hours, 0);
+  const avgDailyHours = totalWeeklyHours / 7;
+
+  // Find low-effort days (good candidates for extra study)
+  const sortedDays = [...weeklyData].sort((a, b) => a.hours - b.hours);
+  const lowDays = sortedDays.slice(0, 3).map(d => d.day);
+  const highDays = sortedDays.slice(-2).map(d => d.day);
+
+  // Calculate available capacity (assume max 10h/day is realistic)
+  const availableExtra = weeklyData.reduce((sum, d) => sum + Math.max(0, 10 - d.hours), 0);
+
+  return grades
+    .filter(g => g.currentGrade < g.targetGrade)
+    .sort((a, b) => (b.targetGrade - b.currentGrade) - (a.targetGrade - a.currentGrade))
+    .map((g, idx) => {
+      const gap = g.targetGrade - g.currentGrade;
+      let suggestion: string;
+      let priority: 'high' | 'medium' | 'low';
+      let hoursPerWeek: number;
+      let bestDays: string[];
+      let strategy: string;
+
+      if (gap >= 20) {
+        priority = 'high';
+        hoursPerWeek = Math.min(8, Math.ceil(gap / 3));
+        bestDays = [...lowDays.slice(0, 2), highDays[0]];
+        suggestion = `Critical gap of ${gap}%. You're averaging ${avgDailyHours.toFixed(1)}h/day — redistribute to prioritise this module.`;
+        strategy = `Dedicate ${hoursPerWeek}h/week: focus sessions on ${bestDays.join(', ')}. Use active recall and spaced repetition. Attend consultations weekly.`;
+      } else if (gap >= 10) {
+        priority = 'medium';
+        hoursPerWeek = Math.min(5, Math.ceil(gap / 4));
+        bestDays = lowDays.slice(0, 2);
+        suggestion = `Moderate gap of ${gap}%. Your lightest days (${lowDays.join(', ')}) have capacity for focused study blocks.`;
+        strategy = `Add ${hoursPerWeek}h/week on ${bestDays.join(' & ')}. Practice problems + peer study group. Review weak topics from past papers.`;
+      } else {
+        priority = 'low';
+        hoursPerWeek = Math.min(3, Math.ceil(gap / 5));
+        bestDays = [lowDays[0]];
+        suggestion = `Small gap of ${gap}%. Minimal extra effort needed — just ${hoursPerWeek}h/week of targeted revision.`;
+        strategy = `${hoursPerWeek}h/week on ${bestDays[0]}. Focus on exam technique and past paper practice. You're almost there.`;
+      }
+
+      return { module: g.module, gap, suggestion, priority, studyPlan: { hoursPerWeek, bestDays, strategy } };
+    });
+}
+
+function parseCSV(text: string): ModuleGrade[] {
+  const lines = text.trim().split('\n');
+  const grades: ModuleGrade[] = [];
+  // Skip header if present
+  const start = lines[0]?.toLowerCase().includes('module') ? 1 : 0;
+  for (let i = start; i < lines.length; i++) {
+    const parts = lines[i].split(',').map(s => s.trim());
+    if (parts.length >= 2) {
+      const module = parts[0];
+      const currentGrade = parseFloat(parts[1]);
+      const targetGrade = parts.length >= 3 ? parseFloat(parts[2]) : TARGET_GRADE;
+      if (module && !isNaN(currentGrade)) {
+        grades.push({ module, currentGrade, targetGrade: isNaN(targetGrade) ? TARGET_GRADE : targetGrade });
+      }
+    }
+  }
+  return grades;
+}
+
+function parseJSON(text: string): ModuleGrade[] {
+  const data = JSON.parse(text);
+  const arr = Array.isArray(data) ? data : data.grades || data.modules || [];
+  return arr
+    .map((item: any) => ({
+      module: item.module || item.subject || item.name || '',
+      currentGrade: parseFloat(item.currentGrade ?? item.grade ?? item.score ?? 0),
+      targetGrade: parseFloat(item.targetGrade ?? item.target ?? TARGET_GRADE),
+    }))
+    .filter((g: ModuleGrade) => g.module && !isNaN(g.currentGrade));
+}
 const radarData = [
   { category: "Focus", value: 85 }, { category: "Consistency", value: 92 },
   { category: "Collaboration", value: 88 }, { category: "Notes Quality", value: 90 }, { category: "Attendance", value: 95 },
 ];
+const POMODORO_STORAGE_KEY = 'synccircle_pomodoro_stats';
+const STUDY_LOG_KEY = 'synccircle_study_log';
+
+interface PomodoroStats {
+  totalSessions: number;
+  totalMinutes: number;
+  todaySessions: number;
+  lastSessionDate: string;
+}
+
+interface DailyStudyEntry {
+  date: string; // YYYY-MM-DD
+  minutes: number;
+}
+
+function loadPomodoroStats(): PomodoroStats {
+  try {
+    const raw = localStorage.getItem(POMODORO_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : { totalSessions: 0, totalMinutes: 0, todaySessions: 0, lastSessionDate: '' };
+  } catch { return { totalSessions: 0, totalMinutes: 0, todaySessions: 0, lastSessionDate: '' }; }
+}
+
+function savePomodoroStats(stats: PomodoroStats): void {
+  localStorage.setItem(POMODORO_STORAGE_KEY, JSON.stringify(stats));
+}
+
+function loadStudyLog(): DailyStudyEntry[] {
+  try {
+    const raw = localStorage.getItem(STUDY_LOG_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveStudyLog(log: DailyStudyEntry[]): void {
+  localStorage.setItem(STUDY_LOG_KEY, JSON.stringify(log));
+}
+
+function addStudyMinutes(minutes: number): DailyStudyEntry[] {
+  const log = loadStudyLog();
+  const today = new Date().toISOString().slice(0, 10);
+  const existing = log.find(e => e.date === today);
+  if (existing) {
+    existing.minutes += minutes;
+  } else {
+    log.push({ date: today, minutes });
+  }
+  // Keep last 30 days max
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 30);
+  const filtered = log.filter(e => e.date >= cutoff.toISOString().slice(0, 10));
+  saveStudyLog(filtered);
+  return filtered;
+}
+
+function getWeeklyData(log: DailyStudyEntry[]): { day: string; thisWeek: number; lastWeek: number }[] {
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const today = new Date();
+  const dayOfWeek = (today.getDay() + 6) % 7; // Mon=0
+
+  return days.map((day, i) => {
+    // This week
+    const thisWeekDate = new Date(today);
+    thisWeekDate.setDate(today.getDate() - dayOfWeek + i);
+    const thisWeekStr = thisWeekDate.toISOString().slice(0, 10);
+    const thisWeekEntry = log.find(e => e.date === thisWeekStr);
+
+    // Last week
+    const lastWeekDate = new Date(thisWeekDate);
+    lastWeekDate.setDate(lastWeekDate.getDate() - 7);
+    const lastWeekStr = lastWeekDate.toISOString().slice(0, 10);
+    const lastWeekEntry = log.find(e => e.date === lastWeekStr);
+
+    return {
+      day,
+      thisWeek: thisWeekEntry ? +(thisWeekEntry.minutes / 60).toFixed(1) : 0,
+      lastWeek: lastWeekEntry ? +(lastWeekEntry.minutes / 60).toFixed(1) : 0,
+    };
+  });
+}
+
+// --- Student Profile ---
+const STUDENT_PROFILE_KEY = 'synccircle_student_profile';
+
+type AcademicLevel = 'secondary' | 'jc' | 'polytechnic' | 'undergraduate' | 'postgraduate';
+type LearningArchetype = 'methodical' | 'intensive' | 'balanced' | 'distributed' | 'adaptive';
+
+interface StudentProfile {
+  academicLevel: AcademicLevel;
+  archetype: LearningArchetype;
+  sleepStart: string; // "HH:mm" e.g. "23:00"
+  sleepEnd: string;   // "HH:mm" e.g. "07:00"
+}
+
+const ACADEMIC_LEVELS: Record<AcademicLevel, string> = {
+  secondary: 'Secondary School',
+  jc: 'Junior College / IB',
+  polytechnic: 'Polytechnic / Diploma',
+  undergraduate: 'Undergraduate',
+  postgraduate: 'Postgraduate',
+};
+
+const LEARNING_ARCHETYPES: Record<LearningArchetype, { label: string; description: string }> = {
+  methodical: { label: 'Methodical Learner', description: 'Prefers structured, step-by-step study with clear schedules' },
+  intensive: { label: 'Intensive Learner', description: 'Thrives in deep, focused study marathons with fewer but longer sessions' },
+  balanced: { label: 'Balanced Learner', description: 'Maintains steady pace with equal time for study and rest' },
+  distributed: { label: 'Distributed Learner', description: 'Learns best with frequent short sessions spread across the day' },
+  adaptive: { label: 'Adaptive Learner', description: 'Flexes between styles based on energy levels and deadlines' },
+};
+
+function loadStudentProfile(): StudentProfile | null {
+  try {
+    const raw = localStorage.getItem(STUDENT_PROFILE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function saveStudentProfile(profile: StudentProfile): void {
+  localStorage.setItem(STUDENT_PROFILE_KEY, JSON.stringify(profile));
+}
+
 const achievements = [
-  { id: 1, title: "Study Streak Master", description: "Maintain 10+ day streak", icon: Flame, color: "#f4b8d0", unlocked: true },
-  { id: 2, title: "Top Contributor", description: "Share 50+ notes", icon: BookOpen, color: "#d4f4e8", unlocked: true },
-  { id: 3, title: "Team Player", description: "Join 20+ study sessions", icon: Trophy, color: "#b8a4d4", unlocked: true },
-  { id: 4, title: "Early Bird", description: "Study before 8 AM 5 times", icon: Target, color: "#d4e8f4", unlocked: true },
-  { id: 5, title: "Night Owl", description: "Study past midnight 10 times", icon: Star, color: "#fef4d4", unlocked: false },
-  { id: 6, title: "Century Club", description: "100+ total study hours", icon: Award, color: "#ffd4c8", unlocked: false },
+  { id: 1, title: "Study Streak Master", description: "Maintain 10+ day streak", icon: Flame, color: "#f4b8d0", goal: 10, type: 'streak' as const },
+  { id: 2, title: "First Focus", description: "Complete 1 pomodoro session", icon: Target, color: "#d4e8f4", goal: 1, type: 'pomodoro' as const },
+  { id: 3, title: "Deep Work", description: "Complete 10 pomodoro sessions", icon: Clock, color: "#b8a4d4", goal: 10, type: 'pomodoro' as const },
+  { id: 4, title: "Focus Machine", description: "Complete 50 pomodoro sessions", icon: Trophy, color: "#d4f4e8", goal: 50, type: 'pomodoro' as const },
+  { id: 5, title: "Century Club", description: "100+ total focus minutes", icon: Award, color: "#ffd4c8", goal: 100, type: 'minutes' as const },
+  { id: 6, title: "Marathon Mind", description: "500+ total focus minutes", icon: Star, color: "#fef4d4", goal: 500, type: 'minutes' as const },
 ];
 const favoriteModules = [
   { name: "Machine Learning", color: "#f4b8d0", progress: 75, grade: "A-" },
@@ -253,6 +486,28 @@ export function Profile() {
   });
   const [characterState, setCharacterState] = useState<CharacterState>("idle");
 
+  // Pomodoro timer state
+  const [pomodoroStats, setPomodoroStats] = useState<PomodoroStats>(loadPomodoroStats);
+  const [pomodoroActive, setPomodoroActive] = useState(false);
+  const [pomodoroSeconds, setPomodoroSeconds] = useState(25 * 60); // 25 min default
+  const [pomodoroMode, setPomodoroMode] = useState<'focus' | 'break'>('focus');
+  const pomodoroRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [studyLog, setStudyLog] = useState<DailyStudyEntry[]>(loadStudyLog);
+
+  // Student profile modal
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(loadStudentProfile);
+  const [profileForm, setProfileForm] = useState<StudentProfile>(
+    studentProfile || { academicLevel: 'undergraduate', archetype: 'balanced', sleepStart: '23:00', sleepEnd: '07:00' }
+  );
+
+  // Module grades state
+  const [moduleGrades, setModuleGrades] = useState<ModuleGrade[]>(loadGrades);
+  const [gradesExpanded, setGradesExpanded] = useState(false);
+  const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // Load user profile info from localStorage
   const user = useMemo(() => getUser(), []);
   const settings = useMemo(() => getSettings(), []);
@@ -270,6 +525,33 @@ export function Profile() {
   const friendsCount = friends.length;
   const notesCount = notes.length;
 
+  // Calculate task completion streak (consecutive days with at least 1 task completed)
+  const streak = useMemo(() => {
+    const completedDates = new Set(
+      tasks
+        .filter(t => t.completed && t.completedAt)
+        .map(t => t.completedAt!.slice(0, 10)) // "YYYY-MM-DD"
+    );
+    if (completedDates.size === 0) return 0;
+
+    let count = 0;
+    const today = new Date();
+    for (let i = 0; i < 365; i++) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().slice(0, 10);
+      if (completedDates.has(dateStr)) {
+        count++;
+      } else if (i > 0) {
+        // Allow today to not have a completion yet (streak counts from yesterday back)
+        break;
+      }
+    }
+    return count;
+  }, [tasks]);
+
+  const evolution = useMemo(() => getEvolutionLevel(streak), [streak]);
+
   // Check if any task was completed in the last hour to trigger celebration
   useEffect(() => {
     const oneHourAgo = Date.now() - 60 * 60 * 1000;
@@ -285,15 +567,134 @@ export function Profile() {
     setCharacterState("idle");
   };
 
-  const toggleStudyMode = () => {
-    setCharacterState((prev) => (prev === "studying" ? "idle" : "studying"));
+  // Pomodoro timer effect
+  useEffect(() => {
+    if (pomodoroActive && pomodoroSeconds > 0) {
+      pomodoroRef.current = setInterval(() => {
+        setPomodoroSeconds(prev => {
+          if (prev <= 1) {
+            // Timer complete
+            clearInterval(pomodoroRef.current!);
+            setPomodoroActive(false);
+
+            if (pomodoroMode === 'focus') {
+              // Focus session complete — update stats
+              const today = new Date().toISOString().slice(0, 10);
+              const updated: PomodoroStats = {
+                totalSessions: pomodoroStats.totalSessions + 1,
+                totalMinutes: pomodoroStats.totalMinutes + 25,
+                todaySessions: pomodoroStats.lastSessionDate === today
+                  ? pomodoroStats.todaySessions + 1
+                  : 1,
+                lastSessionDate: today,
+              };
+              setPomodoroStats(updated);
+              savePomodoroStats(updated);
+              // Log study minutes
+              const updatedLog = addStudyMinutes(25);
+              setStudyLog(updatedLog);
+              setCharacterState("celebration");
+              // Switch to break
+              setPomodoroMode('break');
+              return 5 * 60; // 5 min break
+            } else {
+              // Break complete — back to focus
+              setPomodoroMode('focus');
+              return 25 * 60;
+            }
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (pomodoroRef.current) clearInterval(pomodoroRef.current);
+    };
+  }, [pomodoroActive, pomodoroMode]);
+
+  const startPomodoro = () => {
+    setPomodoroActive(true);
+    setCharacterState("studying");
   };
 
-  const triggerCelebration = () => {
-    setCharacterState("celebration");
+  const pausePomodoro = () => {
+    setPomodoroActive(false);
+    setCharacterState("idle");
+  };
+
+  const resetPomodoro = () => {
+    setPomodoroActive(false);
+    setPomodoroMode('focus');
+    setPomodoroSeconds(25 * 60);
+    setCharacterState("idle");
+  };
+
+  // Check which achievements are unlocked based on stats
+  const isAchievementUnlocked = (achievement: typeof achievements[0]) => {
+    switch (achievement.type) {
+      case 'streak': return streak >= achievement.goal;
+      case 'pomodoro': return pomodoroStats.totalSessions >= achievement.goal;
+      case 'minutes': return pomodoroStats.totalMinutes >= achievement.goal;
+      default: return false;
+    }
+  };
+
+  const getAchievementProgress = (achievement: typeof achievements[0]) => {
+    switch (achievement.type) {
+      case 'streak': return Math.min(1, streak / achievement.goal);
+      case 'pomodoro': return Math.min(1, pomodoroStats.totalSessions / achievement.goal);
+      case 'minutes': return Math.min(1, pomodoroStats.totalMinutes / achievement.goal);
+      default: return 0;
+    }
+  };
+
+  // --- Grade upload handlers ---
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      try {
+        let grades: ModuleGrade[];
+        if (file.name.endsWith('.json')) {
+          grades = parseJSON(text);
+        } else {
+          grades = parseCSV(text);
+        }
+        if (grades.length > 0) {
+          setModuleGrades(grades);
+          saveGrades(grades);
+          setAiInsights([]);
+          setGradesExpanded(true);
+        }
+      } catch (err) {
+        console.error('Failed to parse grades file:', err);
+      }
+    };
+    reader.readAsText(file);
+    // Reset input so the same file can be re-uploaded
+    e.target.value = '';
+  };
+
+  const handleAnalyzeGrades = () => {
+    setIsAnalyzing(true);
+    // Simulate AI processing delay
+    setTimeout(() => {
+      const insights = generateAIInsights(moduleGrades);
+      setAiInsights(insights);
+      setIsAnalyzing(false);
+    }, 1500);
   };
 
   const set = (field: keyof CharConfig) => (v: any) => setCharConfig(prev => ({ ...prev, [field]: v }));
+
+  const handleSaveProfile = () => {
+    setStudentProfile(profileForm);
+    saveStudentProfile(profileForm);
+    setShowProfileModal(false);
+  };
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -331,10 +732,15 @@ export function Profile() {
             <div>
               <h1 className="text-3xl font-bold mb-2">{displayName}</h1>
               <p className="text-lg opacity-90 mb-3">{course}</p>
+              {studentProfile && (
+                <p className="text-sm opacity-75 mb-3">
+                  {ACADEMIC_LEVELS[studentProfile.academicLevel]} · {LEARNING_ARCHETYPES[studentProfile.archetype].label}
+                </p>
+              )}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-xl backdrop-blur-sm">
                   <Flame className="w-5 h-5" />
-                  <span className="font-semibold">12 Day Streak</span>
+                  <span className="font-semibold">{streak} Day Streak</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-xl backdrop-blur-sm">
                   <Trophy className="w-5 h-5" />
@@ -343,16 +749,131 @@ export function Profile() {
               </div>
             </div>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm transition-all">
+          <button
+            onClick={() => setShowProfileModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm transition-all"
+          >
             <Edit className="w-4 h-4" />
-            Edit Profile
+            {studentProfile ? 'Edit Profile' : 'Set Up Profile'}
           </button>
         </div>
       </motion.div>
 
+      {/* Student Profile Modal */}
+      <AnimatePresence>
+        {showProfileModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+            onClick={() => setShowProfileModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-card rounded-2xl border border-border p-8 w-full max-w-lg space-y-6 shadow-xl max-h-[90vh] overflow-y-auto"
+            >
+              <div>
+                <h2 className="text-2xl font-bold">Student Profile</h2>
+                <p className="text-sm text-muted-foreground mt-1">Help SyncCircle personalise your study experience</p>
+              </div>
+
+              {/* Academic Level */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Academic Level</label>
+                <select
+                  value={profileForm.academicLevel}
+                  onChange={(e) => setProfileForm(prev => ({ ...prev, academicLevel: e.target.value as AcademicLevel }))}
+                  className="w-full px-4 py-2.5 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+                >
+                  {(Object.entries(ACADEMIC_LEVELS) as [AcademicLevel, string][]).map(([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Learning Archetype */}
+              <div className="space-y-3">
+                <label className="block text-sm font-medium">Learning Style</label>
+                <div className="space-y-2">
+                  {(Object.entries(LEARNING_ARCHETYPES) as [LearningArchetype, { label: string; description: string }][]).map(([key, { label, description }]) => (
+                    <label
+                      key={key}
+                      className={`flex items-start gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                        profileForm.archetype === key
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border hover:border-primary/40'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="archetype"
+                        value={key}
+                        checked={profileForm.archetype === key}
+                        onChange={() => setProfileForm(prev => ({ ...prev, archetype: key }))}
+                        className="mt-1 accent-primary"
+                      />
+                      <div>
+                        <p className="font-medium text-sm">{label}</p>
+                        <p className="text-xs text-muted-foreground">{description}</p>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sleep Schedule */}
+              <div className="space-y-3">
+                <label className="block text-sm font-medium">Sleep Schedule</label>
+                <p className="text-xs text-muted-foreground">SyncCircle will avoid scheduling study reminders during these hours</p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Bedtime</label>
+                    <input
+                      type="time"
+                      value={profileForm.sleepStart}
+                      onChange={(e) => setProfileForm(prev => ({ ...prev, sleepStart: e.target.value }))}
+                      className="w-full px-4 py-2.5 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Wake up</label>
+                    <input
+                      type="time"
+                      value={profileForm.sleepEnd}
+                      onChange={(e) => setProfileForm(prev => ({ ...prev, sleepEnd: e.target.value }))}
+                      className="w-full px-4 py-2.5 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={handleSaveProfile}
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium bg-primary text-primary-foreground hover:shadow-lg transition-all"
+                >
+                  Save Profile
+                </button>
+                <button
+                  onClick={() => setShowProfileModal(false)}
+                  className="px-4 py-2.5 rounded-xl text-sm font-medium bg-accent hover:bg-accent/80 transition-all"
+                >
+                  Cancel
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Profile Character & Stats Section */}
-      <div className="grid grid-cols-[auto_1fr] gap-6">
-        {/* Animated Profile Character */}
+      <div className="grid grid-cols-[360px_1fr] gap-6">
+        {/* Animated Profile Character + Pomodoro */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -365,315 +886,442 @@ export function Profile() {
             </div>
             <div>
               <h2 className="text-lg font-bold">Study Buddy</h2>
-              <p className="text-xs text-muted-foreground">Your animated companion</p>
+              <p className="text-xs text-muted-foreground">Lv.{evolution.level} {evolution.title}</p>
             </div>
           </div>
 
           <div className="w-52 h-52 rounded-2xl bg-gradient-to-br from-[#f0e6f6] to-[#d4e8f4] flex items-center justify-center border-2 border-border">
             <ProfileCharacter
               state={characterState}
+              level={evolution.level}
               onCelebrationComplete={handleCelebrationComplete}
             />
           </div>
 
-          <div className="flex gap-2 mt-2">
-            <button
-              onClick={toggleStudyMode}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                characterState === "studying"
-                  ? "bg-[#b8a4d4] text-white shadow-md"
-                  : "bg-accent hover:bg-accent/80"
-              }`}
-            >
-              {characterState === "studying" ? "📖 Studying..." : "📚 Study Mode"}
-            </button>
-            <button
-              onClick={triggerCelebration}
-              className="px-4 py-2 rounded-xl text-sm font-medium bg-accent hover:bg-accent/80 transition-all"
-            >
-              🎉 Celebrate
-            </button>
+          {/* Evolution progress */}
+          <div className="w-full space-y-2 mt-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-medium">🔥 {streak} day streak</span>
+              {evolution.nextLevelAt && (
+                <span className="text-muted-foreground">
+                  Next: {EVOLUTION_LEVELS[(evolution.level + 1) as EvolutionLevel].title} ({evolution.nextLevelAt - streak} days)
+                </span>
+              )}
+              {!evolution.nextLevelAt && (
+                <span className="text-amber-500 font-medium">Max level! 👑</span>
+              )}
+            </div>
+            <div className="w-full h-2 bg-accent rounded-full overflow-hidden">
+              <motion.div
+                className="h-full rounded-full"
+                style={{
+                  backgroundColor: evolution.level === 4 ? '#ffd700' : evolution.level === 3 ? '#b388ff' : evolution.level === 2 ? '#60a5fa' : '#e0e0e0',
+                }}
+                initial={{ width: 0 }}
+                animate={{
+                  width: evolution.nextLevelAt
+                    ? `${(streak / evolution.nextLevelAt) * 100}%`
+                    : '100%',
+                }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              />
+            </div>
+            <div className="flex justify-between text-[10px] text-muted-foreground">
+              {([1, 2, 3, 4] as EvolutionLevel[]).map(lvl => (
+                <span key={lvl} className={evolution.level >= lvl ? 'font-semibold text-foreground' : ''}>
+                  {EVOLUTION_LEVELS[lvl].title}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Pomodoro Timer */}
+          <div className="w-full space-y-3 mt-2">
+            <div className="flex items-center justify-center gap-2">
+              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                pomodoroMode === 'focus'
+                  ? 'bg-primary/20 text-primary'
+                  : 'bg-green-500/20 text-green-600'
+              }`}>
+                {pomodoroMode === 'focus' ? '🎯 Focus' : '☕ Break'}
+              </span>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-bold font-mono">
+                {Math.floor(pomodoroSeconds / 60).toString().padStart(2, '0')}:{(pomodoroSeconds % 60).toString().padStart(2, '0')}
+              </p>
+            </div>
+            <div className="flex gap-2 justify-center">
+              {!pomodoroActive ? (
+                <button
+                  onClick={startPomodoro}
+                  className="px-4 py-2 rounded-xl text-sm font-medium bg-primary text-primary-foreground hover:shadow-lg transition-all"
+                >
+                  {pomodoroSeconds === (pomodoroMode === 'focus' ? 25 * 60 : 5 * 60) ? '▶ Start' : '▶ Resume'}
+                </button>
+              ) : (
+                <button
+                  onClick={pausePomodoro}
+                  className="px-4 py-2 rounded-xl text-sm font-medium bg-amber-500 text-white hover:shadow-lg transition-all"
+                >
+                  ⏸ Pause
+                </button>
+              )}
+              <button
+                onClick={resetPomodoro}
+                className="px-4 py-2 rounded-xl text-sm font-medium bg-accent hover:bg-accent/80 transition-all"
+              >
+                ↺ Reset
+              </button>
+            </div>
+            <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border">
+              <span>Today: {pomodoroStats.todaySessions} sessions</span>
+              <span>Total: {pomodoroStats.totalMinutes} min</span>
+            </div>
+
+            {/* How to use */}
+            <div className="pt-3 border-t border-border space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground">📖 How Pomodoro Works</p>
+              <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
+                <li>Press <strong>Start</strong> to begin a 25-min focus session</li>
+                <li>Your buddy studies with you — stay focused!</li>
+                <li>When the timer ends, take a 5-min break ☕</li>
+                <li>Repeat — every session counts towards achievements</li>
+              </ol>
+              <p className="text-[10px] text-muted-foreground/70 italic">
+                Tip: Complete sessions daily to grow your streak and evolve your character!
+              </p>
+            </div>
           </div>
         </motion.div>
 
-        {/* Quick Stats from localStorage */}
+        {/* Study Hours Tracker - right side of grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.08 }}
-          className="grid grid-cols-2 grid-rows-2 gap-4"
+          transition={{ delay: 0.12 }}
+          className="bg-card rounded-2xl border border-border p-6 flex flex-col"
         >
-          <div
-            className="bg-card rounded-2xl p-5 border border-border"
-            style={{ background: "linear-gradient(135deg, #b8a4d415 0%, transparent 100%)" }}
-          >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: "#b8a4d430" }}>
-              <CheckCircle2 className="w-5 h-5" style={{ color: "#b8a4d4" }} />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#b8a4d4]/20 flex items-center justify-center">
+                <Clock className="w-5 h-5 text-[#b8a4d4]" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold">Study Hours</h2>
+                <p className="text-sm text-muted-foreground">This week vs last week</p>
+              </div>
             </div>
-            <p className="text-2xl font-bold mb-1">{completedTasks}/{totalTasks}</p>
-            <p className="text-sm text-muted-foreground">Tasks Completed</p>
           </div>
-          <div
-            className="bg-card rounded-2xl p-5 border border-border"
-            style={{ background: "linear-gradient(135deg, #f4b8d015 0%, transparent 100%)" }}
-          >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: "#f4b8d030" }}>
-              <Users className="w-5 h-5" style={{ color: "#f4b8d0" }} />
+
+          <div className="flex gap-6 mb-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-primary">
+                {(() => {
+                  const today = new Date().toISOString().slice(0, 10);
+                  const entry = studyLog.find(e => e.date === today);
+                  return entry ? (entry.minutes / 60).toFixed(1) : '0';
+                })()}h
+              </p>
+              <p className="text-xs text-muted-foreground">Today</p>
             </div>
-            <p className="text-2xl font-bold mb-1">{friendsCount}</p>
-            <p className="text-sm text-muted-foreground">Study Friends</p>
-          </div>
-          <div
-            className="bg-card rounded-2xl p-5 border border-border"
-            style={{ background: "linear-gradient(135deg, #d4f4e815 0%, transparent 100%)" }}
-          >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: "#d4f4e830" }}>
-              <StickyNote className="w-5 h-5" style={{ color: "#4ade80" }} />
+            <div className="text-center">
+              <p className="text-2xl font-bold text-[#b8a4d4]">
+                {(() => {
+                  const weekData = getWeeklyData(studyLog);
+                  return weekData.reduce((s, d) => s + d.thisWeek, 0).toFixed(1);
+                })()}h
+              </p>
+              <p className="text-xs text-muted-foreground">This Week</p>
             </div>
-            <p className="text-2xl font-bold mb-1">{notesCount}</p>
-            <p className="text-sm text-muted-foreground">Notes Created</p>
-          </div>
-          <div
-            className="bg-card rounded-2xl p-5 border border-border"
-            style={{ background: "linear-gradient(135deg, #d4e8f415 0%, transparent 100%)" }}
-          >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: "#d4e8f430" }}>
-              <Target className="w-5 h-5" style={{ color: "#60a5fa" }} />
+            <div className="text-center">
+              <p className="text-2xl font-bold text-muted-foreground">
+                {(() => {
+                  const weekData = getWeeklyData(studyLog);
+                  return weekData.reduce((s, d) => s + d.lastWeek, 0).toFixed(1);
+                })()}h
+              </p>
+              <p className="text-xs text-muted-foreground">Last Week</p>
             </div>
-            <p className="text-2xl font-bold mb-1">{totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0}%</p>
-            <p className="text-sm text-muted-foreground">Completion Rate</p>
           </div>
+
+          <div className="flex-1 min-h-0">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={getWeeklyData(studyLog)}>
+                <defs>
+                  <linearGradient id="colorThisWeek" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#b8a4d4" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#b8a4d4" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="colorLastWeek" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#9ca3af" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#9ca3af" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.2} />
+                <XAxis dataKey="day" stroke="#9088a0" />
+                <YAxis stroke="#9088a0" unit="h" />
+                <Tooltip
+                  contentStyle={{ backgroundColor: "var(--color-card)", border: "1px solid var(--color-border)", borderRadius: "12px" }}
+                  formatter={(value: number, name: string) => [`${value}h`, name === 'thisWeek' ? 'This Week' : 'Last Week']}
+                />
+                <Legend formatter={(value) => value === 'thisWeek' ? 'This Week' : 'Last Week'} />
+                <Area type="monotone" dataKey="lastWeek" stroke="#9ca3af" strokeWidth={2} strokeDasharray="5 5" fill="url(#colorLastWeek)" />
+                <Area type="monotone" dataKey="thisWeek" stroke="#b8a4d4" strokeWidth={3} fill="url(#colorThisWeek)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+          {studyLog.length === 0 && (
+            <p className="text-center text-sm text-muted-foreground mt-4">
+              Complete pomodoro sessions to start tracking your study hours here.
+            </p>
+          )}
         </motion.div>
       </div>
 
-      {/* ——— Character Customizer ——— */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-card rounded-2xl border border-border p-6"
-      >
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-[#f4b8d0]/20 flex items-center justify-center">
-            <User className="w-5 h-5 text-[#f4b8d0]" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold">Study Character</h2>
-            <p className="text-sm text-muted-foreground">Customise your avatar ✨</p>
-          </div>
-        </div>
-
-        <div className="flex gap-8 items-center flex-wrap">
-          {/* Character preview */}
-          <div className="flex-shrink-0 flex flex-col items-center gap-3">
-            <div className="w-44 h-52 rounded-2xl bg-gradient-to-br from-[#f0e6f6] to-[#d4e8f4] flex items-center justify-center border-2 border-border">
-              <StudyCharacter cfg={charConfig} />
-            </div>
-            <p className="text-xs text-muted-foreground">Your study buddy 💜</p>
-          </div>
-
-          {/* Controls */}
-          <div className="flex-1 grid grid-cols-2 gap-x-8 gap-y-6 min-w-[280px]">
-            {/* Skin tone */}
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-xs text-muted-foreground font-medium">Skin Tone</span>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => set("skinIdx")((charConfig.skinIdx - 1 + SKIN_TONES.length) % SKIN_TONES.length)}
-                  className="p-1 rounded-lg hover:bg-accent transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <div className="w-24 flex items-center justify-center">
-                  <div className="flex gap-1">
-                    {SKIN_TONES.map((c, i) => (
-                      <div
-                        key={c}
-                        onClick={() => set("skinIdx")(i)}
-                        className={`w-5 h-5 rounded-full cursor-pointer transition-all ${i === charConfig.skinIdx ? "ring-2 ring-primary ring-offset-1 scale-110" : "opacity-60 hover:opacity-100"}`}
-                        style={{ backgroundColor: c }}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <button
-                  onClick={() => set("skinIdx")((charConfig.skinIdx + 1) % SKIN_TONES.length)}
-                  className="p-1 rounded-lg hover:bg-accent transition-colors"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
+      {/* Module Performance — Full Width */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-card rounded-2xl p-6 border border-border">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#d4e8f4]/20 flex items-center justify-center">
+                <Award className="w-5 h-5 text-[#d4e8f4]" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold">Module Performance</h2>
+                <p className="text-sm text-muted-foreground">
+                  {moduleGrades.length > 0 ? `${moduleGrades.length} modules loaded` : 'Upload your grades'}
+                </p>
               </div>
             </div>
-
-            {/* Hair color */}
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-xs text-muted-foreground font-medium">Hair Color</span>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => set("hairColorIdx")((charConfig.hairColorIdx - 1 + HAIR_COLORS.length) % HAIR_COLORS.length)}
-                  className="p-1 rounded-lg hover:bg-accent transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <div className="w-24 flex items-center justify-center">
-                  <div className="flex gap-1">
-                    {HAIR_COLORS.map((c, i) => (
-                      <div
-                        key={c}
-                        onClick={() => set("hairColorIdx")(i)}
-                        className={`w-5 h-5 rounded-full cursor-pointer transition-all ${i === charConfig.hairColorIdx ? "ring-2 ring-primary ring-offset-1 scale-110" : "opacity-60 hover:opacity-100"}`}
-                        style={{ backgroundColor: c }}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <button
-                  onClick={() => set("hairColorIdx")((charConfig.hairColorIdx + 1) % HAIR_COLORS.length)}
-                  className="p-1 rounded-lg hover:bg-accent transition-colors"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Hair style */}
-            <CycleSelector
-              label="Hair Style"
-              values={HAIR_STYLES}
-              current={charConfig.hairStyle}
-              onChange={set("hairStyle")}
-              renderPreview={(v) => (
-                <span className="text-sm font-medium">{HAIR_STYLE_LABELS[v]}</span>
-              )}
-            />
-
-            {/* Outfit */}
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-xs text-muted-foreground font-medium">Outfit Color</span>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => set("outfitIdx")((charConfig.outfitIdx - 1 + OUTFIT_COLORS.length) % OUTFIT_COLORS.length)}
-                  className="p-1 rounded-lg hover:bg-accent transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <div className="w-24 flex items-center justify-center">
-                  <div className="flex gap-1">
-                    {OUTFIT_COLORS.map((c, i) => (
-                      <div
-                        key={c}
-                        onClick={() => set("outfitIdx")(i)}
-                        className={`w-5 h-5 rounded-full cursor-pointer transition-all ${i === charConfig.outfitIdx ? "ring-2 ring-primary ring-offset-1 scale-110" : "opacity-60 hover:opacity-100"}`}
-                        style={{ backgroundColor: c }}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <button
-                  onClick={() => set("outfitIdx")((charConfig.outfitIdx + 1) % OUTFIT_COLORS.length)}
-                  className="p-1 rounded-lg hover:bg-accent transition-colors"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Accessory */}
-            <CycleSelector
-              label="Accessory"
-              values={ACCESSORIES}
-              current={charConfig.accessory}
-              onChange={set("accessory")}
-              renderPreview={(v) => (
-                <span className="text-sm font-medium">{ACCESSORY_LABELS[v]}</span>
-              )}
-            />
-
-            {/* Save button */}
-            <div className="flex flex-col items-center justify-end gap-2">
-              <button className="px-5 py-2 rounded-xl bg-primary text-primary-foreground hover:shadow-lg transition-all text-sm font-medium">
-                Save Character
+            <div className="flex items-center gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json,.csv"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium bg-accent hover:bg-accent/80 transition-all"
+              >
+                <Upload className="w-4 h-4" />
+                Upload Grades
               </button>
+              {moduleGrades.length > 0 && (
+                <button
+                  onClick={() => setGradesExpanded(!gradesExpanded)}
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-medium bg-accent hover:bg-accent/80 transition-all"
+                >
+                  {gradesExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  {gradesExpanded ? 'Collapse' : 'Expand'}
+                </button>
+              )}
             </div>
           </div>
-        </div>
-      </motion.div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-4 gap-4">
-        {[
-          { label: "Total Study Hours", value: "87.3", icon: Clock, color: "#b8a4d4" },
-          { label: "Notes Shared", value: String(notesCount), icon: BookOpen, color: "#d4f4e8" },
-          { label: "Study Sessions", value: "23", icon: Calendar, color: "#d4e8f4" },
-          { label: "Study Friends", value: String(friendsCount), icon: User, color: "#f4b8d0" },
-        ].map((stat, index) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            className="bg-card rounded-2xl p-5 border border-border"
-            style={{ background: `linear-gradient(135deg, ${stat.color}15 0%, transparent 100%)` }}
-          >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: `${stat.color}30` }}>
-              <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
+          {moduleGrades.length > 0 ? (
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={moduleGrades.map(g => ({ subject: g.module, current: g.currentGrade, target: g.targetGrade }))}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.3} />
+                <XAxis dataKey="subject" stroke="#9088a0" />
+                <YAxis stroke="#9088a0" domain={[0, 100]} />
+                <Tooltip contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e0e0e0", borderRadius: "12px" }} />
+                <Legend />
+                <Bar dataKey="current" name="Current" fill="#d4e8f4" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="target" name="Target" fill="#b8a4d4" radius={[8, 8, 0, 0]} opacity={0.5} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[200px] text-muted-foreground">
+              <Upload className="w-10 h-10 mb-3 opacity-40" />
+              <p className="text-sm">Upload a .csv or .json file with your grades</p>
+              <p className="text-xs mt-1 opacity-70">CSV: module,currentGrade,targetGrade</p>
+              <p className="text-xs opacity-70">JSON: [{"{"} module, currentGrade, targetGrade {"}"}]</p>
             </div>
-            <p className="text-2xl font-bold mb-1">{stat.value}</p>
-            <p className="text-sm text-muted-foreground">{stat.label}</p>
-          </motion.div>
-        ))}
-      </div>
+          )}
 
-      {/* Charts Row */}
-      <div className="grid grid-cols-2 gap-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-card rounded-2xl p-6 border border-border">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-[#b8a4d4]/20 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-[#b8a4d4]" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold">Weekly Study Hours</h2>
-              <p className="text-sm text-muted-foreground">Last 7 days</p>
-            </div>
-          </div>
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={weeklyData}>
-              <defs>
-                <linearGradient id="colorHours2" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#b8a4d4" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#b8a4d4" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.3} />
-              <XAxis dataKey="day" stroke="#9088a0" />
-              <YAxis stroke="#9088a0" />
-              <Tooltip contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e0e0e0", borderRadius: "12px" }} />
-              <Area type="monotone" dataKey="hours" stroke="#b8a4d4" strokeWidth={3} fill="url(#colorHours2)" />
-            </AreaChart>
-          </ResponsiveContainer>
+          {/* Expanded detail view */}
+          <AnimatePresence>
+            {gradesExpanded && moduleGrades.length > 0 && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="mt-6 border-t border-border pt-6 space-y-4">
+                  {/* Grade table */}
+                  <div className="rounded-xl border border-border overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="bg-accent/50">
+                          <th className="text-left px-4 py-3 font-medium">Module</th>
+                          <th className="text-center px-4 py-3 font-medium">Current</th>
+                          <th className="text-center px-4 py-3 font-medium">Target</th>
+                          <th className="text-center px-4 py-3 font-medium">Gap</th>
+                          <th className="text-left px-4 py-3 font-medium">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {moduleGrades.map((g, i) => {
+                          const gap = g.targetGrade - g.currentGrade;
+                          const onTrack = gap <= 0;
+                          return (
+                            <tr key={i} className="border-t border-border">
+                              <td className="px-4 py-3 font-medium">{g.module}</td>
+                              <td className="text-center px-4 py-3">{g.currentGrade}%</td>
+                              <td className="text-center px-4 py-3">{g.targetGrade}%</td>
+                              <td className="text-center px-4 py-3">
+                                <span className={onTrack ? 'text-green-600' : 'text-amber-600'}>
+                                  {onTrack ? '✓ On track' : `−${gap}%`}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3">
+                                <div className="w-full bg-accent rounded-full h-2">
+                                  <div
+                                    className="h-2 rounded-full transition-all"
+                                    style={{
+                                      width: `${Math.min(100, (g.currentGrade / g.targetGrade) * 100)}%`,
+                                      backgroundColor: onTrack ? '#4ade80' : gap > 15 ? '#f87171' : '#fbbf24',
+                                    }}
+                                  />
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* AI Analysis button */}
+                  <div className="flex items-center justify-between">
+                    <button
+                      onClick={handleAnalyzeGrades}
+                      disabled={isAnalyzing}
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-primary text-primary-foreground hover:shadow-lg transition-all disabled:opacity-50"
+                    >
+                      {isAnalyzing ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-4 h-4" />
+                      )}
+                      {isAnalyzing ? 'Analyzing...' : 'AI Improvement Plan'}
+                    </button>
+                    <p className="text-xs text-muted-foreground">
+                      AI will suggest what to focus on based on your grade gaps
+                    </p>
+                  </div>
+
+                  {/* AI Insights with Study Plan */}
+                  {aiInsights.length > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-semibold flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-primary" />
+                          AI Study Plan & Recommendations
+                        </h3>
+                        <p className="text-xs text-muted-foreground">
+                          Based on your weekly study pattern ({weeklyData.reduce((s, d) => s + d.hours, 0).toFixed(1)}h total)
+                        </p>
+                      </div>
+
+                      {/* Weekly hours summary */}
+                      <div className="p-4 rounded-xl bg-accent/30 border border-border">
+                        <p className="text-sm font-medium mb-2">📊 Your Weekly Study Pattern</p>
+                        <div className="flex gap-2">
+                          {weeklyData.map(d => (
+                            <div key={d.day} className="flex-1 text-center">
+                              <div className="relative h-16 flex items-end justify-center mb-1">
+                                <div
+                                  className="w-full rounded-t-md bg-primary/30"
+                                  style={{ height: `${(d.hours / 10) * 100}%` }}
+                                />
+                              </div>
+                              <span className="text-xs text-muted-foreground">{d.day}</span>
+                              <p className="text-xs font-medium">{d.hours}h</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Per-module study plans */}
+                      {aiInsights.map((insight, i) => (
+                        <motion.div
+                          key={insight.module}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.1 }}
+                          className={`p-4 rounded-xl border-l-4 ${
+                            insight.priority === 'high'
+                              ? 'border-l-red-400 bg-red-500/10'
+                              : insight.priority === 'medium'
+                              ? 'border-l-amber-400 bg-amber-500/10'
+                              : 'border-l-green-400 bg-green-500/10'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-medium text-sm">{insight.module}</span>
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                              insight.priority === 'high'
+                                ? 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300'
+                                : insight.priority === 'medium'
+                                ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'
+                                : 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300'
+                            }`}>
+                              {insight.priority} priority
+                            </span>
+                          </div>
+                          <p className="text-sm text-foreground/80 mb-3">{insight.suggestion}</p>
+
+                          {/* Study Plan Card */}
+                          <div className="p-3 rounded-lg bg-card border border-border space-y-2">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">📅 Recommended Study Plan</p>
+                            <div className="grid grid-cols-3 gap-3 text-sm">
+                              <div>
+                                <p className="text-xs text-muted-foreground">Hours/week</p>
+                                <p className="font-semibold">{insight.studyPlan.hoursPerWeek}h</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-muted-foreground">Best days</p>
+                                <p className="font-semibold">{insight.studyPlan.bestDays.join(', ')}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-muted-foreground">Gap to close</p>
+                                <p className="font-semibold">{insight.gap}%</p>
+                              </div>
+                            </div>
+                            <p className="text-sm text-foreground/70">{insight.studyPlan.strategy}</p>
+                          </div>
+                        </motion.div>
+                      ))}
+
+                      {/* Total recommended hours summary */}
+                      <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold">📝 Total Recommended Extra Study</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Add {aiInsights.reduce((s, i) => s + i.studyPlan.hoursPerWeek, 0)}h/week across {aiInsights.length} modules to reach your targets
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-2xl font-bold text-primary">
+                              {aiInsights.reduce((s, i) => s + i.studyPlan.hoursPerWeek, 0)}h
+                            </p>
+                            <p className="text-xs text-muted-foreground">per week</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-card rounded-2xl p-6 border border-border">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-[#d4e8f4]/20 flex items-center justify-center">
-              <Award className="w-5 h-5 text-[#d4e8f4]" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold">Module Performance</h2>
-              <p className="text-sm text-muted-foreground">Current grades</p>
-            </div>
-          </div>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={modulePerformance}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.3} />
-              <XAxis dataKey="subject" stroke="#9088a0" />
-              <YAxis stroke="#9088a0" />
-              <Tooltip contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e0e0e0", borderRadius: "12px" }} />
-              <Bar dataKey="score" fill="#d4e8f4" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </motion.div>
-      </div>
 
       {/* Achievements & Radar */}
       <div className="grid grid-cols-[1fr_400px] gap-6">
@@ -684,29 +1332,43 @@ export function Profile() {
             </div>
             <div>
               <h2 className="text-xl font-bold">Achievements</h2>
-              <p className="text-sm text-muted-foreground">4 of 6 unlocked</p>
+              <p className="text-sm text-muted-foreground">{achievements.filter(a => isAchievementUnlocked(a)).length} of {achievements.length} unlocked</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            {achievements.map((achievement, index) => (
-              <motion.div
-                key={achievement.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 + index * 0.05 }}
-                className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${achievement.unlocked ? "border-transparent hover:shadow-lg" : "border-dashed border-border opacity-50"}`}
-                style={achievement.unlocked ? { background: `linear-gradient(135deg, ${achievement.color}20 0%, transparent 100%)` } : {}}
-              >
-                <div
-                  className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 ${achievement.unlocked ? "" : "opacity-40"}`}
-                  style={{ backgroundColor: `${achievement.color}30` }}
+            {achievements.map((achievement, index) => {
+              const unlocked = isAchievementUnlocked(achievement);
+              const progress = getAchievementProgress(achievement);
+              return (
+                <motion.div
+                  key={achievement.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 + index * 0.05 }}
+                  className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${unlocked ? "border-transparent hover:shadow-lg" : "border-dashed border-border opacity-50"}`}
+                  style={unlocked ? { background: `linear-gradient(135deg, ${achievement.color}20 0%, transparent 100%)` } : {}}
                 >
-                  <achievement.icon className="w-6 h-6" style={{ color: achievement.color }} />
-                </div>
-                <h4 className="font-semibold mb-1 text-sm">{achievement.title}</h4>
-                <p className="text-xs text-muted-foreground">{achievement.description}</p>
-              </motion.div>
-            ))}
+                  <div
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 ${unlocked ? "" : "opacity-40"}`}
+                    style={{ backgroundColor: `${achievement.color}30` }}
+                  >
+                    <achievement.icon className="w-6 h-6" style={{ color: achievement.color }} />
+                  </div>
+                  <h4 className="font-semibold mb-1 text-sm">{achievement.title}</h4>
+                  <p className="text-xs text-muted-foreground mb-2">{achievement.description}</p>
+                  {/* Progress bar */}
+                  <div className="w-full h-1.5 bg-accent rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all"
+                      style={{
+                        width: `${progress * 100}%`,
+                        backgroundColor: unlocked ? achievement.color : '#9ca3af',
+                      }}
+                    />
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </motion.div>
 

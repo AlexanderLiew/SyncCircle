@@ -8,9 +8,11 @@ import {
   Palette,
   Accessibility,
   Sparkles,
+  Mail,
 } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
-import { getSettings, saveSettings } from "../lib/storage";
+import { getSettings, saveSettings, getUser, saveUser } from "../lib/storage";
+import { useAuth } from "../hooks/useAuth";
 import type { UserSettings } from "../types";
 
 const settingsSections = [
@@ -18,7 +20,7 @@ const settingsSections = [
   { id: "notifications", label: "Notifications", icon: Bell },
   { id: "privacy", label: "Privacy & Security", icon: Lock },
   { id: "accessibility", label: "Accessibility", icon: Accessibility },
-  { id: "profile", label: "Profile", icon: User },
+  { id: "profile", label: "Account", icon: User },
   { id: "ai", label: "AI Preferences", icon: Sparkles },
 ];
 
@@ -26,6 +28,7 @@ export function Settings() {
   const [activeSection, setActiveSection] = useState("appearance");
   const [settings, setSettings] = useState<UserSettings>(getSettings);
   const { currentTheme, applyTheme, getAvailableThemes } = useTheme();
+  const { user } = useAuth();
 
   // Sync theme from context into local settings state on mount
   useEffect(() => {
@@ -295,31 +298,62 @@ export function Settings() {
     </div>
   );
 
-  const renderProfile = () => (
-    <div className="space-y-6">
-      <div className="space-y-4">
+  const renderProfile = () => {
+    const authUser = user;
+    const localUser = getUser();
+    const accountEmail = authUser?.email || localUser?.email || '';
+    const accountName = authUser?.displayName || localUser?.displayName || '';
+
+    return (
+      <div className="space-y-6">
+        {/* Account Email (read-only) */}
+        <div>
+          <label className="block text-sm font-medium mb-2">Account Email</label>
+          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-accent/30 border border-border">
+            <Mail className="w-4 h-4 text-muted-foreground" />
+            <span className="text-foreground">{accountEmail || 'Not available'}</span>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            This is the email you registered with. Task notifications are sent here.
+          </p>
+        </div>
+
+        {/* Display Name (editable) */}
         <div>
           <label className="block text-sm font-medium mb-2">Display Name</label>
           <input
             type="text"
-            value={settings.profile.displayName}
-            onChange={(e) =>
-              updateSettings((prev) => ({
-                ...prev,
-                profile: { ...prev.profile, displayName: e.target.value },
-              }))
-            }
+            defaultValue={accountName}
+            onBlur={(e) => {
+              const newName = e.target.value.trim();
+              if (newName && newName !== accountName) {
+                // Update localStorage user
+                const current = getUser();
+                if (current) {
+                  saveUser({ ...current, displayName: newName });
+                }
+                // Update settings profile
+                updateSettings((prev) => ({
+                  ...prev,
+                  profile: { ...prev.profile, displayName: newName },
+                }));
+              }
+            }}
             placeholder="Enter your display name"
             className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
           />
+          <p className="text-xs text-muted-foreground mt-1">
+            This name is shown in notifications and to your friends.
+          </p>
         </div>
 
+        {/* Avatar */}
         <div>
           <label className="block text-sm font-medium mb-2">Avatar</label>
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground text-xl font-bold">
               {settings.profile.avatar ||
-                settings.profile.displayName
+                (accountName || settings.profile.displayName)
                   .split(" ")
                   .map((n) => n[0])
                   .join("")
@@ -342,6 +376,7 @@ export function Settings() {
           </div>
         </div>
 
+        {/* Course */}
         <div>
           <label className="block text-sm font-medium mb-2">
             Course / Program
@@ -360,8 +395,8 @@ export function Settings() {
           />
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderAIPreferences = () => (
     <div className="space-y-6">

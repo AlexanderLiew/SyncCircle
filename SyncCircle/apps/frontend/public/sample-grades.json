@@ -1,0 +1,7 @@
+[
+  { "module": "Machine Learning", "currentGrade": 72, "targetGrade": 85 },
+  { "module": "Data Structures", "currentGrade": 88, "targetGrade": 90 },
+  { "module": "Calculus II", "currentGrade": 65, "targetGrade": 80 },
+  { "module": "Database Systems", "currentGrade": 78, "targetGrade": 85 },
+  { "module": "Physics", "currentGrade": 82, "targetGrade": 85 }
+]

@@ -130,7 +130,7 @@ export function Auth() {
           className="relative z-10 flex items-center gap-3"
         >
           <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-            <Sparkles className="w-7 h-7 text-white" />
+            <img src="/logo.svg" alt="SyncCircle" className="w-9 h-9" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">SyncCircle</h1>
@@ -189,9 +189,7 @@ export function Auth() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
+            <img src="/logo.svg" alt="SyncCircle" className="w-10 h-10" />
             <h1 className="text-xl font-bold bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] bg-clip-text text-transparent">
               SyncCircle
             </h1>

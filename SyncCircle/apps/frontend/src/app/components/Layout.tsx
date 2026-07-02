@@ -16,6 +16,7 @@ import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useWorkato } from "../hooks/useWorkato";
 import { useTaskNotifications } from "../hooks/useTaskNotifications";
+import { useAuth } from "../hooks/useAuth";
 import { getTasks } from "../lib/storage";
 import type { Task } from "../types";
 
@@ -34,6 +35,7 @@ export function Layout() {
   const navigate = useNavigate();
   const { retryPendingSyncs } = useWorkato();
   const { pendingCount, checkNow } = useTaskNotifications();
+  const { user: authUser, logout } = useAuth();
   const [bellOpen, setBellOpen] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
 
@@ -64,6 +66,7 @@ export function Layout() {
   })();
 
   const handleLogout = () => {
+    logout();
     localStorage.removeItem("synccircle_auth");
     navigate("/login");
   };
@@ -82,9 +85,7 @@ export function Layout() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
+              <img src="/logo.svg" alt="SyncCircle" className="w-10 h-10" />
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-[#b8a4d4] to-[#f4b8d0] bg-clip-text text-transparent">
                   SyncCircle
@@ -132,7 +133,7 @@ export function Layout() {
               <span className="text-lg">✨</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium truncate">Emma Wilson</p>
+              <p className="font-medium truncate">{authUser?.displayName || 'User'}</p>
               <p className="text-xs text-muted-foreground">🔥 12 day streak</p>
             </div>
             <button
