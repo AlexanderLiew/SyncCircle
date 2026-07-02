@@ -6,6 +6,7 @@ import {
   CognitoUserAttribute,
   CognitoUserSession,
 } from 'amazon-cognito-identity-js';
+import { saveUser } from '../lib/storage';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -92,6 +93,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const poolRef = useRef<CognitoUserPool | null>(null);
+
+  // Sync authenticated user to localStorage so getUser() (used by
+  // useTaskNotifications) always returns the real Cognito account email.
+  useEffect(() => {
+    if (user) {
+      saveUser({
+        id: user.userId,
+        email: user.email,
+        displayName: user.displayName,
+        course: user.course,
+        createdAt: new Date().toISOString(),
+      });
+    }
+  }, [user]);
 
   // Lazily initialise the pool to avoid throwing at import time when env vars
   // are missing (e.g. during tests or SSR).
