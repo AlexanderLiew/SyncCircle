@@ -41,7 +41,7 @@ export function Layout() {
   const displayName = localUser?.displayName || authUser?.displayName || "User";
   const initials = displayName
     .split(" ")
-    .map((w) => w[0])
+    .map((w: string) => w[0])
     .join("")
     .toUpperCase()
     .slice(0, 2);

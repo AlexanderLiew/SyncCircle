@@ -836,7 +836,7 @@ export function Timetable() {
             transition={{ delay: 0.2 }}
             className="bg-card rounded-2xl border border-border p-6 overflow-x-auto"
           >
-            <div className="grid grid-cols-[80px_repeat(5,1fr)] gap-3 min-w-[900px]">
+            <div className="grid grid-cols-[80px_repeat(5,1fr)] min-w-[900px]">
               {/* Header Row */}
               <div></div>
               {days.map((day) => (
@@ -845,19 +845,27 @@ export function Timetable() {
                 </div>
               ))}
 
-              {/* Time Slots */}
+              {/* Time Slots — each row is one hour */}
               {timeSlots.map((time, timeIndex) => (
                 <div key={time} className="contents">
-                  <div className="flex items-start justify-end pr-3 text-sm text-muted-foreground pt-2">
+                  <div className="flex items-start justify-end pr-3 text-sm text-muted-foreground pt-2 h-[60px]">
                     {timeLabels[timeIndex]}
                   </div>
                   {days.map((_, dayIndex) => {
-                    // User's class in this slot
+                    // User's class starting in this slot
                     const classInSlot = showMyClasses
                       ? classes.find(
                           (c) => c.dayOfWeek === dayIndex && timeToRow(c.startTime) === timeIndex
                         )
                       : undefined;
+
+                    // Is this cell occupied by a class that started earlier?
+                    const isOccupiedByEarlierClass = showMyClasses && !classInSlot && classes.some((c) => {
+                      if (c.dayOfWeek !== dayIndex) return false;
+                      const startRow = timeToRow(c.startTime);
+                      const span = durationInRows(c.startTime, c.endTime);
+                      return startRow < timeIndex && startRow + span > timeIndex;
+                    });
 
                     // Friend classes in this slot
                     const friendClassesInSlot: { cls: TimetableClass; color: string; friendName: string }[] = [];
@@ -880,32 +888,80 @@ export function Timetable() {
                       selectedFriendIds.size > 0 &&
                       showMyClasses &&
                       !classInSlot &&
+                      !isOccupiedByEarlierClass &&
                       friendClassesInSlot.length === 0 &&
                       !classes.some(
                         (c) => c.dayOfWeek === dayIndex && timeToRow(c.startTime) === timeIndex
                       );
 
+                    // Calculate span height for classes that start here
+                    const spanRows = classInSlot ? durationInRows(classInSlot.startTime, classInSlot.endTime) : 1;
+
                     return (
-                      <div key={`${dayIndex}-${timeIndex}`} className="relative">
-                        {classInSlot ? (
-                          <ClassCard
-                            classItem={classInSlot}
-                            onClick={() => openEditDialog(classInSlot)}
-                          />
+                      <div key={`${dayIndex}-${timeIndex}`} className="relative h-[60px]">
+                        {classInSlot && friendClassesInSlot.length > 0 ? (
+                          // Both user + friend classes — show side by side, each with own height
+                          <>
+                            <div
+                              className="absolute top-0 left-0 z-10 px-0.5"
+                              style={{ height: `${spanRows * 60}px`, width: '50%' }}
+                            >
+                              <ClassCard
+                                classItem={classInSlot}
+                                onClick={() => openEditDialog(classInSlot)}
+                              />
+                            </div>
+                            {friendClassesInSlot.map(({ cls, color, friendName }, fIdx) => {
+                              const friendSpan = durationInRows(cls.startTime, cls.endTime);
+                              return (
+                                <motion.div
+                                  key={cls.id}
+                                  initial={{ opacity: 0, scale: 0.9 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  className="absolute top-0 z-10 p-1.5 rounded-lg shadow-sm border-2 overflow-hidden"
+                                  style={{
+                                    left: `${50 + fIdx * 25}%`,
+                                    width: `${50 / friendClassesInSlot.length}%`,
+                                    height: `${friendSpan * 60}px`,
+                                    borderColor: color,
+                                    backgroundColor: `${color}15`,
+                                  }}
+                                >
+                                  <h4 className="font-medium text-[10px] leading-tight truncate" style={{ color }}>
+                                    {cls.title}
+                                  </h4>
+                                  <div className="text-[9px] opacity-70 truncate">{friendName}</div>
+                                </motion.div>
+                              );
+                            })}
+                          </>
+                        ) : classInSlot ? (
+                          <div
+                            className="absolute inset-x-0 top-0 z-10 px-0.5"
+                            style={{ height: `${spanRows * 60}px` }}
+                          >
+                            <ClassCard
+                              classItem={classInSlot}
+                              onClick={() => openEditDialog(classInSlot)}
+                            />
+                          </div>
+                        ) : isOccupiedByEarlierClass ? (
+                          // Empty — occupied by a multi-hour class above
+                          <div className="h-full" />
                         ) : friendClassesInSlot.length > 0 ? (
-                          <div className="space-y-1">
+                          <div className="flex gap-0.5 h-full px-0.5">
                             {friendClassesInSlot.map(({ cls, color, friendName }) => (
                               <motion.div
                                 key={cls.id}
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="p-2 rounded-xl shadow-sm h-full border-2"
+                                className="flex-1 min-w-0 p-2 rounded-xl shadow-sm h-full border-2"
                                 style={{ borderColor: color, backgroundColor: `${color}15` }}
                               >
-                                <h4 className="font-medium text-xs leading-tight" style={{ color }}>
+                                <h4 className="font-medium text-xs leading-tight truncate" style={{ color }}>
                                   {cls.title}
                                 </h4>
-                                <div className="text-[10px] opacity-70 mt-0.5">{friendName}</div>
+                                <div className="text-[10px] opacity-70 truncate">{friendName}</div>
                                 {cls.location && (
                                   <div className="flex items-center gap-1 text-[10px] opacity-70 mt-0.5">
                                     <MapPin className="w-2.5 h-2.5" />
@@ -917,7 +973,7 @@ export function Timetable() {
                           </div>
                         ) : (
                           <div
-                            className={`border border-border/30 rounded-lg transition-colors min-h-[52px] ${
+                            className={`border border-border/30 rounded-lg transition-colors h-full ${
                               isCommonFree
                                 ? 'bg-green-500/10 border-green-300/50'
                                 : 'hover:bg-accent/30'
