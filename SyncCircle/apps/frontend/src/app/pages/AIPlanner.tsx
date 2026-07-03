@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useNavigate } from "react-router";
 import {
   Sparkles,
   Send,
@@ -8,37 +7,10 @@ import {
   AlertCircle,
   RotateCcw,
   CheckCircle2,
-  Mail,
 } from "lucide-react";
 import { useKiroAPI, buildUserContext } from "../hooks/useKiroAPI";
-import { useFriends } from "../hooks/useFriendsApi";
 import { STORAGE_KEYS, type ChatMessage } from "../types";
 import { parseActions, executeAction, type ChatAction } from "../lib/chat-actions";
-import {
-  PlannerModeSelector,
-  type PlanningMode,
-} from "../components/ai-planner/PlannerModeSelector";
-import {
-  PlanningRequestForm,
-  type PlanningRequestData,
-} from "../components/ai-planner/PlanningRequestForm";
-import { OptionCard } from "../components/ai-planner/OptionCard";
-import type { ProposedTimeOption } from "../components/ai-planner/OptionCard";
-import { InvitationBadge } from "../components/ai-planner/InvitationBadge";
-import { InvitationCard } from "../components/ai-planner/InvitationCard";
-import type { MeetingInvitation } from "../components/ai-planner/InvitationCard";
-import { EmptyState } from "../components/ai-planner/EmptyState";
-import {
-  createPersonalSession,
-  createGroupSession,
-  acceptOption,
-  rejectOption,
-  nextOption,
-  listInvitations,
-  acceptInvitation,
-  rejectInvitation,
-  type CreateSessionResponse,
-} from "../lib/ai-planner-api";
 
 // --- Helpers ---
 
@@ -63,23 +35,7 @@ function saveChatHistory(messages: ChatMessage[]): void {
 // --- Component ---
 
 export function AIPlanner() {
-  const navigate = useNavigate();
-  const { friends: apiFriends, isLoading: friendsLoading } = useFriends();
-
-  // Planning workflow state
-  const [mode, setMode] = useState<PlanningMode>("personal");
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [options, setOptions] = useState<ProposedTimeOption[]>([]);
-  const [planningLoading, setPlanningLoading] = useState(false);
-  const [planningError, setPlanningError] = useState<string | null>(null);
-  const [acceptedConfirmation, setAcceptedConfirmation] = useState<string | null>(null);
-
-  // Invitations state
-  const [invitations, setInvitations] = useState<MeetingInvitation[]>([]);
-  const [invitationsLoading, setInvitationsLoading] = useState(false);
-  const [invitationActionLoading, setInvitationActionLoading] = useState<string | null>(null);
-
-  // Chat state (kept as secondary interface)
+  // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>(loadChatHistory);
   const [input, setInput] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -90,11 +46,6 @@ export function AIPlanner() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { chatMessage, isLoading } = useKiroAPI();
-
-  // Fetch invitations on page load
-  useEffect(() => {
-    fetchInvitations();
-  }, []);
 
   // Auto-scroll chat
   useEffect(() => {
@@ -108,149 +59,7 @@ export function AIPlanner() {
     saveChatHistory(messages);
   }, [messages]);
 
-  // --- Invitation fetching ---
-  const fetchInvitations = async () => {
-    setInvitationsLoading(true);
-    try {
-      const response = await listInvitations();
-      setInvitations(response.invitations);
-    } catch {
-      // Silently fail — invitations are supplementary
-    } finally {
-      setInvitationsLoading(false);
-    }
-  };
-
-  // --- Planning workflow handlers ---
-  const handlePlanningSubmit = async (data: PlanningRequestData) => {
-    setPlanningLoading(true);
-    setPlanningError(null);
-    setOptions([]);
-    setAcceptedConfirmation(null);
-    setSessionId(null);
-
-    try {
-      let response: CreateSessionResponse;
-
-      if (mode === "personal") {
-        response = await createPersonalSession({
-          activity: data.activity,
-          durationMinutes: data.durationMinutes,
-          dateRangeStart: data.dateRangeStart,
-          dateRangeEnd: data.dateRangeEnd,
-        });
-      } else {
-        response = await createGroupSession({
-          activity: data.activity,
-          durationMinutes: data.durationMinutes,
-          dateRangeStart: data.dateRangeStart,
-          dateRangeEnd: data.dateRangeEnd,
-          participantUserIds: data.participantIds || [],
-        });
-      }
-
-      setSessionId(response.sessionId);
-      setOptions(response.options);
-
-      if (response.options.length === 0) {
-        setPlanningError("no-slots");
-      }
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Failed to create planning session";
-      setPlanningError(message);
-    } finally {
-      setPlanningLoading(false);
-    }
-  };
-
-  const handleAcceptOption = async (optionId: string) => {
-    if (!sessionId) return;
-    setPlanningLoading(true);
-    setPlanningError(null);
-
-    try {
-      const response = await acceptOption(sessionId, { optionId });
-      setAcceptedConfirmation(
-        `Event "${response.event.title}" scheduled for ${new Date(response.event.startDateTime).toLocaleString()}`
-      );
-      // Update option status locally
-      setOptions((prev) =>
-        prev.map((o) =>
-          o.optionId === optionId ? { ...o, status: "accepted" as const } : o
-        )
-      );
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Failed to accept option";
-      setPlanningError(message);
-    } finally {
-      setPlanningLoading(false);
-    }
-  };
-
-  const handleFindAnother = async (optionId: string) => {
-    if (!sessionId) return;
-    setPlanningLoading(true);
-    setPlanningError(null);
-    setAcceptedConfirmation(null);
-
-    try {
-      // First reject the current option
-      await rejectOption(sessionId, { optionId });
-      // Then request new options
-      const response = await nextOption(sessionId);
-      setOptions(response.options);
-
-      if (response.options.length === 0) {
-        setPlanningError("no-slots");
-      }
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Failed to find another time";
-      setPlanningError(message);
-    } finally {
-      setPlanningLoading(false);
-    }
-  };
-
-  const handleAcceptInvitation = async (invitationId: string) => {
-    setInvitationActionLoading(invitationId);
-    try {
-      await acceptInvitation(invitationId);
-      setInvitations((prev) =>
-        prev.map((inv) =>
-          inv.invitationId === invitationId
-            ? { ...inv, status: "accepted" as const }
-            : inv
-        )
-      );
-    } catch {
-      // Error handled silently, could show toast
-    } finally {
-      setInvitationActionLoading(null);
-    }
-  };
-
-  const handleRejectInvitation = async (invitationId: string) => {
-    setInvitationActionLoading(invitationId);
-    try {
-      await rejectInvitation(invitationId);
-      setInvitations((prev) =>
-        prev.filter((inv) => inv.invitationId !== invitationId)
-      );
-    } catch {
-      // Error handled silently
-    } finally {
-      setInvitationActionLoading(null);
-    }
-  };
-
-  const handleRetryPlanning = () => {
-    setPlanningError(null);
-  };
-
-  // --- Chat handlers (secondary interface) ---
+  // --- Chat handlers ---
   const sendMessage = useCallback(
     async (text: string) => {
       if (!text.trim() || isLoading) return;
@@ -275,14 +84,14 @@ export function AIPlanner() {
       const result = await chatMessage(text.trim(), updatedMessages, context);
 
       if (result.data?.response) {
-        const { text, actions } = parseActions(result.data.response);
+        const { text: responseText, actions } = parseActions(result.data.response);
 
         const aiMsg: ChatMessage = {
           id: generateId(),
           groupId: "ai-planner",
           senderId: "ai",
           senderName: "AI Assistant",
-          content: text,
+          content: responseText,
           timestamp: new Date().toISOString(),
         };
         setMessages((prev) => [...prev, aiMsg]);
@@ -378,17 +187,10 @@ export function AIPlanner() {
     }
   };
 
-  // Derived state
-  const pendingInvitations = invitations.filter((inv) => inv.status === "pending");
-  const friendSelectorList = apiFriends.map((f) => ({
-    friendId: f.friendId,
-    displayName: f.displayName,
-  }));
-
   return (
-    <div className="flex flex-col max-w-3xl mx-auto gap-6 pb-8">
+    <div className="flex flex-col max-w-3xl mx-auto h-full pb-8">
       {/* ─── Header ─── */}
-      <div className="flex items-center justify-between p-4 sm:p-6 bg-card rounded-2xl border border-border bg-gradient-to-r from-[#b8a4d4]/10 to-[#f4b8d0]/10">
+      <div className="flex items-center justify-between p-4 sm:p-6 bg-card rounded-2xl border border-border bg-gradient-to-r from-[#b8a4d4]/10 to-[#f4b8d0]/10 mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#b8a4d4] to-[#f4b8d0] flex items-center justify-center">
             <Sparkles className="w-5 h-5 text-white" />
@@ -400,163 +202,10 @@ export function AIPlanner() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => {
-              const section = document.getElementById("invitations-section");
-              section?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
-            aria-label="View invitations"
-          >
-            <Mail className="w-4 h-4" />
-            <span className="hidden sm:inline">Invitations</span>
-            <InvitationBadge count={pendingInvitations.length} />
-          </button>
-        </div>
       </div>
 
-      {/* ─── Mode Selector ─── */}
-      <div className="flex justify-center">
-        <PlannerModeSelector mode={mode} onModeChange={setMode} />
-      </div>
-
-      {/* ─── Planning Request Form ─── */}
-      <div className="bg-card rounded-2xl border border-border p-4 sm:p-6">
-        <PlanningRequestForm
-          mode={mode}
-          onSubmit={handlePlanningSubmit}
-          isLoading={planningLoading}
-          friends={friendSelectorList}
-        />
-      </div>
-
-      {/* ─── No Friends Empty State (group mode) ─── */}
-      {mode === "group" && !friendsLoading && apiFriends.length === 0 && (
-        <EmptyState
-          type="no-friends"
-          onAction={() => navigate("/friends")}
-        />
-      )}
-
-      {/* ─── Results Section ─── */}
-      <AnimatePresence mode="wait">
-        {/* Loading state */}
-        {planningLoading && options.length === 0 && (
-          <motion.div
-            key="planning-loading"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="flex flex-col items-center justify-center py-12 bg-card rounded-2xl border border-border"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#b8a4d4]/20 to-[#f4b8d0]/20 flex items-center justify-center mb-4 animate-pulse">
-              <Sparkles className="w-6 h-6 text-primary" />
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Finding the best times for you...
-            </p>
-          </motion.div>
-        )}
-
-        {/* Accepted confirmation */}
-        {acceptedConfirmation && (
-          <motion.div
-            key="accepted-confirmation"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="flex items-center gap-3 p-4 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 rounded-2xl"
-          >
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-            <p className="text-sm text-emerald-700 dark:text-emerald-300 font-medium">
-              {acceptedConfirmation}
-            </p>
-          </motion.div>
-        )}
-
-        {/* Error state */}
-        {planningError && planningError !== "no-slots" && !planningLoading && (
-          <motion.div
-            key="planning-error"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-          >
-            <EmptyState
-              type="error"
-              message={planningError}
-              onAction={handleRetryPlanning}
-            />
-          </motion.div>
-        )}
-
-        {/* No slots state */}
-        {planningError === "no-slots" && !planningLoading && (
-          <motion.div
-            key="no-slots"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-          >
-            <EmptyState
-              type="no-slots"
-              onAction={handleRetryPlanning}
-            />
-          </motion.div>
-        )}
-
-        {/* Options */}
-        {options.length > 0 && !planningLoading && (
-          <motion.div
-            key="options-list"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="space-y-3"
-          >
-            <h2 className="text-sm font-medium text-muted-foreground px-1">
-              Suggested Times
-            </h2>
-            {options.map((option) => (
-              <OptionCard
-                key={option.optionId}
-                option={option}
-                onAccept={handleAcceptOption}
-                onFindAnother={handleFindAnother}
-                isLoading={planningLoading}
-              />
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ─── Invitations Section ─── */}
-      <div id="invitations-section" className="space-y-3">
-        {pendingInvitations.length > 0 && (
-          <>
-            <h2 className="text-sm font-medium text-muted-foreground px-1 flex items-center gap-2">
-              <Mail className="w-4 h-4" />
-              Pending Invitations
-              <InvitationBadge count={pendingInvitations.length} />
-            </h2>
-            <div className="space-y-3">
-              {pendingInvitations.map((invitation) => (
-                <InvitationCard
-                  key={invitation.invitationId}
-                  invitation={invitation}
-                  onAccept={handleAcceptInvitation}
-                  onReject={handleRejectInvitation}
-                  isLoading={invitationActionLoading === invitation.invitationId}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* ─── Chat Interface (Secondary) ─── */}
-      <div className="flex flex-col bg-card rounded-2xl border border-border overflow-hidden">
+      {/* ─── Chat Interface ─── */}
+      <div className="flex flex-col flex-1 bg-card rounded-2xl border border-border overflow-hidden min-h-0">
         {/* Chat Header */}
         <div className="p-4 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -578,11 +227,14 @@ export function AIPlanner() {
         {/* Messages Thread */}
         <div
           ref={scrollRef}
-          className="overflow-y-auto p-4 space-y-4 max-h-[400px]"
+          className="flex-1 overflow-y-auto p-4 space-y-4"
         >
           {/* Empty state */}
           {messages.length === 0 && !isLoading && (
-            <div className="flex flex-col items-center justify-center text-center py-8">
+            <div className="flex flex-col items-center justify-center text-center py-12">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#b8a4d4]/20 to-[#f4b8d0]/20 flex items-center justify-center mb-4">
+                <Sparkles className="w-6 h-6 text-primary" />
+              </div>
               <p className="text-sm text-muted-foreground">
                 Ask the AI about scheduling, study plans, or anything else.
               </p>
