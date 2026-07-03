@@ -11,10 +11,10 @@ import {
   Target,
   Award,
   CheckSquare,
-  MessageSquare,
 } from "lucide-react";
 import { getClasses, getTasks, getMessages, getNotes, getUser } from "../lib/storage";
 import { useFriends } from "../hooks/useFriendsApi";
+import { FocusTimerWidget } from "../components/FocusTimerWidget";
 import type { TimetableClass, Task, ChatMessage } from "../types";
 
 export function Dashboard() {
@@ -308,54 +308,8 @@ export function Dashboard() {
       </div>
 
       <div className="grid grid-cols-3 gap-6">
-        {/* Recent Collaboration Activity */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-card rounded-2xl p-6 border border-border col-span-2"
-        >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-[#d4e8f4]/20 flex items-center justify-center">
-              <MessageSquare className="w-5 h-5 text-[#d4e8f4]" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold">Recent Activity</h2>
-              <p className="text-sm text-muted-foreground">Latest group messages</p>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {recentMessages.length > 0 ? (
-              recentMessages.map((msg, index) => (
-                <motion.div
-                  key={msg.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                  className="flex items-start gap-3 p-4 rounded-xl hover:bg-accent/50 transition-all"
-                >
-                  <div className="w-9 h-9 rounded-full bg-[#b8a4d4]/20 flex items-center justify-center flex-shrink-0 text-sm font-medium text-[#b8a4d4]">
-                    {msg.senderName.split(" ").map((n) => n[0]).join("").slice(0, 2)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm">{msg.senderName}</span>
-                      <span className="text-xs text-muted-foreground">{formatMessageTime(msg.timestamp)}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground truncate mt-0.5">{msg.content}</p>
-                  </div>
-                </motion.div>
-              ))
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                <p className="font-medium">No recent activity</p>
-                <p className="text-sm mt-1">Join a study group to start collaborating!</p>
-              </div>
-            )}
-          </div>
-        </motion.div>
+        {/* Focus Timer — Free Roam */}
+        <FocusTimerWidget />
 
         {/* Friends Overview */}
         <motion.div

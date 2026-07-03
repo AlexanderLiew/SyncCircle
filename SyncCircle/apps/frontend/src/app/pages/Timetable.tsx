@@ -295,7 +295,31 @@ export function Timetable() {
   useEffect(() => {
     setClasses(getClasses());
     setTasks(getTasks());
-    setFriends(getFriends());
+
+    // Load friends: from API (real auth) or localStorage (dev bypass)
+    const DEV_BYPASS = import.meta.env.VITE_DEV_BYPASS_AUTH === 'true';
+    if (DEV_BYPASS) {
+      setFriends(getFriends());
+    } else {
+      // Fetch from backend API
+      apiClient.get<{ friends: { friendId: string; displayName: string; createdAt: string }[] }>('/friends')
+        .then((data) => {
+          // Map API friends to the Friend type expected by the filter view
+          const mapped: Friend[] = data.friends.map((f) => ({
+            id: f.friendId,
+            userId: 'me',
+            friendId: f.friendId,
+            displayName: f.displayName,
+            status: 'online' as const,
+            timetable: [], // will be fetched on-demand when toggled
+          }));
+          setFriends(mapped);
+        })
+        .catch(() => {
+          // Fallback to localStorage if API fails
+          setFriends(getFriends());
+        });
+    }
   }, []);
 
   // Sync timetable to backend (fire-and-forget, best effort)
@@ -655,6 +679,70 @@ export function Timetable() {
                 </div>
               </PopoverContent>
             </Popover>
+
+            {/* Pull from Google */}
+            {isGoogleConnected && (
+              <button
+                onClick={handleImportFromGoogle}
+                className="px-3 py-2 rounded-xl bg-card border border-border hover:bg-accent transition-all flex items-center gap-2 text-sm"
+              >
+                <Download className="w-4 h-4" />
+                Pull from Google
+              </button>
+            )}
+
+            {/* Sync to Google Calendar */}
+            {isGoogleConnected && (
+              <motion.button
+                onClick={handleSyncToGoogleCalendar}
+                disabled={syncStatus === 'syncing'}
+                animate={{
+                  backgroundColor:
+                    syncStatus === 'success' ? '#16a34a' :
+                    syncStatus === 'error'   ? '#dc2626' :
+                                               '#15803d',
+                }}
+                transition={{ duration: 0.3 }}
+                className="px-3 py-2 rounded-xl text-white disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
+              >
+                {syncStatus === 'syncing' ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Syncing…
+                  </>
+                ) : syncStatus === 'success' ? (
+                  <motion.span
+                    key="success"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    Synced!
+                  </motion.span>
+                ) : syncStatus === 'error' ? (
+                  <motion.span
+                    key="error"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2"
+                  >
+                    <XCircle className="w-4 h-4" />
+                    Sync Failed
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="idle"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2"
+                  >
+                    <CalendarCheck className="w-4 h-4" />
+                    Sync All
+                  </motion.span>
+                )}
+              </motion.button>
+            )}
 
             <button
               onClick={openAddDialog}

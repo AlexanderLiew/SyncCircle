@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence, type Variants } from "motion/react";
 
 export type CharacterState = "idle" | "studying" | "celebration" | "evolving";
-
 export type EvolutionLevel = 1 | 2 | 3 | 4;
 
 export interface EvolutionInfo {
@@ -12,11 +11,11 @@ export interface EvolutionInfo {
   nextLevelAt: number | null;
 }
 
-export const EVOLUTION_LEVELS: Record<EvolutionLevel, { title: string; minStreak: number }> = {
-  1: { title: "Freshman", minStreak: 0 },
-  2: { title: "Scholar", minStreak: 3 },
-  3: { title: "Master", minStreak: 7 },
-  4: { title: "Legend", minStreak: 14 },
+export const EVOLUTION_LEVELS: Record<EvolutionLevel, { title: string; minStreak: number; minMinutes: number }> = {
+  1: { title: "Baby", minStreak: 0, minMinutes: 0 },
+  2: { title: "Kid", minStreak: 3, minMinutes: 60 },
+  3: { title: "Teen", minStreak: 7, minMinutes: 300 },
+  4: { title: "Scholar", minStreak: 14, minMinutes: 1000 },
 };
 
 export function getEvolutionLevel(streak: number): EvolutionInfo {
@@ -24,368 +23,295 @@ export function getEvolutionLevel(streak: number): EvolutionInfo {
   if (streak >= 14) level = 4;
   else if (streak >= 7) level = 3;
   else if (streak >= 3) level = 2;
-
   const nextLevelAt = level < 4 ? EVOLUTION_LEVELS[(level + 1) as EvolutionLevel].minStreak : null;
-
-  return {
-    level,
-    title: EVOLUTION_LEVELS[level].title,
-    streak,
-    nextLevelAt,
-  };
+  return { level, title: EVOLUTION_LEVELS[level].title, streak, nextLevelAt };
 }
 
-interface ProfileCharacterProps {
-  state?: CharacterState;
-  level?: EvolutionLevel;
-  onCelebrationComplete?: () => void;
+export function getEvolutionFromMinutes(totalMinutes: number): EvolutionInfo {
+  let level: EvolutionLevel = 1;
+  if (totalMinutes >= 1000) level = 4;
+  else if (totalMinutes >= 300) level = 3;
+  else if (totalMinutes >= 60) level = 2;
+  const nextLevelAt = level < 4 ? EVOLUTION_LEVELS[(level + 1) as EvolutionLevel].minMinutes : null;
+  return { level, title: EVOLUTION_LEVELS[level].title, streak: totalMinutes, nextLevelAt };
 }
 
-const characterVariants: Variants = {
+// ─── Color Palette (user picks one, applies to all stages) ───────────────────
+
+export const CHARACTER_COLORS = [
+  "#FFB5A7", // coral/peach
+  "#FCD5CE", // light pink
+  "#B8E0D2", // mint
+  "#D6CFFF", // lavender
+  "#95D5F4", // sky blue
+  "#FDE68A", // warm yellow
+  "#A7F3D0", // seafoam
+  "#E9D5FF", // lilac
+  "#FECACA", // blush
+  "#CBD5E1", // slate
+];
+
+const CHAR_COLOR_KEY = "synccircle_char_color";
+
+export function getCharColor(): string {
+  try {
+    return localStorage.getItem(CHAR_COLOR_KEY) || CHARACTER_COLORS[0];
+  } catch { return CHARACTER_COLORS[0]; }
+}
+
+export function setCharColor(color: string): void {
+  localStorage.setItem(CHAR_COLOR_KEY, color);
+}
+
+// ─── Animation Variants ──────────────────────────────────────────────────────
+
+const idleVariants: Variants = {
   idle: {
-    scale: [0.98, 1.02, 0.98],
-    y: [-3, 3, -3],
-    rotate: 0,
-    transition: {
-      scale: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-      y: {
-        duration: 2.5,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-      rotate: {
-        duration: 0.3,
-      },
-    },
-  },
-  studying: {
-    scale: 1,
-    y: 0,
-    rotate: [-5, 5, -3, 4, -5],
-    transition: {
-      rotate: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-      scale: {
-        duration: 0.3,
-      },
-      y: {
-        duration: 0.3,
-      },
-    },
-  },
-  celebration: {
-    scale: [1, 1.1, 1],
-    y: [0, -30, 0],
-    rotate: 0,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 15,
-      duration: 0.8,
-    },
+    y: [-2, 2, -2],
+    transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
   },
 };
 
-interface ConfettiPiece {
-  id: number;
-  x: number;
-  color: string;
-  delay: number;
-}
+const studyingVariants: Variants = {
+  studying: {
+    rotate: [-2, 2, -2],
+    transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
+  },
+};
+
+const celebrationVariants: Variants = {
+  celebration: {
+    y: [0, -20, 0],
+    scale: [1, 1.1, 1],
+    transition: { type: "spring", stiffness: 300, damping: 12 },
+  },
+};
+
+// ─── Confetti ────────────────────────────────────────────────────────────────
 
 function CelebrationConfetti() {
-  const colors = ["#b8a4d4", "#f4b8d0", "#ffd700", "#4ade80", "#60a5fa", "#f97316"];
-  const pieces: ConfettiPiece[] = Array.from({ length: 12 }, (_, i) => ({
+  const colors = ["#FFB5A7", "#D6CFFF", "#FDE68A", "#A7F3D0", "#95D5F4", "#FECACA"];
+  const pieces = Array.from({ length: 10 }, (_, i) => ({
     id: i,
-    x: (i - 6) * 15 + Math.random() * 10,
+    x: (i - 5) * 14 + Math.random() * 8,
     color: colors[i % colors.length],
-    delay: Math.random() * 0.2,
+    delay: Math.random() * 0.15,
   }));
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {pieces.map((piece) => (
+      {pieces.map((p) => (
         <motion.div
-          key={piece.id}
+          key={p.id}
           className="absolute rounded-full"
-          style={{
-            width: 8,
-            height: 8,
-            backgroundColor: piece.color,
-            left: "50%",
-            top: "50%",
-          }}
-          initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-          animate={{
-            opacity: [1, 1, 0],
-            x: piece.x,
-            y: [-20, -50 - Math.random() * 30, 40],
-            scale: [0, 1.2, 0.5],
-          }}
-          transition={{
-            duration: 1,
-            delay: piece.delay,
-            ease: "easeOut",
-          }}
+          style={{ width: 6, height: 6, backgroundColor: p.color, left: "50%", top: "50%" }}
+          initial={{ opacity: 1, x: 0, y: 0 }}
+          animate={{ opacity: [1, 1, 0], x: p.x, y: [-10, -40, 30], scale: [0, 1, 0.4] }}
+          transition={{ duration: 0.9, delay: p.delay, ease: "easeOut" }}
         />
       ))}
     </div>
   );
 }
 
+// ─── Stage Renderers (SVG) ───────────────────────────────────────────────────
+
+function BabyStage({ color }: { color: string }) {
+  // Round toddler blob with big eyes, tiny arms, sitting
+  return (
+    <svg viewBox="0 0 100 120" width="100%" height="100%">
+      {/* Body — round */}
+      <ellipse cx="50" cy="70" rx="28" ry="30" fill={color} />
+      {/* Head — big relative to body */}
+      <circle cx="50" cy="38" r="24" fill={color} />
+      {/* Cheeks */}
+      <circle cx="38" cy="44" r="5" fill="#ff9999" opacity="0.4" />
+      <circle cx="62" cy="44" r="5" fill="#ff9999" opacity="0.4" />
+      {/* Eyes — big and round */}
+      <circle cx="42" cy="36" r="5" fill="#2d2d2d" />
+      <circle cx="58" cy="36" r="5" fill="#2d2d2d" />
+      <circle cx="44" cy="34" r="2" fill="white" />
+      <circle cx="60" cy="34" r="2" fill="white" />
+      {/* Tiny smile */}
+      <path d="M44 48 Q50 54 56 48" fill="none" stroke="#c07070" strokeWidth="2" strokeLinecap="round" />
+      {/* Tiny arms */}
+      <ellipse cx="26" cy="68" rx="6" ry="8" fill={color} opacity="0.9" />
+      <ellipse cx="74" cy="68" rx="6" ry="8" fill={color} opacity="0.9" />
+      {/* Pacifier/dummy */}
+      <circle cx="50" cy="52" r="3" fill="#ffcc80" stroke="#e6a040" strokeWidth="1" />
+    </svg>
+  );
+}
+
+function KidStage({ color }: { color: string }) {
+  // Small human with legs, backpack, energetic
+  return (
+    <svg viewBox="0 0 100 140" width="100%" height="100%">
+      {/* Legs */}
+      <rect x="38" y="105" width="9" height="22" rx="4" fill={color} opacity="0.85" />
+      <rect x="53" y="105" width="9" height="22" rx="4" fill={color} opacity="0.85" />
+      {/* Shoes */}
+      <ellipse cx="42" cy="128" rx="7" ry="4" fill="#5a5a5a" />
+      <ellipse cx="58" cy="128" rx="7" ry="4" fill="#5a5a5a" />
+      {/* Body */}
+      <rect x="34" y="65" width="32" height="42" rx="14" fill={color} />
+      {/* Backpack */}
+      <rect x="58" y="70" width="12" height="20" rx="5" fill="#ff9966" opacity="0.8" />
+      <rect x="60" y="74" width="8" height="4" rx="2" fill="#cc6633" opacity="0.6" />
+      {/* Arms */}
+      <rect x="24" y="72" width="10" height="24" rx="5" fill={color} opacity="0.9" />
+      <rect x="66" y="72" width="10" height="24" rx="5" fill={color} opacity="0.9" />
+      {/* Head */}
+      <circle cx="50" cy="48" r="22" fill={color} />
+      {/* Hair tuft */}
+      <path d="M40 30 Q50 20 60 30" fill={color} stroke="#555" strokeWidth="2" opacity="0.4" />
+      {/* Eyes */}
+      <circle cx="42" cy="46" r="4" fill="#2d2d2d" />
+      <circle cx="58" cy="46" r="4" fill="#2d2d2d" />
+      <circle cx="43.5" cy="44.5" r="1.5" fill="white" />
+      <circle cx="59.5" cy="44.5" r="1.5" fill="white" />
+      {/* Smile */}
+      <path d="M42 56 Q50 62 58 56" fill="none" stroke="#c07070" strokeWidth="2" strokeLinecap="round" />
+      {/* Cheeks */}
+      <circle cx="35" cy="52" r="4" fill="#ff9999" opacity="0.3" />
+      <circle cx="65" cy="52" r="4" fill="#ff9999" opacity="0.3" />
+    </svg>
+  );
+}
+
+function TeenStage({ color }: { color: string }) {
+  // Taller, holds a book, more detailed
+  return (
+    <svg viewBox="0 0 100 160" width="100%" height="100%">
+      {/* Legs */}
+      <rect x="37" y="115" width="10" height="30" rx="5" fill={color} opacity="0.85" />
+      <rect x="53" y="115" width="10" height="30" rx="5" fill={color} opacity="0.85" />
+      {/* Shoes */}
+      <ellipse cx="42" cy="146" rx="8" ry="5" fill="#4a4a4a" />
+      <ellipse cx="58" cy="146" rx="8" ry="5" fill="#4a4a4a" />
+      {/* Body */}
+      <rect x="33" y="60" width="34" height="58" rx="14" fill={color} />
+      {/* Arms */}
+      <rect x="22" y="66" width="11" height="30" rx="5" fill={color} opacity="0.9" />
+      <rect x="67" y="66" width="11" height="30" rx="5" fill={color} opacity="0.9" />
+      {/* Book in left hand */}
+      <rect x="14" y="90" width="18" height="14" rx="2" fill="#6366f1" />
+      <rect x="22" y="90" width="2" height="14" rx="1" fill="#4f46e5" />
+      {/* Head */}
+      <circle cx="50" cy="42" r="22" fill={color} />
+      {/* Eyes — slightly more mature */}
+      <ellipse cx="42" cy="40" rx="3.5" ry="4" fill="#2d2d2d" />
+      <ellipse cx="58" cy="40" rx="3.5" ry="4" fill="#2d2d2d" />
+      <circle cx="43" cy="38.5" r="1.5" fill="white" />
+      <circle cx="59" cy="38.5" r="1.5" fill="white" />
+      {/* Slight smile */}
+      <path d="M44 50 Q50 55 56 50" fill="none" stroke="#a06060" strokeWidth="1.8" strokeLinecap="round" />
+      {/* Headphones */}
+      <path d="M30 34 Q30 18 50 18 Q70 18 70 34" fill="none" stroke="#555" strokeWidth="3" strokeLinecap="round" />
+      <rect x="26" y="32" width="8" height="10" rx="4" fill="#555" />
+      <rect x="66" y="32" width="8" height="10" rx="4" fill="#555" />
+    </svg>
+  );
+}
+
+function ScholarStage({ color }: { color: string }) {
+  // Full adult scholar — confident, stack of books, graduation cap
+  return (
+    <svg viewBox="0 0 100 170" width="100%" height="100%">
+      {/* Legs */}
+      <rect x="36" y="125" width="11" height="32" rx="5" fill={color} opacity="0.85" />
+      <rect x="53" y="125" width="11" height="32" rx="5" fill={color} opacity="0.85" />
+      {/* Shoes */}
+      <ellipse cx="41" cy="158" rx="9" ry="5" fill="#3a3a3a" />
+      <ellipse cx="59" cy="158" rx="9" ry="5" fill="#3a3a3a" />
+      {/* Body */}
+      <rect x="32" y="58" width="36" height="70" rx="14" fill={color} />
+      {/* Collar / coat detail */}
+      <path d="M40 60 L50 70 L60 60" fill="none" stroke="white" strokeWidth="2" opacity="0.5" />
+      {/* Arms */}
+      <rect x="20" y="64" width="12" height="34" rx="6" fill={color} opacity="0.9" />
+      <rect x="68" y="64" width="12" height="34" rx="6" fill={color} opacity="0.9" />
+      {/* Stack of books in arm */}
+      <rect x="10" y="92" width="20" height="6" rx="1.5" fill="#ef4444" />
+      <rect x="11" y="86" width="18" height="6" rx="1.5" fill="#3b82f6" />
+      <rect x="12" y="80" width="16" height="6" rx="1.5" fill="#22c55e" />
+      {/* Head */}
+      <circle cx="50" cy="40" r="22" fill={color} />
+      {/* Graduation cap */}
+      <polygon points="50,10 80,22 50,28 20,22" fill="#1e293b" />
+      <rect x="48" y="8" width="4" height="4" rx="2" fill="#ffd700" />
+      <line x1="72" y1="22" x2="74" y2="32" stroke="#ffd700" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="74" cy="33" r="2" fill="#ffd700" />
+      {/* Glasses */}
+      <circle cx="42" cy="38" r="6" fill="none" stroke="#444" strokeWidth="1.5" />
+      <circle cx="58" cy="38" r="6" fill="none" stroke="#444" strokeWidth="1.5" />
+      <line x1="48" y1="38" x2="52" y2="38" stroke="#444" strokeWidth="1.5" />
+      {/* Eyes behind glasses */}
+      <circle cx="42" cy="38" r="2.5" fill="#2d2d2d" />
+      <circle cx="58" cy="38" r="2.5" fill="#2d2d2d" />
+      {/* Confident smile */}
+      <path d="M43 49 Q50 55 57 49" fill="none" stroke="#a06060" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+// ─── Main Component ──────────────────────────────────────────────────────────
+
+interface ProfileCharacterProps {
+  state?: CharacterState;
+  level?: EvolutionLevel;
+  size?: "sm" | "md" | "lg";
+  onCelebrationComplete?: () => void;
+}
+
 export function ProfileCharacter({
   state = "idle",
   level = 1,
+  size = "lg",
   onCelebrationComplete,
 }: ProfileCharacterProps) {
   const [currentState, setCurrentState] = useState<CharacterState>(state);
   const [showConfetti, setShowConfetti] = useState(false);
+  const color = getCharColor();
 
   useEffect(() => {
     setCurrentState(state);
-
     if (state === "celebration" || state === "evolving") {
       setShowConfetti(true);
-
       const timer = setTimeout(() => {
         setShowConfetti(false);
         setCurrentState("idle");
         onCelebrationComplete?.();
       }, 1200);
-
       return () => clearTimeout(timer);
     }
   }, [state, onCelebrationComplete]);
 
-  // Evolution visual properties
-  const glowColor = level === 4 ? '#ffd700' : level === 3 ? '#b388ff' : level === 2 ? '#60a5fa' : 'transparent';
-  const hasAura = level >= 2;
-  const hasCrown = level === 4;
-  const hasWings = level >= 3;
+  const sizeClasses = {
+    sm: "w-16 h-16",
+    md: "w-32 h-32",
+    lg: "w-48 h-48",
+  };
+
+  const variants = currentState === "studying" ? studyingVariants
+    : currentState === "celebration" || currentState === "evolving" ? celebrationVariants
+    : idleVariants;
+
+  const StageComponent = level === 4 ? ScholarStage
+    : level === 3 ? TeenStage
+    : level === 2 ? KidStage
+    : BabyStage;
 
   return (
-    <div className="relative flex items-center justify-center w-48 h-48">
-      {/* Evolution aura glow */}
-      {hasAura && (
-        <motion.div
-          className="absolute rounded-full"
-          style={{
-            width: level === 4 ? 160 : level === 3 ? 140 : 120,
-            height: level === 4 ? 160 : level === 3 ? 140 : 120,
-            background: `radial-gradient(circle, ${glowColor}30 0%, transparent 70%)`,
-          }}
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
-      )}
-
-      {/* Confetti burst on celebration */}
+    <div className={`relative flex items-center justify-center ${sizeClasses[size]}`}>
       <AnimatePresence>{showConfetti && <CelebrationConfetti />}</AnimatePresence>
-
-      {/* Character body */}
       <motion.div
-        className="relative flex flex-col items-center"
-        variants={characterVariants}
-        animate={currentState === "evolving" ? "celebration" : currentState}
+        className="w-full h-full"
+        variants={variants}
+        animate={currentState}
       >
-        {/* Crown for Legend level */}
-        {hasCrown ? (
-          <svg
-            width="48"
-            height="24"
-            viewBox="0 0 48 24"
-            fill="none"
-            className="relative z-10 -mb-2"
-          >
-            <path d="M4 20 L10 8 L18 14 L24 2 L30 14 L38 8 L44 20 Z" fill="#ffd700" stroke="#e6b800" strokeWidth="1" />
-            <circle cx="10" cy="8" r="2.5" fill="#ff4444" />
-            <circle cx="24" cy="2" r="2.5" fill="#4488ff" />
-            <circle cx="38" cy="8" r="2.5" fill="#44ff44" />
-            <rect x="4" y="18" width="40" height="4" rx="1" fill="#ffd700" stroke="#e6b800" strokeWidth="0.5" />
-          </svg>
-        ) : (
-          /* Graduation cap for non-Legend */
-          <svg
-            width="48"
-            height="24"
-            viewBox="0 0 48 24"
-            fill="none"
-            className="relative z-10 -mb-2"
-          >
-            <polygon points="24,0 48,12 24,18 0,12" fill="#1e293b" />
-            <rect x="22" y="0" width="4" height="4" rx="2" fill="#ffd700" />
-            <line x1="38" y1="12" x2="40" y2="20" stroke="#ffd700" strokeWidth="1.5" strokeLinecap="round" />
-            <circle cx="40" cy="21" r="2" fill="#ffd700" />
-          </svg>
-        )}
-
-        {/* Wings for Master+ */}
-        {hasWings && (
-          <>
-            <motion.div
-              className="absolute top-10 -left-6 z-0"
-              animate={{ rotate: [-5, 5, -5], y: [-2, 2, -2] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <svg width="28" height="40" viewBox="0 0 28 40" fill="none">
-                <path d="M28 20 Q20 5 8 0 Q0 10 4 20 Q0 30 8 40 Q20 35 28 20Z" fill={level === 4 ? '#ffd70060' : '#b388ff40'} stroke={level === 4 ? '#ffd700' : '#b388ff'} strokeWidth="1" />
-              </svg>
-            </motion.div>
-            <motion.div
-              className="absolute top-10 -right-6 z-0"
-              animate={{ rotate: [5, -5, 5], y: [-2, 2, -2] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <svg width="28" height="40" viewBox="0 0 28 40" fill="none">
-                <path d="M0 20 Q8 5 20 0 Q28 10 24 20 Q28 30 20 40 Q8 35 0 20Z" fill={level === 4 ? '#ffd70060' : '#b388ff40'} stroke={level === 4 ? '#ffd700' : '#b388ff'} strokeWidth="1" />
-              </svg>
-            </motion.div>
-          </>
-        )}
-
-        {/* Head / body (round character) */}
-        <div
-          className="relative w-24 h-24 rounded-full shadow-lg flex items-center justify-center"
-          style={{
-            background: level === 4
-              ? 'linear-gradient(135deg, #fff3b0, #ffd700)'
-              : level === 3
-              ? 'linear-gradient(135deg, #e8d5f5, #d4a8f5)'
-              : level === 2
-              ? 'linear-gradient(135deg, #d4e8f4, #a8d4f0)'
-              : 'linear-gradient(135deg, #ffe0b2, #ffcc80)',
-            border: `2px solid ${level === 4 ? '#e6b800' : level === 3 ? '#b388ff' : level === 2 ? '#60a5fa' : '#ffb74d'}`,
-            boxShadow: hasAura ? `0 0 20px ${glowColor}40` : undefined,
-          }}
-        >
-          {/* Eyes */}
-          <div className="flex gap-3 -mt-1">
-            <motion.div
-              className="w-3 h-3 rounded-full bg-[#3d2c1e]"
-              animate={
-                currentState === "studying"
-                  ? { scaleY: [1, 0.3, 1], transition: { duration: 2, repeat: Infinity } }
-                  : { scaleY: 1 }
-              }
-            />
-            <motion.div
-              className="w-3 h-3 rounded-full bg-[#3d2c1e]"
-              animate={
-                currentState === "studying"
-                  ? { scaleY: [1, 0.3, 1], transition: { duration: 2, repeat: Infinity, delay: 0.1 } }
-                  : { scaleY: 1 }
-              }
-            />
-          </div>
-
-          {/* Mouth */}
-          <div className="absolute bottom-5">
-            {currentState === "celebration" || currentState === "evolving" ? (
-              <div className="w-5 h-3 rounded-b-full bg-[#e57373] border-t border-[#c62828]" />
-            ) : (
-              <div className="w-4 h-2 rounded-b-full border-b-2 border-[#5d4037]" />
-            )}
-          </div>
-
-          {/* Blush */}
-          <div className="absolute bottom-7 left-3 w-3 h-2 rounded-full bg-[#ffcdd2] opacity-60" />
-          <div className="absolute bottom-7 right-3 w-3 h-2 rounded-full bg-[#ffcdd2] opacity-60" />
-        </div>
-
-        {/* Arms */}
-        <div className="absolute top-14 w-32 flex justify-between">
-          <motion.div
-            className="w-4 h-8 rounded-full bg-gradient-to-b from-[#ffe0b2] to-[#ffcc80] border border-[#ffb74d]"
-            animate={
-              currentState === "studying"
-                ? { rotate: [-10, 10, -10], transition: { duration: 1.5, repeat: Infinity } }
-                : { rotate: 0 }
-            }
-            style={{ transformOrigin: "top center" }}
-          />
-          <motion.div
-            className="w-4 h-8 rounded-full bg-gradient-to-b from-[#ffe0b2] to-[#ffcc80] border border-[#ffb74d]"
-            animate={
-              currentState === "studying"
-                ? { rotate: [5, -5, 5], transition: { duration: 1.2, repeat: Infinity } }
-                : { rotate: 0 }
-            }
-            style={{ transformOrigin: "top center" }}
-          />
-        </div>
-
-        {/* Book (visible during studying) */}
-        <AnimatePresence>
-          {currentState === "studying" && (
-            <motion.div
-              className="absolute bottom-0 w-10 h-7 bg-gradient-to-r from-[#7c4dff] to-[#b388ff] rounded-sm shadow-md flex items-center justify-center"
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.5 }}
-            >
-              <div className="w-0.5 h-5 bg-white/40" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Stars around character during celebration */}
-        <AnimatePresence>
-          {(currentState === "celebration" || currentState === "evolving") && (
-            <>
-              {[0, 1, 2].map((i) => (
-                <motion.span
-                  key={i}
-                  className="absolute text-lg"
-                  style={{
-                    top: -10 + i * 10,
-                    left: i === 1 ? -20 : i === 0 ? 30 : 40,
-                  }}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5], y: -15 }}
-                  transition={{ duration: 0.8, delay: i * 0.15 }}
-                >
-                  ⭐
-                </motion.span>
-              ))}
-            </>
-          )}
-        </AnimatePresence>
-
-        {/* Level badge */}
-        <motion.div
-          className="absolute -top-1 -right-3 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shadow-md z-20"
-          style={{
-            backgroundColor: level === 4 ? '#ffd700' : level === 3 ? '#b388ff' : level === 2 ? '#60a5fa' : '#e0e0e0',
-            color: level >= 3 ? '#fff' : '#333',
-          }}
-        >
-          {level}
-        </motion.div>
+        <StageComponent color={color} />
       </motion.div>
-
-      {/* State label */}
-      <motion.p
-        className="absolute -bottom-2 text-xs text-muted-foreground font-medium capitalize"
-        key={currentState}
-        initial={{ opacity: 0, y: 5 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {currentState === "idle" && "Chilling... 📚"}
-        {currentState === "studying" && "Studying hard! ✏️"}
-        {currentState === "celebration" && "Yay! 🎉"}
-        {currentState === "evolving" && "Evolving! ✨"}
-      </motion.p>
     </div>
   );
 }

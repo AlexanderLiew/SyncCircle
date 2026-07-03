@@ -30,8 +30,8 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, Legend,
   AreaChart, Area,
 } from "recharts";
-import { ProfileCharacter, type CharacterState, getEvolutionLevel, EVOLUTION_LEVELS, type EvolutionLevel } from "../components/ProfileCharacter";
-import { getUser, getSettings, getTasks, getFriends, getNotes } from "../lib/storage";
+import { ProfileCharacter, type CharacterState, getEvolutionLevel, getEvolutionFromMinutes, EVOLUTION_LEVELS, type EvolutionLevel, CHARACTER_COLORS, getCharColor, setCharColor } from "../components/ProfileCharacter";
+import { getUser, getSettings, getTasks, getFriends, getNotes, getClasses } from "../lib/storage";
 
 // ——— Character customizer data ———
 const SKIN_TONES = ["#FDDBB4", "#F1C27D", "#E0AC69", "#C68642", "#8D5524"];
@@ -233,11 +233,7 @@ function CycleSelector<T extends string>({
   );
 }
 
-// ——— Static data ———
-const weeklyData = [
-  { day: "Mon", hours: 4.5 }, { day: "Tue", hours: 6.2 }, { day: "Wed", hours: 5.8 },
-  { day: "Thu", hours: 7.1 }, { day: "Fri", hours: 6.5 }, { day: "Sat", hours: 8.2 }, { day: "Sun", hours: 5.9 },
-];
+// ——— Static weekly data removed — now uses live studyLog via getWeeklyData() ———
 
 // --- Module Grade Types ---
 interface ModuleGrade {
@@ -263,27 +259,28 @@ const TARGET_GRADE = 85; // default target
 
 function loadGrades(): ModuleGrade[] {
   try {
-    const raw = localStorage.getItem(GRADES_STORAGE_KEY);
+    const raw = localStorage.getItem(userKey(GRADES_STORAGE_KEY));
     return raw ? JSON.parse(raw) : [];
   } catch { return []; }
 }
 
 function saveGrades(grades: ModuleGrade[]): void {
-  localStorage.setItem(GRADES_STORAGE_KEY, JSON.stringify(grades));
+  localStorage.setItem(userKey(GRADES_STORAGE_KEY), JSON.stringify(grades));
 }
 
-function generateAIInsights(grades: ModuleGrade[]): AIInsight[] {
+function generateAIInsights(grades: ModuleGrade[], studyLogData: DailyStudyEntry[]): AIInsight[] {
   // Analyze weekly study patterns to recommend optimal study schedule
-  const totalWeeklyHours = weeklyData.reduce((sum, d) => sum + d.hours, 0);
+  const liveWeeklyData = getWeeklyData(studyLogData);
+  const totalWeeklyHours = liveWeeklyData.reduce((sum, d) => sum + d.thisWeek, 0);
   const avgDailyHours = totalWeeklyHours / 7;
 
   // Find low-effort days (good candidates for extra study)
-  const sortedDays = [...weeklyData].sort((a, b) => a.hours - b.hours);
+  const sortedDays = [...liveWeeklyData].sort((a, b) => a.thisWeek - b.thisWeek);
   const lowDays = sortedDays.slice(0, 3).map(d => d.day);
   const highDays = sortedDays.slice(-2).map(d => d.day);
 
   // Calculate available capacity (assume max 10h/day is realistic)
-  const availableExtra = weeklyData.reduce((sum, d) => sum + Math.max(0, 10 - d.hours), 0);
+  const availableExtra = liveWeeklyData.reduce((sum: number, d) => sum + Math.max(0, 10 - d.thisWeek), 0);
 
   return grades
     .filter(g => g.currentGrade < g.targetGrade)
@@ -350,12 +347,26 @@ function parseJSON(text: string): ModuleGrade[] {
     }))
     .filter((g: ModuleGrade) => g.module && !isNaN(g.currentGrade));
 }
-const radarData = [
-  { category: "Focus", value: 85 }, { category: "Consistency", value: 92 },
-  { category: "Collaboration", value: 88 }, { category: "Notes Quality", value: 90 }, { category: "Attendance", value: 95 },
-];
+// radarData will be computed live from real metrics in the component
 const POMODORO_STORAGE_KEY = 'synccircle_pomodoro_stats';
 const STUDY_LOG_KEY = 'synccircle_study_log';
+
+function getUserId(): string {
+  try {
+    const raw = localStorage.getItem('synccircle_user');
+    if (raw) {
+      const user = JSON.parse(raw);
+      return user.id || 'default';
+    }
+  } catch {}
+  // Fallback: check if dev bypass has a userId
+  return 'default';
+}
+
+function userKey(base: string): string {
+  const uid = getUserId();
+  return uid === 'default' ? base : `${base}_${uid}`;
+}
 
 interface PomodoroStats {
   totalSessions: number;
@@ -371,24 +382,24 @@ interface DailyStudyEntry {
 
 function loadPomodoroStats(): PomodoroStats {
   try {
-    const raw = localStorage.getItem(POMODORO_STORAGE_KEY);
+    const raw = localStorage.getItem(userKey(POMODORO_STORAGE_KEY));
     return raw ? JSON.parse(raw) : { totalSessions: 0, totalMinutes: 0, todaySessions: 0, lastSessionDate: '' };
   } catch { return { totalSessions: 0, totalMinutes: 0, todaySessions: 0, lastSessionDate: '' }; }
 }
 
 function savePomodoroStats(stats: PomodoroStats): void {
-  localStorage.setItem(POMODORO_STORAGE_KEY, JSON.stringify(stats));
+  localStorage.setItem(userKey(POMODORO_STORAGE_KEY), JSON.stringify(stats));
 }
 
 function loadStudyLog(): DailyStudyEntry[] {
   try {
-    const raw = localStorage.getItem(STUDY_LOG_KEY);
+    const raw = localStorage.getItem(userKey(STUDY_LOG_KEY));
     return raw ? JSON.parse(raw) : [];
   } catch { return []; }
 }
 
 function saveStudyLog(log: DailyStudyEntry[]): void {
-  localStorage.setItem(STUDY_LOG_KEY, JSON.stringify(log));
+  localStorage.setItem(userKey(STUDY_LOG_KEY), JSON.stringify(log));
 }
 
 function addStudyMinutes(minutes: number): DailyStudyEntry[] {
@@ -465,13 +476,13 @@ const LEARNING_ARCHETYPES: Record<LearningArchetype, { label: string; descriptio
 
 function loadStudentProfile(): StudentProfile | null {
   try {
-    const raw = localStorage.getItem(STUDENT_PROFILE_KEY);
+    const raw = localStorage.getItem(userKey(STUDENT_PROFILE_KEY));
     return raw ? JSON.parse(raw) : null;
   } catch { return null; }
 }
 
 function saveStudentProfile(profile: StudentProfile): void {
-  localStorage.setItem(STUDENT_PROFILE_KEY, JSON.stringify(profile));
+  localStorage.setItem(userKey(STUDENT_PROFILE_KEY), JSON.stringify(profile));
 }
 
 const achievements = [
@@ -482,42 +493,50 @@ const achievements = [
   { id: 5, title: "Century Club", description: "100+ total focus minutes", icon: Award, color: "#ffd4c8", goal: 100, type: 'minutes' as const },
   { id: 6, title: "Marathon Mind", description: "500+ total focus minutes", icon: Star, color: "#fef4d4", goal: 500, type: 'minutes' as const },
 ];
-const favoriteModules = [
-  { name: "Machine Learning", color: "#f4b8d0", progress: 75, grade: "A-" },
-  { name: "Data Structures", color: "#b8a4d4", progress: 82, grade: "A" },
-  { name: "Calculus II", color: "#d4e8f4", progress: 68, grade: "B+" },
-];
-const recentActivity = [
-  { id: 1, type: "note", action: "Shared notes", detail: "Neural Networks - Week 5", time: "2 hours ago", color: "#f4b8d0" },
-  { id: 2, type: "session", action: "Attended study session", detail: "Algorithms Review", time: "1 day ago", color: "#b8a4d4" },
-  { id: 3, type: "achievement", action: "Unlocked achievement", detail: "Team Player", time: "2 days ago", color: "#d4f4e8" },
-  { id: 4, type: "friend", action: "New study buddy", detail: "Connected with Liam Johnson", time: "3 days ago", color: "#d4e8f4" },
-];
+// favoriteModules and recentActivity are now computed live in the component
+
+function getTimeAgo(isoDate: string): string {
+  const diff = Date.now() - new Date(isoDate).getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return `${minutes} min ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+  return `${Math.floor(days / 7)} week${Math.floor(days / 7) > 1 ? 's' : ''} ago`;
+}
 
 export function Profile() {
   const navigate = useNavigate();
-  const [charConfig, setCharConfig] = useState<CharConfig>(() => {
-    try {
-      const saved = localStorage.getItem("synccircle_character");
-      if (saved) return JSON.parse(saved);
-    } catch {}
-    return {
-      skinIdx: 0,
-      hairColorIdx: 0,
-      hairStyle: "bob" as HairStyle,
-      outfitIdx: 0,
-      accessory: "none" as Accessory,
-    };
-  });
+  const [selectedColor, setSelectedColor] = useState(getCharColor());
   const [characterState, setCharacterState] = useState<CharacterState>("idle");
 
-  // Pomodoro timer state
+  // Persist character color (no longer need full charConfig save)
+  useEffect(() => {
+    // Color is saved via setCharColor() in the onClick handler directly
+  }, []);
+
+  // Pomodoro timer state — re-read from localStorage on mount (handles navigation from Dashboard)
   const [pomodoroStats, setPomodoroStats] = useState<PomodoroStats>(loadPomodoroStats);
   const [pomodoroActive, setPomodoroActive] = useState(false);
-  const [pomodoroSeconds, setPomodoroSeconds] = useState(25 * 60); // 25 min default
+  const [focusDuration, setFocusDuration] = useState(25); // customizable: 15/25/30/45/60
+  const [pomodoroSeconds, setPomodoroSeconds] = useState(25 * 60);
   const [pomodoroMode, setPomodoroMode] = useState<'focus' | 'break'>('focus');
   const pomodoroRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [studyLog, setStudyLog] = useState<DailyStudyEntry[]>(loadStudyLog);
+
+  // Re-sync stats from localStorage when page is focused (e.g. after using Dashboard timer)
+  useEffect(() => {
+    const handleFocus = () => {
+      setPomodoroStats(loadPomodoroStats());
+      setStudyLog(loadStudyLog());
+    };
+    window.addEventListener('focus', handleFocus);
+    // Also re-read on mount
+    handleFocus();
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
 
   // Student profile modal
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -575,7 +594,67 @@ export function Profile() {
     return count;
   }, [tasks]);
 
-  const evolution = useMemo(() => getEvolutionLevel(streak), [streak]);
+  const evolution = useMemo(() => getEvolutionFromMinutes(pomodoroStats.totalMinutes), [pomodoroStats.totalMinutes]);
+
+  // Compute radar data from real metrics
+  const radarData = useMemo(() => {
+    const focusScore = Math.min(100, Math.round((pomodoroStats.totalMinutes / 10) * 10) / 10); // 1000 min = 100
+    const consistencyScore = Math.min(100, streak * 10); // 10-day streak = 100
+    const collaborationScore = Math.min(100, friendsCount * 20); // 5 friends = 100
+    const notesScore = Math.min(100, notesCount * 15); // ~7 notes = 100
+    const tasksScore = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    return [
+      { category: "Focus", value: Math.max(5, focusScore) },
+      { category: "Consistency", value: Math.max(5, consistencyScore) },
+      { category: "Collaboration", value: Math.max(5, collaborationScore) },
+      { category: "Notes", value: Math.max(5, notesScore) },
+      { category: "Task Completion", value: Math.max(5, tasksScore) },
+    ];
+  }, [pomodoroStats.totalMinutes, streak, friendsCount, notesCount, completedTasks, totalTasks]);
+
+  // Compute favorite modules from timetable classes
+  const classes = useMemo(() => getClasses(), []);
+  const favoriteModules = useMemo(() => {
+    const moduleColors = ['#f4b8d0', '#b8a4d4', '#d4e8f4', '#d4f4e8', '#fef4d4'];
+    return classes.slice(0, 5).map((cls, i) => ({
+      name: cls.title,
+      color: cls.color || moduleColors[i % moduleColors.length],
+      progress: Math.round(50 + Math.random() * 40), // derive from study time later
+      grade: '-',
+    }));
+  }, [classes]);
+
+  // Compute recent activity from real data (tasks completed, notes created)
+  const recentActivity = useMemo(() => {
+    const activities: { id: number; type: string; action: string; detail: string; time: string; color: string }[] = [];
+    let id = 1;
+
+    // Recent task completions
+    tasks
+      .filter(t => t.completed && t.completedAt)
+      .sort((a, b) => (b.completedAt || '').localeCompare(a.completedAt || ''))
+      .slice(0, 3)
+      .forEach(t => {
+        const ago = getTimeAgo(t.completedAt!);
+        activities.push({ id: id++, type: 'task', action: 'Completed task', detail: t.title, time: ago, color: '#d4f4e8' });
+      });
+
+    // Recent notes
+    const sortedNotes = [...notes].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 2);
+    sortedNotes.forEach(n => {
+      const ago = getTimeAgo(n.updatedAt);
+      activities.push({ id: id++, type: 'note', action: 'Updated note', detail: n.title, time: ago, color: '#f4b8d0' });
+    });
+
+    // Pomodoro session
+    if (pomodoroStats.totalSessions > 0) {
+      activities.push({ id: id++, type: 'session', action: 'Focus session', detail: `${pomodoroStats.totalSessions} total sessions completed`, time: pomodoroStats.lastSessionDate ? getTimeAgo(pomodoroStats.lastSessionDate + 'T12:00:00') : 'Recently', color: '#b8a4d4' });
+    }
+
+    return activities.length > 0 ? activities.slice(0, 4) : [
+      { id: 1, type: 'info', action: 'Get started', detail: 'Complete a focus session or task to see activity here', time: 'Now', color: '#d4e8f4' },
+    ];
+  }, [tasks, notes, pomodoroStats]);
 
   // Check if any task was completed in the last hour to trigger celebration
   useEffect(() => {
@@ -607,7 +686,7 @@ export function Profile() {
               const today = new Date().toISOString().slice(0, 10);
               const updated: PomodoroStats = {
                 totalSessions: pomodoroStats.totalSessions + 1,
-                totalMinutes: pomodoroStats.totalMinutes + 25,
+                totalMinutes: pomodoroStats.totalMinutes + focusDuration,
                 todaySessions: pomodoroStats.lastSessionDate === today
                   ? pomodoroStats.todaySessions + 1
                   : 1,
@@ -616,7 +695,7 @@ export function Profile() {
               setPomodoroStats(updated);
               savePomodoroStats(updated);
               // Log study minutes
-              const updatedLog = addStudyMinutes(25);
+              const updatedLog = addStudyMinutes(focusDuration);
               setStudyLog(updatedLog);
               setCharacterState("celebration");
               // Switch to break
@@ -625,7 +704,7 @@ export function Profile() {
             } else {
               // Break complete — back to focus
               setPomodoroMode('focus');
-              return 25 * 60;
+              return focusDuration * 60;
             }
           }
           return prev - 1;
@@ -650,7 +729,7 @@ export function Profile() {
   const resetPomodoro = () => {
     setPomodoroActive(false);
     setPomodoroMode('focus');
-    setPomodoroSeconds(25 * 60);
+    setPomodoroSeconds(focusDuration * 60);
     setCharacterState("idle");
   };
 
@@ -707,13 +786,11 @@ export function Profile() {
     setIsAnalyzing(true);
     // Simulate AI processing delay
     setTimeout(() => {
-      const insights = generateAIInsights(moduleGrades);
+      const insights = generateAIInsights(moduleGrades, studyLog);
       setAiInsights(insights);
       setIsAnalyzing(false);
     }, 1500);
   };
-
-  const set = (field: keyof CharConfig) => (v: any) => setCharConfig(prev => ({ ...prev, [field]: v }));
 
   const handleSaveProfile = () => {
     setStudentProfile(profileForm);
@@ -736,23 +813,7 @@ export function Profile() {
           <div className="flex items-center gap-6">
             {/* Character avatar preview */}
             <div className="w-24 h-24 rounded-3xl bg-white/20 backdrop-blur-sm flex items-center justify-center border-4 border-white/30 overflow-hidden">
-              {avatar ? (
-                <img src={avatar} alt={displayName} className="w-full h-full object-cover" />
-              ) : (
-                <svg viewBox="0 0 120 180" width="70" height="70" className="mt-6">
-                  <ellipse cx="60" cy="145" rx="32" ry="36" fill={OUTFIT_COLORS[charConfig.outfitIdx]} />
-                  <rect x="52" y="106" width="16" height="12" rx="4" fill={SKIN_TONES[charConfig.skinIdx]} />
-                  <circle cx="60" cy="72" r="36" fill={SKIN_TONES[charConfig.skinIdx]} />
-                  <ellipse cx="60" cy="54" rx="34" ry="20" fill={HAIR_COLORS[charConfig.hairColorIdx]} />
-                  <circle cx="48" cy="74" r="5" fill="#2C1810" />
-                  <circle cx="72" cy="74" r="5" fill="#2C1810" />
-                  <circle cx="50" cy="72" r="2" fill="white" />
-                  <circle cx="74" cy="72" r="2" fill="white" />
-                  <circle cx="40" cy="82" r="6" fill="#f4b8d0" opacity="0.5" />
-                  <circle cx="80" cy="82" r="6" fill="#f4b8d0" opacity="0.5" />
-                  <path d="M52 88 Q60 96 68 88" fill="none" stroke="#c07090" strokeWidth="2.5" strokeLinecap="round" />
-                </svg>
-              )}
+              <ProfileCharacter state="idle" level={evolution.level} size="sm" />
             </div>
             <div>
               <h1 className="text-3xl font-bold mb-2">{displayName}</h1>
@@ -920,7 +981,7 @@ export function Profile() {
             </div>
             <div>
               <h2 className="text-lg font-bold">Study Buddy</h2>
-              <p className="text-xs text-muted-foreground">Lv.{evolution.level} {evolution.title}</p>
+              <p className="text-xs text-muted-foreground">{evolution.title}</p>
             </div>
           </div>
 
@@ -935,10 +996,10 @@ export function Profile() {
           {/* Evolution progress */}
           <div className="w-full space-y-2 mt-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-medium">🔥 {streak} day streak</span>
+              <span className="font-medium">📚 {pomodoroStats.totalMinutes} min studied</span>
               {evolution.nextLevelAt && (
                 <span className="text-muted-foreground">
-                  Next: {EVOLUTION_LEVELS[(evolution.level + 1) as EvolutionLevel].title} ({evolution.nextLevelAt - streak} days)
+                  Next: {EVOLUTION_LEVELS[(evolution.level + 1) as EvolutionLevel].title} ({evolution.nextLevelAt - pomodoroStats.totalMinutes} min)
                 </span>
               )}
               {!evolution.nextLevelAt && (
@@ -954,7 +1015,7 @@ export function Profile() {
                 initial={{ width: 0 }}
                 animate={{
                   width: evolution.nextLevelAt
-                    ? `${(streak / evolution.nextLevelAt) * 100}%`
+                    ? `${(pomodoroStats.totalMinutes / evolution.nextLevelAt) * 100}%`
                     : '100%',
                 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -969,63 +1030,28 @@ export function Profile() {
             </div>
           </div>
 
-          {/* Pomodoro Timer */}
+          {/* Character Color Customizer */}
           <div className="w-full space-y-3 mt-2">
-            <div className="flex items-center justify-center gap-2">
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                pomodoroMode === 'focus'
-                  ? 'bg-primary/20 text-primary'
-                  : 'bg-green-500/20 text-green-600'
-              }`}>
-                {pomodoroMode === 'focus' ? '🎯 Focus' : '☕ Break'}
-              </span>
+            <h3 className="text-sm font-semibold text-muted-foreground">Customize Your Buddy</h3>
+            <div className="space-y-1.5">
+              <span className="text-xs text-muted-foreground">Pick a color</span>
+              <div className="flex flex-wrap gap-2">
+                {CHARACTER_COLORS.map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => { setCharColor(color); setSelectedColor(color); }}
+                    className={`w-8 h-8 rounded-full border-2 transition-all ${
+                      selectedColor === color ? 'border-primary scale-110 shadow-md' : 'border-transparent hover:scale-105'
+                    }`}
+                    style={{ backgroundColor: color }}
+                    aria-label={`Character color ${color}`}
+                  />
+                ))}
+              </div>
             </div>
-            <div className="text-center">
-              <p className="text-3xl font-bold font-mono">
-                {Math.floor(pomodoroSeconds / 60).toString().padStart(2, '0')}:{(pomodoroSeconds % 60).toString().padStart(2, '0')}
-              </p>
-            </div>
-            <div className="flex gap-2 justify-center">
-              {!pomodoroActive ? (
-                <button
-                  onClick={startPomodoro}
-                  className="px-4 py-2 rounded-xl text-sm font-medium bg-primary text-primary-foreground hover:shadow-lg transition-all"
-                >
-                  {pomodoroSeconds === (pomodoroMode === 'focus' ? 25 * 60 : 5 * 60) ? '▶ Start' : '▶ Resume'}
-                </button>
-              ) : (
-                <button
-                  onClick={pausePomodoro}
-                  className="px-4 py-2 rounded-xl text-sm font-medium bg-amber-500 text-white hover:shadow-lg transition-all"
-                >
-                  ⏸ Pause
-                </button>
-              )}
-              <button
-                onClick={resetPomodoro}
-                className="px-4 py-2 rounded-xl text-sm font-medium bg-accent hover:bg-accent/80 transition-all"
-              >
-                ↺ Reset
-              </button>
-            </div>
-            <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border">
-              <span>Today: {pomodoroStats.todaySessions} sessions</span>
-              <span>Total: {pomodoroStats.totalMinutes} min</span>
-            </div>
-
-            {/* How to use */}
-            <div className="pt-3 border-t border-border space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground">📖 How Pomodoro Works</p>
-              <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
-                <li>Press <strong>Start</strong> to begin a 25-min focus session</li>
-                <li>Your buddy studies with you — stay focused!</li>
-                <li>When the timer ends, take a 5-min break ☕</li>
-                <li>Repeat — every session counts towards achievements</li>
-              </ol>
-              <p className="text-[10px] text-muted-foreground/70 italic">
-                Tip: Complete sessions daily to grow your streak and evolve your character!
-              </p>
-            </div>
+            <p className="text-[10px] text-muted-foreground italic">
+              Your buddy grows as you study: Baby → Kid → Teen → Scholar
+            </p>
           </div>
         </motion.div>
 
@@ -1156,10 +1182,10 @@ export function Profile() {
           </div>
 
           {moduleGrades.length > 0 ? (
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={moduleGrades.map(g => ({ subject: g.module, current: g.currentGrade, target: g.targetGrade }))}>
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={moduleGrades.map(g => ({ subject: g.module.length > 12 ? g.module.slice(0, 12) + '…' : g.module, current: g.currentGrade, target: g.targetGrade }))} margin={{ bottom: 60 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.3} />
-                <XAxis dataKey="subject" stroke="#9088a0" />
+                <XAxis dataKey="subject" stroke="#9088a0" angle={-35} textAnchor="end" interval={0} height={70} tick={{ fontSize: 11 }} />
                 <YAxis stroke="#9088a0" domain={[0, 100]} />
                 <Tooltip contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e0e0e0", borderRadius: "12px" }} />
                 <Legend />
@@ -1258,7 +1284,7 @@ export function Profile() {
                           AI Study Plan & Recommendations
                         </h3>
                         <p className="text-xs text-muted-foreground">
-                          Based on your weekly study pattern ({weeklyData.reduce((s, d) => s + d.hours, 0).toFixed(1)}h total)
+                          Based on your weekly study pattern ({getWeeklyData(studyLog).reduce((s: number, d) => s + d.thisWeek, 0).toFixed(1)}h total)
                         </p>
                       </div>
 
@@ -1266,16 +1292,16 @@ export function Profile() {
                       <div className="p-4 rounded-xl bg-accent/30 border border-border">
                         <p className="text-sm font-medium mb-2">📊 Your Weekly Study Pattern</p>
                         <div className="flex gap-2">
-                          {weeklyData.map(d => (
+                          {getWeeklyData(studyLog).map(d => (
                             <div key={d.day} className="flex-1 text-center">
                               <div className="relative h-16 flex items-end justify-center mb-1">
                                 <div
                                   className="w-full rounded-t-md bg-primary/30"
-                                  style={{ height: `${(d.hours / 10) * 100}%` }}
+                                  style={{ height: `${(d.thisWeek / 10) * 100}%` }}
                                 />
                               </div>
                               <span className="text-xs text-muted-foreground">{d.day}</span>
-                              <p className="text-xs font-medium">{d.hours}h</p>
+                              <p className="text-xs font-medium">{d.thisWeek}h</p>
                             </div>
                           ))}
                         </div>
