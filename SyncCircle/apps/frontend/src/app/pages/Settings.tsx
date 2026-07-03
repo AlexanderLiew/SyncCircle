@@ -2,35 +2,33 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { motion } from "motion/react";
 import {
-  Settings as SettingsIcon,
   User,
   Bell,
   Lock,
   Palette,
   Accessibility,
-  Sparkles,
   Mail,
+  ArrowLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useTheme } from "../hooks/useTheme";
 import { getSettings, saveSettings, getUser, saveUser } from "../lib/storage";
 import { useAuth } from "../hooks/useAuth";
+import { SyncCircleLogo } from "../components/SyncCircleLogo";
 import type { UserSettings } from "../types";
 
 const settingsSections = [
-  { id: "profile", label: "Profile", icon: User },
+  { id: "account", label: "Account", icon: User },
   { id: "appearance", label: "Appearance", icon: Palette },
   { id: "notifications", label: "Notifications", icon: Bell },
   { id: "privacy", label: "Privacy & Security", icon: Lock },
   { id: "accessibility", label: "Accessibility", icon: Accessibility },
-  { id: "profile", label: "Account", icon: User },
-  { id: "ai", label: "AI Preferences", icon: Sparkles },
 ];
 
 export function Settings() {
   const navigate = useNavigate();
   const { user: authUser } = useAuth();
-  const [activeSection, setActiveSection] = useState("profile");
+  const [activeSection, setActiveSection] = useState("account");
   const [settings, setSettings] = useState<UserSettings>(getSettings);
   const { currentTheme, applyTheme, getAvailableThemes } = useTheme();
   const { user } = useAuth();
@@ -91,78 +89,6 @@ export function Settings() {
         }`}
       />
     </button>
-  );
-
-  const renderProfile = () => (
-    <div className="space-y-6">
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">Email</label>
-          <input
-            type="email"
-            value={authUser?.email || ""}
-            disabled
-            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border opacity-60 cursor-not-allowed"
-          />
-          <p className="text-xs text-muted-foreground mt-1">Email cannot be changed</p>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2">Display Name</label>
-          <input
-            type="text"
-            value={settings.profile.displayName}
-            onChange={(e) =>
-              setSettings((prev) => ({
-                ...prev,
-                profile: { ...prev.profile, displayName: e.target.value },
-              }))
-            }
-            placeholder="Enter your display name"
-            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2">
-            Course / Program
-          </label>
-          <input
-            type="text"
-            value={settings.profile.course}
-            onChange={(e) =>
-              setSettings((prev) => ({
-                ...prev,
-                profile: { ...prev.profile, course: e.target.value },
-              }))
-            }
-            placeholder="e.g. Computer Science"
-            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
-          />
-        </div>
-      </div>
-
-      <button
-        onClick={() => {
-          // Save to settings storage
-          saveSettings(settings);
-          // Also update the synccircle_user localStorage entry
-          const user = getUser();
-          if (user) {
-            saveUser({
-              ...user,
-              displayName: settings.profile.displayName,
-              avatar: settings.profile.avatar,
-              course: settings.profile.course,
-            });
-          }
-          toast.success("Profile saved!");
-        }}
-        className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
-      >
-        Save Changes
-      </button>
-    </div>
   );
 
   const renderAppearance = () => (
@@ -415,97 +341,9 @@ export function Settings() {
     );
   };
 
-  const renderAIPreferences = () => (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Response Style</h3>
-        <div className="flex gap-4">
-          {(["concise", "balanced", "detailed"] as const).map((style) => (
-            <label
-              key={style}
-              className={`flex-1 flex flex-col items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                settings.aiPreferences.responseStyle === style
-                  ? "border-primary bg-primary/10"
-                  : "border-border hover:border-primary/50"
-              }`}
-            >
-              <input
-                type="radio"
-                name="responseStyle"
-                value={style}
-                checked={settings.aiPreferences.responseStyle === style}
-                onChange={() =>
-                  updateSettings((prev) => ({
-                    ...prev,
-                    aiPreferences: {
-                      ...prev.aiPreferences,
-                      responseStyle: style,
-                    },
-                  }))
-                }
-                className="sr-only"
-              />
-              <span className="font-medium capitalize">{style}</span>
-              <span className="text-xs text-muted-foreground mt-1">
-                {style === "concise"
-                  ? "Short & direct"
-                  : style === "detailed"
-                  ? "In-depth explanations"
-                  : "Mix of both"}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Planning Aggressiveness</h3>
-        <div className="flex gap-4">
-          {(["relaxed", "moderate", "intensive"] as const).map((level) => (
-            <label
-              key={level}
-              className={`flex-1 flex flex-col items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                settings.aiPreferences.planningAggressiveness === level
-                  ? "border-primary bg-primary/10"
-                  : "border-border hover:border-primary/50"
-              }`}
-            >
-              <input
-                type="radio"
-                name="planningAggressiveness"
-                value={level}
-                checked={
-                  settings.aiPreferences.planningAggressiveness === level
-                }
-                onChange={() =>
-                  updateSettings((prev) => ({
-                    ...prev,
-                    aiPreferences: {
-                      ...prev.aiPreferences,
-                      planningAggressiveness: level,
-                    },
-                  }))
-                }
-                className="sr-only"
-              />
-              <span className="font-medium capitalize">{level}</span>
-              <span className="text-xs text-muted-foreground mt-1">
-                {level === "relaxed"
-                  ? "Fewer reminders"
-                  : level === "intensive"
-                  ? "Proactive planning"
-                  : "Balanced nudges"}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
   const renderSection = () => {
     switch (activeSection) {
-      case "profile":
+      case "account":
         return renderProfile();
       case "appearance":
         return renderAppearance();
@@ -546,8 +384,8 @@ export function Settings() {
           className="bg-card rounded-2xl border border-border p-4"
         >
           <div className="flex items-center gap-3 mb-6 p-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <SettingsIcon className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center">
+              <SyncCircleLogo size={28} />
             </div>
             <div>
               <h2 className="text-xl font-bold">Settings</h2>

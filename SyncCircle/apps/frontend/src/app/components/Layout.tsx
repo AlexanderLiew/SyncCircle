@@ -16,6 +16,7 @@ import { useWorkato } from "../hooks/useWorkato";
 import { useTaskNotifications } from "../hooks/useTaskNotifications";
 import { useAuth } from "../hooks/useAuth";
 import { getTasks } from "../lib/storage";
+import { SyncCircleLogo } from "./SyncCircleLogo";
 import type { Task } from "../types";
 
 const navItems = [
@@ -90,8 +91,8 @@ export function Layout() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center">
+                <SyncCircleLogo size={28} />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-primary">

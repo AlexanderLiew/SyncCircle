@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
+import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import {
   User,
@@ -22,6 +23,7 @@ import {
   ChevronDown,
   ChevronUp,
   Loader2,
+  Edit,
 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -772,13 +774,22 @@ export function Profile() {
               </div>
             </div>
           </div>
-          <button
-            onClick={() => setShowProfileModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm transition-all"
-          >
-            <Edit className="w-4 h-4" />
-            {studentProfile ? 'Edit Profile' : 'Set Up Profile'}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate('/settings')}
+              className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm transition-all"
+            >
+              <SettingsIcon className="w-4 h-4" />
+              Settings
+            </button>
+            <button
+              onClick={() => setShowProfileModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm transition-all"
+            >
+              <Edit className="w-4 h-4" />
+              {studentProfile ? 'Edit Profile' : 'Set Up Profile'}
+            </button>
+          </div>
         </div>
       </motion.div>
 

@@ -315,6 +315,18 @@ export function Timetable() {
     await syncToGoogle(classes);
   };
 
+  // Connect and auto-sync all classes after connection
+  const handleConnectGoogle = async () => {
+    await connectGoogle();
+    // After connecting, auto-sync all existing classes
+    if (classes.length > 0) {
+      // Small delay to ensure token is stored
+      setTimeout(async () => {
+        await syncToGoogle(classes);
+      }, 500);
+    }
+  };
+
   const handleImportFromGoogle = async () => {
     const imported = await importFromGoogle(weekOffset);
     if (imported.length > 0) {
@@ -560,7 +572,7 @@ export function Timetable() {
               </button>
             ) : (
               <button
-                onClick={connectGoogle}
+                onClick={handleConnectGoogle}
                 disabled={isGoogleLoading || !isGoogleInitialized}
                 className="px-3 py-2 rounded-xl bg-blue-500/10 text-blue-600 border border-blue-200 hover:bg-blue-500/20 disabled:opacity-50 transition-all flex items-center gap-2 text-sm"
               >
@@ -584,17 +596,6 @@ export function Timetable() {
               <Upload className="w-4 h-4" />
               Import .ics
             </button>
-
-            {/* Import from Google */}
-            {isGoogleConnected && (
-              <button
-                onClick={handleImportFromGoogle}
-                className="px-3 py-2 rounded-xl bg-card border border-border hover:bg-accent transition-all flex items-center gap-2 text-sm"
-              >
-                <Download className="w-4 h-4" />
-                Pull from Google
-              </button>
-            )}
 
             {/* Filter Popover */}
             <Popover>
@@ -654,59 +655,6 @@ export function Timetable() {
                 </div>
               </PopoverContent>
             </Popover>
-
-            {/* Sync to Google Calendar */}
-            {isGoogleConnected && (
-              <motion.button
-                onClick={handleSyncToGoogleCalendar}
-                disabled={syncStatus === 'syncing'}
-                animate={{
-                  backgroundColor:
-                    syncStatus === 'success' ? '#16a34a' :
-                    syncStatus === 'error'   ? '#dc2626' :
-                                               '#15803d',
-                }}
-                transition={{ duration: 0.3 }}
-                className="px-3 py-2 rounded-xl text-white disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
-              >
-                {syncStatus === 'syncing' ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Syncing…
-                  </>
-                ) : syncStatus === 'success' ? (
-                  <motion.span
-                    key="success"
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-2"
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    Synced!
-                  </motion.span>
-                ) : syncStatus === 'error' ? (
-                  <motion.span
-                    key="error"
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-2"
-                  >
-                    <XCircle className="w-4 h-4" />
-                    Sync Failed
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="idle"
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-2"
-                  >
-                    <CalendarCheck className="w-4 h-4" />
-                    Sync to Google
-                  </motion.span>
-                )}
-              </motion.button>
-            )}
 
             <button
               onClick={openAddDialog}
