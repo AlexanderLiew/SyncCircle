@@ -302,11 +302,12 @@ export function Timetable() {
       setFriends(getFriends());
     } else {
       // Fetch from backend API
-      apiClient.get<{ friends: { friendId: string; displayName: string; createdAt: string }[] }>('/friends')
+      apiClient.get<{ friends: { friendId: string; friendUserId?: string; displayName: string; createdAt: string }[] }>('/friends')
         .then((data) => {
           // Map API friends to the Friend type expected by the filter view
+          // friendId = friendshipId (for delete), friendUserId = actual user ID (for timetable fetch)
           const mapped: Friend[] = data.friends.map((f) => ({
-            id: f.friendId,
+            id: f.friendUserId || f.friendId,
             userId: 'me',
             friendId: f.friendId,
             displayName: f.displayName,
@@ -317,13 +318,14 @@ export function Timetable() {
 
           // Pre-fetch all friends' timetables for class counts
           for (const f of data.friends) {
+            const timetableUserId = f.friendUserId || f.friendId;
             apiClient.get<{ classes: TimetableClass[]; updatedAt: string | null }>(
-              `/friends/${f.friendId}/timetable`
+              `/friends/${timetableUserId}/timetable`
             ).then((timetableData) => {
               if (timetableData.classes.length > 0) {
                 setFriends((prev) =>
                   prev.map((friend) =>
-                    friend.id === f.friendId || friend.friendId === f.friendId
+                    friend.id === timetableUserId
                       ? { ...friend, timetable: timetableData.classes }
                       : friend
                   )

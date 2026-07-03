@@ -248,6 +248,7 @@ export function Settings() {
     const accountName = authUser?.displayName || localUser?.displayName || '';
 
     return (
+      <>
       <div className="space-y-6">
         {/* Account Email (read-only) */}
         <div>
@@ -266,21 +267,12 @@ export function Settings() {
           <label className="block text-sm font-medium mb-2">Display Name</label>
           <input
             type="text"
-            defaultValue={accountName}
-            onBlur={(e) => {
-              const newName = e.target.value.trim();
-              if (newName && newName !== accountName) {
-                // Update localStorage user
-                const current = getUser();
-                if (current) {
-                  saveUser({ ...current, displayName: newName });
-                }
-                // Update settings profile
-                updateSettings((prev) => ({
-                  ...prev,
-                  profile: { ...prev.profile, displayName: newName },
-                }));
-              }
+            value={settings.profile.displayName || accountName}
+            onChange={(e) => {
+              updateSettings((prev) => ({
+                ...prev,
+                profile: { ...prev.profile, displayName: e.target.value },
+              }));
             }}
             placeholder="Enter your display name"
             className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
@@ -338,6 +330,35 @@ export function Settings() {
           />
         </div>
       </div>
+
+      <button
+        onClick={() => {
+          // Save to localStorage
+          saveSettings(settings);
+          const localUser = getUser();
+          if (localUser) {
+            saveUser({
+              ...localUser,
+              displayName: settings.profile.displayName,
+              course: settings.profile.course,
+            });
+          } else {
+            // Create user entry if it doesn't exist
+            saveUser({
+              id: authUser?.userId || 'local-user',
+              email: accountEmail,
+              displayName: settings.profile.displayName,
+              course: settings.profile.course,
+              createdAt: new Date().toISOString(),
+            });
+          }
+          toast.success("Profile saved!");
+        }}
+        className="mt-6 px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
+      >
+        Save Changes
+      </button>
+    </>
     );
   };
 

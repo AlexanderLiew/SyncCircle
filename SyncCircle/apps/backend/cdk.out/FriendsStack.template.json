@@ -1794,7 +1794,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "f54f7ab9e91d131e89eb8bcf1cd5493d9e4f9c4e0d628767a2f6f33d7d99d433.zip"
+     "S3Key": "0e2c5eac65c6a7d205119d2bddd68b297dee01bbb67f6526faa43686537df896.zip"
     },
     "Environment": {
      "Variables": {
@@ -1833,7 +1833,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/ListFriendsHandler/Resource",
-    "aws:asset:path": "asset.f54f7ab9e91d131e89eb8bcf1cd5493d9e4f9c4e0d628767a2f6f33d7d99d433",
+    "aws:asset:path": "asset.0e2c5eac65c6a7d205119d2bddd68b297dee01bbb67f6526faa43686537df896",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }

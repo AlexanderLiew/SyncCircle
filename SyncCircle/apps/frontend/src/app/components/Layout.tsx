@@ -36,8 +36,9 @@ export function Layout() {
   const [bellOpen, setBellOpen] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
 
-  // Derive user display info
-  const displayName = authUser?.displayName || "User";
+  // Derive user display info — prefer localStorage (user can update in settings) over Cognito
+  const localUser = (() => { try { const raw = localStorage.getItem('synccircle_user'); return raw ? JSON.parse(raw) : null; } catch { return null; } })();
+  const displayName = localUser?.displayName || authUser?.displayName || "User";
   const initials = displayName
     .split(" ")
     .map((w) => w[0])

@@ -60,7 +60,8 @@ export async function handler(
         const friendUserId =
           f.userIdLow === callerUserId ? f.userIdHigh : f.userIdLow;
         return {
-          friendId: friendUserId,
+          friendId: f.friendshipId,
+          friendUserId,
           displayName: displayNameMap.get(friendUserId) ?? 'Unknown User',
           createdAt: f.createdAt,
         };
