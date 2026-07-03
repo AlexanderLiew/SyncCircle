@@ -248,4 +248,46 @@ export function seedTestData(): void {
     localStorage.setItem(STORAGE_KEYS.CLASSES, JSON.stringify(SEED_MY_CLASSES));
     console.log('[Seed] Loaded 5 sample classes for your timetable');
   }
+
+  // Seed tasks (for AI Planner context)
+  const existingTasks = localStorage.getItem(STORAGE_KEYS.TASKS);
+  if (!existingTasks || existingTasks === '[]') {
+    const today = new Date();
+    const tasks = [
+      { id: 'task-1', title: 'CS2040 Assignment 3 - Binary Trees', dueDate: new Date(today.getTime() + 2 * 86400000).toISOString().slice(0, 10), priority: 'High', completed: false },
+      { id: 'task-2', title: 'CS3230 Problem Set 5', dueDate: new Date(today.getTime() + 5 * 86400000).toISOString().slice(0, 10), priority: 'Medium', completed: false },
+      { id: 'task-3', title: 'MA2001 Quiz Revision', dueDate: new Date(today.getTime() + 1 * 86400000).toISOString().slice(0, 10), priority: 'High', completed: false },
+      { id: 'task-4', title: 'CS2106 Lab Report', dueDate: new Date(today.getTime() + 7 * 86400000).toISOString().slice(0, 10), priority: 'Low', completed: false },
+      { id: 'task-5', title: 'CS2105 Tutorial Prep', dueDate: today.toISOString().slice(0, 10), priority: 'Medium', completed: true },
+    ];
+    localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+    console.log('[Seed] Loaded 5 sample tasks with due dates');
+  }
+
+  // Seed study stats (for character evolution + Profile page)
+  if (!localStorage.getItem('synccircle_pomodoro_stats')) {
+    localStorage.setItem('synccircle_pomodoro_stats', JSON.stringify({
+      totalSessions: 25,
+      totalMinutes: 450,
+      todaySessions: 2,
+      lastSessionDate: today().toISOString().slice(0, 10),
+    }));
+    console.log('[Seed] Loaded pomodoro stats (Teen level character)');
+  }
+
+  // Seed study log (for Profile study hours graph)
+  if (!localStorage.getItem('synccircle_study_log')) {
+    const log = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      log.push({ date: d.toISOString().slice(0, 10), minutes: Math.round(30 + Math.random() * 120) });
+    }
+    localStorage.setItem('synccircle_study_log', JSON.stringify(log));
+    console.log('[Seed] Loaded 7-day study log');
+  }
+}
+
+function today(): Date {
+  return new Date();
 }

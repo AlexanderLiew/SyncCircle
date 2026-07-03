@@ -140,11 +140,35 @@ Start the timer on Dashboard, wait 5 sec, click End → confirm "End Anyway" →
 
 ---
 
-### 7. AI Study Planner (Teammate adds this)
-**Say:**
-> "The AI Planner uses your timetable, tasks, and study patterns to suggest optimal study schedules — powered by the Kiro API."
+### 7. AI Study Planner (1.5 min)
+**Show:** AI Planner page (chat interface)
 
-*(Teammate demos this section)*
+**Say:**
+> "The AI Planner is a smart scheduling assistant. It can read your timetable, detect conflicts, find free time with friends, and add or move classes — all through natural conversation."
+
+**Do: (a) Ask about schedule**
+- Type: "What's my schedule this week?"
+- AI lists all your classes by day
+
+**Do: (b) Add a class with conflict**
+- Type: "Add Machine Learning on Wednesday 10am to 12pm"
+- AI warns: "You have Operating Systems at that time" + suggests free slots
+
+**Do: (c) Add a class to a free slot**
+- Type: "Add it on Monday 2pm to 4pm instead"
+- AI shows Confirm button → click Confirm
+- Switch to Timetable → show "Machine Learning" now on Monday 2-4pm
+
+**Do: (d) Find free time with friend**
+- Type: "When are me and Alice Tan free this week?"
+- AI shows mutual free slots by day
+
+**Do: (e) Schedule with friend**
+- Type: "Schedule a study session with Alice on Thursday 4pm to 6pm"
+- AI checks both schedules → shows Confirm button → click Confirm
+- Toast: "Email sent to Alice Tan" appears
+
+> "Everything is permission-based — the AI always asks before making changes, and your friends get notified by email when you schedule group events."
 
 ---
 
@@ -166,65 +190,31 @@ Start the timer on Dashboard, wait 5 sec, click End → confirm "End Anyway" →
 
 ---
 
-## For the AI Planner Teammate
+## AI Planner — Demo Setup
 
-### What's already built that you can use:
+The AI Planner is fully built and uses Groq (Llama 3.3 70B). To demo:
 
-**Available data (from localStorage):**
-```typescript
-import { getClasses, getTasks, getUser, getSettings } from '../lib/storage';
+1. Make sure `VITE_GROQ_API_KEY` is set in `.env`
+2. Make sure `VITE_DEV_BYPASS_AUTH=true` (loads seed data with 3 friends + 5 classes)
+3. Run `npm run dev` from `apps/frontend`
+4. Go to AI Planner page and follow the demo script above
 
-// User's class schedule
-const classes = getClasses(); // TimetableClass[] — title, dayOfWeek, startTime, endTime
+**What works in demo:**
+- Add/delete/move/extend classes via chat
+- Conflict detection with alternative suggestions
+- Friend availability cross-check (uses seed data timetables)
+- Group event scheduling with email notification toast
+- Chat persistence across page navigation
 
-// User's tasks
-const tasks = getTasks(); // Task[] — title, dueDate, priority, completed
-
-// User info
-const user = getUser(); // User — displayName, email
-
-// Study preferences
-const settings = getSettings(); // UserSettings — aiPreferences.responseStyle, planningAggressiveness
+**Quick demo seed (paste in console if needed):**
+```javascript
+// Ensure seed data is loaded with friends + timetable
+localStorage.removeItem('synccircle_classes');
+localStorage.removeItem('synccircle_friends');
+localStorage.removeItem('synccircle_chat_history');
+location.reload();
+// Seed auto-loads on refresh when dev bypass is on
 ```
-
-**Pomodoro / study stats:**
-```typescript
-const POMODORO_STORAGE_KEY = 'synccircle_pomodoro_stats';
-const STUDY_LOG_KEY = 'synccircle_study_log';
-// Read with: JSON.parse(localStorage.getItem(key))
-```
-
-**Friends' timetables (if connected):**
-```typescript
-import { apiClient } from '../lib/api-client';
-// GET /friends → list of friends
-// GET /friends/:friendId/timetable → their classes
-```
-
-**What the AI Planner should do:**
-1. Read the user's classes + tasks + study log
-2. Find free slots in their timetable
-3. Suggest study blocks based on task deadlines and priorities
-4. Optionally suggest group study times (from friend free slots)
-5. Chat interface (already scaffolded in `pages/AIPlanner.tsx`)
-
-**Hook to use for Kiro API:**
-```typescript
-import { useKiroAPI } from '../hooks/useKiroAPI';
-// Already exists — sends messages to VITE_KIRO_API_URL
-```
-
-**Env var needed:**
-```
-VITE_KIRO_API_URL=https://your-kiro-api-endpoint
-```
-
-### Your workflow:
-1. Create a new branch from `3july-harry-mergefix`
-2. Implement the AI chat logic in `pages/AIPlanner.tsx`
-3. Read user data from the helpers above and include in the AI prompt context
-4. Use `MERGE_CHECKLIST.md` to verify you haven't broken any of Harry's features
-5. Push and PR
 
 ---
 
