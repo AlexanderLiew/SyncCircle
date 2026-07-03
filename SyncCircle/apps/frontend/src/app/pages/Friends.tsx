@@ -309,11 +309,11 @@ export function Friends() {
           Sent Requests
         </h2>
 
-        {outgoing.length === 0 ? (
+        {outgoing.filter((r) => r.status !== "accepted").length === 0 ? (
           <p className="text-sm text-muted-foreground">No sent requests</p>
         ) : (
           <div className="space-y-3">
-            {outgoing.map((req) => (
+            {outgoing.filter((r) => r.status !== "accepted").map((req) => (
               <div
                 key={req.requestId}
                 className="flex items-center justify-between bg-background/50 rounded-xl border border-border p-4"
