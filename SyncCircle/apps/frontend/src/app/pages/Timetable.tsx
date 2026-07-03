@@ -311,9 +311,26 @@ export function Timetable() {
             friendId: f.friendId,
             displayName: f.displayName,
             status: 'online' as const,
-            timetable: [], // will be fetched on-demand when toggled
+            timetable: [], // will be populated below
           }));
           setFriends(mapped);
+
+          // Pre-fetch all friends' timetables for class counts
+          for (const f of data.friends) {
+            apiClient.get<{ classes: TimetableClass[]; updatedAt: string | null }>(
+              `/friends/${f.friendId}/timetable`
+            ).then((timetableData) => {
+              if (timetableData.classes.length > 0) {
+                setFriends((prev) =>
+                  prev.map((friend) =>
+                    friend.id === f.friendId || friend.friendId === f.friendId
+                      ? { ...friend, timetable: timetableData.classes }
+                      : friend
+                  )
+                );
+              }
+            }).catch(() => { /* silent fail for individual friend fetch */ });
+          }
         })
         .catch(() => {
           // Fallback to localStorage if API fails

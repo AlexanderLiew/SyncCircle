@@ -75,17 +75,30 @@ function removeById<T extends { id: string }>(key: string, id: string): void {
   writeArray(key, items.filter((i) => i.id !== id));
 }
 
-// --- Classes ---
+// --- Classes (user-scoped) ---
+
+function getClassesKey(): string {
+  try {
+    const userRaw = localStorage.getItem(STORAGE_KEYS.USER);
+    if (userRaw) {
+      const user = JSON.parse(userRaw);
+      if (user.id) return `synccircle_classes_${user.id}`;
+    }
+  } catch {}
+  return STORAGE_KEYS.CLASSES;
+}
 
 export function getClasses(): TimetableClass[] {
-  return readArray<TimetableClass>(STORAGE_KEYS.CLASSES);
+  return readArray<TimetableClass>(getClassesKey());
 }
 
 export function saveClass(cls: TimetableClass): void {
-  upsert(STORAGE_KEYS.CLASSES, cls);
+  upsert(getClassesKey(), cls);
 }
 
 export function deleteClass(id: string): void {
+  removeById<TimetableClass>(getClassesKey(), id);
+  // Also remove from the old global key to prevent ghost data
   removeById<TimetableClass>(STORAGE_KEYS.CLASSES, id);
 }
 
