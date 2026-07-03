@@ -21,16 +21,67 @@ Frontend (React + Vite)  →  API Gateway  →  Lambda (Node.js 20)  →  Dynamo
 | Integration | Status |
 |---|---|
 | AWS Cognito | ✅ Real user authentication (signup, login, email verification) |
-| AWS DynamoDB | ✅ UserProfiles, FriendRequests, Friendships, UserTimetables tables |
-| AWS Lambda | ✅ 14 serverless functions (friends API + timetable sync) |
+| AWS DynamoDB | ✅ UserProfiles, FriendRequests, Friendships, UserTimetables + 4 AI Planner tables |
+| AWS Lambda | ✅ 28 serverless functions (friends API + timetable sync + AI planner) |
 | AWS API Gateway | ✅ REST API with Cognito authorizer + CORS |
 | AWS SES | ⚠️ Configured but in sandbox mode (set EMAIL_ADAPTER=local) |
 | AWS CDK | ✅ Full Infrastructure as Code |
-| Google Calendar API | ✅ Direct OAuth2 integration (replaced Workato) — sync & pull events |
+| Google Calendar API | ✅ Direct OAuth2 integration — sync & pull events |
 | .ics Import | ✅ Upload school timetable files directly |
-| Workato → AWS SNS | ✅ Task deadline email notifications |
+| Groq AI (Llama 3.3) | ✅ Conversational AI chatbot with timetable actions |
+| AI Planner | ✅ Actionable scheduling assistant with conflict detection |
 
-## Timetable & Google Calendar
+## AI Study Planner (Chatbot)
+
+The AI Planner page features a conversational chatbot powered by Groq (Llama 3.3 70B) that can read and modify your timetable with permission-based actions.
+
+### What it can do
+
+| Feature | How to use |
+|---|---|
+| **Add a class** | "Add Machine Learning on Monday 2pm to 4pm" |
+| **Conflict detection** | AI warns if a slot is busy and suggests alternatives |
+| **Delete a class** | "Remove Data Structures from Monday" |
+| **Move a class** | "Move Algorithms from Tuesday to Thursday same time" |
+| **Extend a class** | "Extend my Monday class until 11am" |
+| **Find free time with friends** | "When are me and Alice Tan free this week?" |
+| **Schedule group events** | "Schedule a study session with Alice on Thursday 4pm to 6pm" |
+| **Email notifications** | Group events trigger email notifications to friends |
+
+### How it works
+
+1. **Context-aware** — the AI sees your full timetable + friends' timetables + free slots
+2. **Conflict detection** — checks for time overlaps before proposing any action
+3. **Confirmation required** — shows a "Confirm" button; nothing changes without your approval
+4. **Real modifications** — confirmed actions update localStorage + sync to DynamoDB backend
+5. **Friend availability** — cross-references both schedules for accurate mutual free time
+
+### Architecture
+
+```
+User message → Groq API (Llama 3.3 70B) → AI response with [ACTION] blocks
+                                                    ↓
+                                          Frontend parses action
+                                                    ↓
+                                          Shows "Confirm" button
+                                                    ↓ (user clicks)
+                                          Executes: saveClass() / deleteClass()
+                                                    ↓
+                                          localStorage + backend sync
+```
+
+### Setup
+
+Add to `apps/frontend/.env`:
+```env
+VITE_GROQ_API_KEY=gsk_your_key_here
+```
+
+Get a free key from [console.groq.com](https://console.groq.com) (30 req/min, 14,400/day free tier).
+
+---
+
+
 
 ### How it works
 - **Add classes** manually, via `.ics` file import, or by pulling from Google Calendar
@@ -104,6 +155,8 @@ VITE_COGNITO_CLIENT_ID=djuh7mtqdl2hudmmdk1veigsq
 
 ## API Endpoints
 
+### Friends & Timetable
+
 | Method | Path | Description |
 |---|---|---|
 | POST | /friends/search | Search for a user by email + name |
@@ -119,6 +172,25 @@ VITE_COGNITO_CLIENT_ID=djuh7mtqdl2hudmmdk1veigsq
 | GET | /friends/{userId}/relationship | Check relationship status |
 | PUT | /timetable | Save user's timetable classes to DynamoDB |
 | GET | /friends/{friendId}/timetable | Fetch a friend's timetable (must be friends) |
+
+### AI Planner (requires CDK deploy)
+
+| Method | Path | Description |
+|---|---|---|
+| POST | /ai-planner/personal | Create personal planning session |
+| POST | /ai-planner/group | Create group planning session |
+| GET | /planning-sessions | List user's planning sessions |
+| GET | /planning-sessions/{id} | Get session details |
+| POST | /planning-sessions/{id}/accept-option | Accept a time slot |
+| POST | /planning-sessions/{id}/reject-option | Reject a time slot |
+| POST | /planning-sessions/{id}/next-option | Get new suggestions |
+| POST | /planning-sessions/{id}/cancel | Cancel a session |
+| GET | /meeting-invitations | List pending invitations |
+| GET | /meeting-invitations/{id} | Get invitation details |
+| POST | /meeting-invitations/{id}/accept | Accept invitation |
+| POST | /meeting-invitations/{id}/reject | Reject invitation |
+| PUT | /timetable/privacy | Update timetable privacy setting |
+| GET | /timetable/privacy | Get timetable privacy setting |
 
 All endpoints require `Authorization: Bearer {id_token}` (Cognito ID token).
 
@@ -157,21 +229,19 @@ Backend built and wired into CDK. Needs `cdk deploy` to go live.
 
 **To deploy:** run `corepack pnpm exec cdk deploy --require-approval never` from `apps/backend` with AWS credentials configured.
 
-### 2. AI Planner Friend Feature
+### 2. AI Planner Feature ✅ DONE
 
-Same relationship check applies. The friends list is available via:
+Full conversational AI chatbot with timetable actions:
 
-```typescript
-import { API_PATHS, type FriendsListResponse } from '@synccircle/shared';
+- **Groq API** (Llama 3.3 70B) — free tier, 30 req/min
+- **Actionable chat** — add, delete, move, extend classes with confirmation
+- **Conflict detection** — warns about time overlaps, suggests free alternatives
+- **Friend availability** — cross-checks both timetables for mutual free slots
+- **Group scheduling** — creates events + sends email notifications
+- **Backend infrastructure** — 14 new Lambda handlers, 4 DynamoDB tables, CDK construct (ready to deploy)
+- **157 passing tests** — availability calculator, planning service, privacy enforcement
 
-const { friends } = await apiClient.get<FriendsListResponse>(API_PATHS.FRIENDS);
-// friends = [{ friendId, displayName, createdAt }]
-```
-
-Use this to:
-- Show friends' study schedules in the AI planner
-- Suggest group study sessions based on overlapping free time
-- Include friend availability in planning recommendations
+**To use:** Add `VITE_GROQ_API_KEY` to frontend `.env` and run `npm run dev`.
 
 ### 3. SES Email (optional)
 
@@ -187,7 +257,8 @@ To enable real invitation emails:
 | `main` | Stable base |
 | `alex-frontend-fixes` | Initial frontend fixes |
 | `workato-google-calendar-sync` | Google Calendar integration |
-| `aest-workato` | Task deadline email via AWS SNS ← current |
+| `aest-workato` | Task deadline email via AWS SNS |
+| `3-jul-Andre-AI-Planner` | AI Planner integration with actionable chatbot ← current |
 
 ## Useful Commands
 

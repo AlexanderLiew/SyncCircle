@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
+import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import {
   User,
@@ -22,6 +23,7 @@ import {
   ChevronDown,
   ChevronUp,
   Loader2,
+  Edit,
 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,

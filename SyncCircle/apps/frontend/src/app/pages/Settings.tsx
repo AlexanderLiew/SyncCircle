@@ -10,6 +10,7 @@ import {
   Accessibility,
   Sparkles,
   Mail,
+  ArrowLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useTheme } from "../hooks/useTheme";
@@ -93,77 +94,7 @@ export function Settings() {
     </button>
   );
 
-  const renderProfile = () => (
-    <div className="space-y-6">
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">Email</label>
-          <input
-            type="email"
-            value={authUser?.email || ""}
-            disabled
-            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border opacity-60 cursor-not-allowed"
-          />
-          <p className="text-xs text-muted-foreground mt-1">Email cannot be changed</p>
-        </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Display Name</label>
-          <input
-            type="text"
-            value={settings.profile.displayName}
-            onChange={(e) =>
-              setSettings((prev) => ({
-                ...prev,
-                profile: { ...prev.profile, displayName: e.target.value },
-              }))
-            }
-            placeholder="Enter your display name"
-            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2">
-            Course / Program
-          </label>
-          <input
-            type="text"
-            value={settings.profile.course}
-            onChange={(e) =>
-              setSettings((prev) => ({
-                ...prev,
-                profile: { ...prev.profile, course: e.target.value },
-              }))
-            }
-            placeholder="e.g. Computer Science"
-            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
-          />
-        </div>
-      </div>
-
-      <button
-        onClick={() => {
-          // Save to settings storage
-          saveSettings(settings);
-          // Also update the synccircle_user localStorage entry
-          const user = getUser();
-          if (user) {
-            saveUser({
-              ...user,
-              displayName: settings.profile.displayName,
-              avatar: settings.profile.avatar,
-              course: settings.profile.course,
-            });
-          }
-          toast.success("Profile saved!");
-        }}
-        className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
-      >
-        Save Changes
-      </button>
-    </div>
-  );
 
   const renderAppearance = () => (
     <div className="space-y-6">
@@ -515,6 +446,8 @@ export function Settings() {
         return renderPrivacy();
       case "accessibility":
         return renderAccessibility();
+      case "ai":
+        return renderAIPreferences();
       default:
         return null;
     }

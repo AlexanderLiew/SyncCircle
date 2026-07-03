@@ -5,6 +5,8 @@ import { LambdaConstruct } from './lambda-construct';
 import { CognitoConstruct } from './cognito-construct';
 import { ApiConstruct } from './api-construct';
 import { SesConstruct } from './ses-construct';
+import { AIPlannerDynamoDbConstruct } from './ai-planner-dynamodb-construct';
+import { AIPlannerConstruct } from './ai-planner-construct';
 
 /**
  * Props for the FriendsStack allowing deployment-time configuration.
@@ -57,7 +59,7 @@ export class FriendsStack extends Stack {
 
     // ─── API Gateway ─────────────────────────────────────────────────────
     // Access logging with 14-day retention is configured within the construct.
-    new ApiConstruct(this, 'Api', {
+    const apiConstruct = new ApiConstruct(this, 'Api', {
       userPool: cognito.userPool,
       allowedOrigins: props.allowedOrigins,
       searchHandler: lambdas.searchHandler,
@@ -74,6 +76,21 @@ export class FriendsStack extends Stack {
       putTimetableHandler: lambdas.putTimetableHandler,
       getFriendTimetableHandler: lambdas.getFriendTimetableHandler,
       getUsersHandler: lambdas.getUsersHandler,
+    });
+
+    // ─── AI Planner DynamoDB Tables ──────────────────────────────────────
+    const aiPlannerDb = new AIPlannerDynamoDbConstruct(this, 'AIPlannerDynamoDb');
+
+    // ─── AI Planner Lambda Functions & API Routes ────────────────────────
+    new AIPlannerConstruct(this, 'AIPlanner', {
+      api: apiConstruct.api,
+      userPool: cognito.userPool,
+      planningSessionsTable: aiPlannerDb.planningSessionsTable,
+      calendarEventsTable: aiPlannerDb.calendarEventsTable,
+      meetingInvitationsTable: aiPlannerDb.meetingInvitationsTable,
+      timetablePrivacySettingsTable: aiPlannerDb.timetablePrivacySettingsTable,
+      userTimetablesTable: dynamodb.userTimetablesTable,
+      friendshipsTable: dynamodb.friendshipsTable,
     });
   }
 }
