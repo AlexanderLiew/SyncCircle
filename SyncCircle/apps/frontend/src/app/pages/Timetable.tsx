@@ -52,25 +52,74 @@ import { formatSGTDate, sgtWeekStartWithOffset, sgtWeekEndWithOffset } from "../
 import { toast } from "sonner";
 import type { TimetableClass, Task, Friend } from "../types";
 
+// --- Student Profile (sleep schedule) ---
+const STUDENT_PROFILE_KEY = 'synccircle_student_profile';
+
+interface StudentProfile {
+  sleepStart: string; // "HH:mm" e.g. "23:00"
+  sleepEnd: string;   // "HH:mm" e.g. "07:00"
+}
+
+function loadStudentProfile(): StudentProfile | null {
+  try {
+    // Replicate the same key format as Profile.tsx: userKey(STUDENT_PROFILE_KEY)
+    let userId = 'default';
+    const raw = localStorage.getItem('synccircle_user');
+    if (raw) {
+      const user = JSON.parse(raw);
+      if (user.id) userId = user.id;
+    }
+    const key = userId === 'default' ? STUDENT_PROFILE_KEY : `${STUDENT_PROFILE_KEY}_${userId}`;
+    const data = localStorage.getItem(key);
+    if (data) return JSON.parse(data);
+    // Fallback: try without user suffix in case it was stored before user login
+    if (userId !== 'default') {
+      const fallback = localStorage.getItem(STUDENT_PROFILE_KEY);
+      if (fallback) return JSON.parse(fallback);
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function isInSleepRange(hour: number, sleepStart: string, sleepEnd: string): boolean {
+  const startHour = parseInt(sleepStart.split(":")[0], 10);
+  const endHour = parseInt(sleepEnd.split(":")[0], 10);
+
+  if (startHour > endHour) {
+    // Sleep wraps past midnight (e.g. 23:00 - 07:00)
+    return hour >= startHour || hour < endHour;
+  } else {
+    // Sleep doesn't wrap (e.g. 01:00 - 09:00)
+    return hour >= startHour && hour < endHour;
+  }
+}
+
+// --- Full 24-hour time slots ---
 const timeSlots = [
-  "08:00", "09:00", "10:00", "11:00", "12:00",
-  "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
+  "00:00", "01:00", "02:00", "03:00", "04:00", "05:00",
+  "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
+  "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
+  "18:00", "19:00", "20:00", "21:00", "22:00", "23:00",
 ];
 
 const timeLabels = [
-  "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
-  "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM",
+  "12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM",
+  "6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM",
+  "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
+  "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM",
 ];
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 /**
  * Convert "HH:mm" string to a grid row index (0-based).
- * "08:00" -> 0, "09:00" -> 1, etc.
+ * "00:00" -> 0, "01:00" -> 1, ..., "23:00" -> 23
  */
 function timeToRow(time: string): number {
   const [hours] = time.split(":").map(Number);
-  return Math.max(0, Math.min(timeSlots.length - 1, hours - 8));
+  return Math.max(0, Math.min(timeSlots.length - 1, hours));
 }
 
 /**
@@ -273,6 +322,9 @@ export function Timetable() {
   const [selectedFriendIds, setSelectedFriendIds] = useState<Set<string>>(new Set());
   const [showMyClasses, setShowMyClasses] = useState(true);
 
+  // Sleep schedule from user profile
+  const [sleepProfile, setSleepProfile] = useState<StudentProfile | null>(null);
+
   // ICS import
   const icsInputRef = useRef<HTMLInputElement>(null);
 
@@ -295,6 +347,7 @@ export function Timetable() {
   useEffect(() => {
     setClasses(getClasses());
     setTasks(getTasks());
+    setSleepProfile(loadStudentProfile());
 
     // Load friends: from API (real auth) or localStorage (dev bypass)
     const DEV_BYPASS = import.meta.env.VITE_DEV_BYPASS_AUTH === 'true';
@@ -478,6 +531,28 @@ export function Timetable() {
     if (!result.valid) {
       setFormErrors(result.errors);
       return;
+    }
+
+    // Prevent scheduling classes during sleep hours
+    if (sleepProfile) {
+      const startHour = parseInt(formData.startTime.split(":")[0], 10);
+      const endHour = parseInt(formData.endTime.split(":")[0], 10);
+      // Check if any hour in the class range overlaps with sleep
+      const classHours: number[] = [];
+      if (endHour > startHour) {
+        for (let h = startHour; h < endHour; h++) classHours.push(h);
+      } else {
+        // Wraps past midnight
+        for (let h = startHour; h < 24; h++) classHours.push(h);
+        for (let h = 0; h < endHour; h++) classHours.push(h);
+      }
+      const conflictsWithSleep = classHours.some((h) =>
+        isInSleepRange(h, sleepProfile.sleepStart, sleepProfile.sleepEnd)
+      );
+      if (conflictsWithSleep) {
+        setFormErrors({ startTime: `This time overlaps with your sleep schedule (${sleepProfile.sleepStart} – ${sleepProfile.sleepEnd}). Update your sleep schedule in Profile to change this.` });
+        return;
+      }
     }
 
     const cls: TimetableClass = {
@@ -817,7 +892,7 @@ export function Timetable() {
             transition={{ delay: 0.2 }}
             className="bg-card rounded-2xl border border-border p-6 overflow-x-auto"
           >
-            <div className="grid grid-cols-[80px_repeat(5,1fr)] gap-3 min-w-[900px]">
+            <div className="grid grid-cols-[80px_repeat(5,1fr)] min-w-[900px]" style={{ gap: '0px', rowGap: '3px', columnGap: '12px' }}>
               {/* Header Row */}
               <div></div>
               {days.map((day) => (
@@ -827,89 +902,148 @@ export function Timetable() {
               ))}
 
               {/* Time Slots */}
-              {timeSlots.map((time, timeIndex) => (
-                <div key={time} className="contents">
-                  <div className="flex items-start justify-end pr-3 text-sm text-muted-foreground pt-2">
-                    {timeLabels[timeIndex]}
-                  </div>
-                  {days.map((_, dayIndex) => {
-                    // User's class in this slot
-                    const classInSlot = showMyClasses
-                      ? classes.find(
-                          (c) => c.dayOfWeek === dayIndex && timeToRow(c.startTime) === timeIndex
-                        )
-                      : undefined;
+              {timeSlots.map((time, timeIndex) => {
+                // Determine sleep info for this row
+                const slotHour = parseInt(time.split(":")[0], 10);
+                const isSleepRow = sleepProfile
+                  ? isInSleepRange(slotHour, sleepProfile.sleepStart, sleepProfile.sleepEnd)
+                  : false;
 
-                    // Friend classes in this slot
-                    const friendClassesInSlot: { cls: TimetableClass; color: string; friendName: string }[] = [];
-                    friends.forEach((friend, fIdx) => {
-                      if (!selectedFriendIds.has(friend.id)) return;
-                      const fc = friend.timetable.find(
-                        (c) => c.dayOfWeek === dayIndex && timeToRow(c.startTime) === timeIndex
-                      );
-                      if (fc) {
-                        friendClassesInSlot.push({
-                          cls: fc,
-                          color: FRIEND_COLORS[fIdx % FRIEND_COLORS.length],
-                          friendName: friend.displayName,
-                        });
-                      }
-                    });
+                // Determine if this is the first sleep row (to show emoji)
+                let isFirstSleepRow = false;
+                if (isSleepRow && sleepProfile) {
+                  const prevHour = (slotHour + 23) % 24;
+                  isFirstSleepRow = !isInSleepRange(prevHour, sleepProfile.sleepStart, sleepProfile.sleepEnd);
+                }
 
-                    // Check if this is a common free slot (user + all selected friends are free)
-                    const isCommonFree =
-                      selectedFriendIds.size > 0 &&
-                      showMyClasses &&
-                      !classInSlot &&
-                      friendClassesInSlot.length === 0 &&
-                      !classes.some(
-                        (c) => c.dayOfWeek === dayIndex && timeToRow(c.startTime) === timeIndex
-                      );
+                // Determine if this is the last sleep row (for bottom border radius)
+                let isLastSleepRow = false;
+                if (isSleepRow && sleepProfile) {
+                  const nextHour = (slotHour + 1) % 24;
+                  isLastSleepRow = !isInSleepRange(nextHour, sleepProfile.sleepStart, sleepProfile.sleepEnd);
+                }
 
-                    return (
-                      <div key={`${dayIndex}-${timeIndex}`} className="relative">
-                        {classInSlot ? (
-                          <ClassCard
-                            classItem={classInSlot}
-                            onClick={() => openEditDialog(classInSlot)}
-                          />
-                        ) : friendClassesInSlot.length > 0 ? (
-                          <div className="space-y-1">
-                            {friendClassesInSlot.map(({ cls, color, friendName }) => (
-                              <motion.div
-                                key={cls.id}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                className="p-2 rounded-xl shadow-sm h-full border-2"
-                                style={{ borderColor: color, backgroundColor: `${color}15` }}
-                              >
-                                <h4 className="font-medium text-xs leading-tight" style={{ color }}>
-                                  {cls.title}
-                                </h4>
-                                <div className="text-[10px] opacity-70 mt-0.5">{friendName}</div>
-                                {cls.location && (
-                                  <div className="flex items-center gap-1 text-[10px] opacity-70 mt-0.5">
-                                    <MapPin className="w-2.5 h-2.5" />
-                                    {cls.location}
-                                  </div>
-                                )}
-                              </motion.div>
-                            ))}
-                          </div>
-                        ) : (
+                // Count total sleep hours for emoji positioning (middle)
+                let sleepHourCount = 0;
+                let sleepRowIndex = 0;
+                if (isSleepRow && sleepProfile) {
+                  // Count how many sleep hours there are total
+                  for (let h = 0; h < 24; h++) {
+                    if (isInSleepRange(h, sleepProfile.sleepStart, sleepProfile.sleepEnd)) {
+                      sleepHourCount++;
+                    }
+                  }
+                  // Determine position of this hour within the sleep block
+                  const startHour = parseInt(sleepProfile.sleepStart.split(":")[0], 10);
+                  if (startHour > parseInt(sleepProfile.sleepEnd.split(":")[0], 10)) {
+                    // Wraps midnight
+                    sleepRowIndex = slotHour >= startHour ? slotHour - startHour : slotHour + (24 - startHour);
+                  } else {
+                    sleepRowIndex = slotHour - startHour;
+                  }
+                }
+                const isMiddleSleepRow = isSleepRow && sleepRowIndex === Math.floor(sleepHourCount / 2);
+
+                return (
+                  <div key={time} className="contents">
+                    <div className="flex items-start justify-end pr-3 text-sm text-muted-foreground pt-2">
+                      {timeLabels[timeIndex]}
+                    </div>
+                    {days.map((_, dayIndex) => {
+                      if (isSleepRow) {
+                        return (
                           <div
-                            className={`border border-border/30 rounded-lg transition-colors min-h-[52px] ${
-                              isCommonFree
-                                ? 'bg-green-500/10 border-green-300/50'
-                                : 'hover:bg-accent/30'
-                            }`}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
+                            key={`${dayIndex}-${timeIndex}`}
+                            className={`bg-slate-900/60 border-x border-purple-900/30 flex items-center justify-center pointer-events-none select-none min-h-[52px] ${
+                              isFirstSleepRow ? 'border-t rounded-t-lg' : ''
+                            } ${isLastSleepRow ? 'border-b rounded-b-lg' : ''}`}
+                            title={`Sleep (${sleepProfile!.sleepStart} – ${sleepProfile!.sleepEnd})`}
+                          >
+                            {isMiddleSleepRow && (
+                              <span className="text-2xl">💤</span>
+                            )}
+                          </div>
+                        );
+                      }
+
+                      // User's class in this slot
+                      const classInSlot = showMyClasses
+                        ? classes.find(
+                            (c) => c.dayOfWeek === dayIndex && timeToRow(c.startTime) === timeIndex
+                          )
+                        : undefined;
+
+                      // Friend classes in this slot
+                      const friendClassesInSlot: { cls: TimetableClass; color: string; friendName: string }[] = [];
+                      friends.forEach((friend, fIdx) => {
+                        if (!selectedFriendIds.has(friend.id)) return;
+                        const fc = friend.timetable.find(
+                          (c) => c.dayOfWeek === dayIndex && timeToRow(c.startTime) === timeIndex
+                        );
+                        if (fc) {
+                          friendClassesInSlot.push({
+                            cls: fc,
+                            color: FRIEND_COLORS[fIdx % FRIEND_COLORS.length],
+                            friendName: friend.displayName,
+                          });
+                        }
+                      });
+
+                      // Check if this is a common free slot (user + all selected friends are free)
+                      const isCommonFree =
+                        selectedFriendIds.size > 0 &&
+                        showMyClasses &&
+                        !classInSlot &&
+                        friendClassesInSlot.length === 0 &&
+                        !classes.some(
+                          (c) => c.dayOfWeek === dayIndex && timeToRow(c.startTime) === timeIndex
+                        );
+
+                      return (
+                        <div key={`${dayIndex}-${timeIndex}`} className="relative">
+                          {classInSlot ? (
+                            <ClassCard
+                              classItem={classInSlot}
+                              onClick={() => openEditDialog(classInSlot)}
+                            />
+                          ) : friendClassesInSlot.length > 0 ? (
+                            <div className="space-y-1">
+                              {friendClassesInSlot.map(({ cls, color, friendName }) => (
+                                <motion.div
+                                  key={cls.id}
+                                  initial={{ opacity: 0, scale: 0.9 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  className="p-2 rounded-xl shadow-sm h-full border-2"
+                                  style={{ borderColor: color, backgroundColor: `${color}15` }}
+                                >
+                                  <h4 className="font-medium text-xs leading-tight" style={{ color }}>
+                                    {cls.title}
+                                  </h4>
+                                  <div className="text-[10px] opacity-70 mt-0.5">{friendName}</div>
+                                  {cls.location && (
+                                    <div className="flex items-center gap-1 text-[10px] opacity-70 mt-0.5">
+                                      <MapPin className="w-2.5 h-2.5" />
+                                      {cls.location}
+                                    </div>
+                                  )}
+                                </motion.div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div
+                              className={`border border-border/30 rounded-lg transition-colors min-h-[52px] ${
+                                isCommonFree
+                                  ? 'bg-green-500/10 border-green-300/50'
+                                  : 'hover:bg-accent/30'
+                              }`}
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
             </div>
 
             {classes.length === 0 && (

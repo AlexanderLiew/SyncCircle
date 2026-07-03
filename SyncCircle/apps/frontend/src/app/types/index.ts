@@ -67,6 +67,12 @@ export interface Note {
   ownerId: string;
   sharedGroupIds: string[];
   summary?: string;
+  attachment?: {
+    fileName: string;
+    fileType: string;
+    fileSize: number;
+    dataUrl: string; // base64 data URL for download
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -109,6 +115,12 @@ export interface GroupNote {
   content: string;
   createdBy: string;       // userId
   createdByName: string;   // display name for UI
+  attachment?: {
+    fileName: string;
+    fileType: string;
+    fileSize: number;
+    dataUrl: string; // base64 data URL for download
+  };
   createdAt: string;
   updatedAt: string;
 }

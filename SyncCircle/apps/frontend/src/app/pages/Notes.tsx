@@ -4,6 +4,7 @@ import {
   Plus,
   FolderOpen,
   FileText,
+  Upload,
   Trash2,
   ChevronDown,
   ChevronRight,
@@ -16,8 +17,10 @@ import {
   Bell,
   UserCheck,
   UserX,
+  Download,
 } from "lucide-react";
 import { AISummarizeButton } from "../components/AISummarizeButton";
+import { NoteFileUpload, type FileAttachment } from "../components/NoteFileUpload";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs";
 import {
   getNotes,
@@ -65,6 +68,9 @@ export function Notes() {
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const [newNoteContent, setNewNoteContent] = useState("");
 
+  // File upload state
+  const [uploadingInFolder, setUploadingInFolder] = useState<string | null>(null);
+
   // Note editing state (personal)
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [editTitle, setEditTitle] = useState("");
@@ -94,6 +100,9 @@ export function Notes() {
   const [creatingNoteInGroupFolder, setCreatingNoteInGroupFolder] = useState<string | null>(null);
   const [newGroupNoteTitle, setNewGroupNoteTitle] = useState("");
   const [newGroupNoteContent, setNewGroupNoteContent] = useState("");
+
+  // Group file upload state
+  const [uploadingInGroupFolder, setUploadingInGroupFolder] = useState<string | null>(null);
 
   // Group note editing state (separate from personal)
   const [editingGroupNote, setEditingGroupNote] = useState<GroupNote | null>(null);
@@ -202,6 +211,24 @@ export function Notes() {
     setCreatingNoteInFolder(null);
     setNewNoteTitle("");
     setNewNoteContent("");
+    reloadData(user);
+  }
+
+  function handleFileExtracted(folderId: string, title: string, content: string, attachment: FileAttachment) {
+    if (!user) return;
+    const note: Note = {
+      id: crypto.randomUUID(),
+      title,
+      content,
+      folderId,
+      ownerId: user.id,
+      sharedGroupIds: [],
+      attachment,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    saveNote(note);
+    setUploadingInFolder(null);
     reloadData(user);
   }
 
@@ -337,6 +364,25 @@ export function Notes() {
     setCreatingNoteInGroupFolder(null);
     setNewGroupNoteTitle("");
     setNewGroupNoteContent("");
+    reloadGroupData();
+  }
+
+  function handleGroupFileExtracted(groupId: string, folderId: string, title: string, content: string, attachment: FileAttachment) {
+    if (!user) return;
+    const note: GroupNote = {
+      id: crypto.randomUUID(),
+      groupId,
+      folderId,
+      title,
+      content,
+      createdBy: user.id,
+      createdByName: user.displayName || user.email,
+      attachment,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    saveGroupNote(note);
+    setUploadingInGroupFolder(null);
     reloadGroupData();
   }
 
@@ -531,6 +577,7 @@ export function Notes() {
                         onClick={(e) => {
                           e.stopPropagation();
                           setCreatingNoteInFolder(folder.id);
+                          setUploadingInFolder(null);
                           setExpandedFolders((prev) =>
                             new Set([...prev, folder.id])
                           );
@@ -539,6 +586,20 @@ export function Notes() {
                         title="Create note"
                       >
                         <Plus className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setUploadingInFolder(folder.id);
+                          setCreatingNoteInFolder(null);
+                          setExpandedFolders((prev) =>
+                            new Set([...prev, folder.id])
+                          );
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-accent transition-colors"
+                        title="Upload note from file"
+                      >
+                        <Upload className="w-4 h-4" />
                       </button>
                       <button
                         onClick={(e) => {
@@ -615,11 +676,29 @@ export function Notes() {
                             </motion.div>
                           )}
 
+                          {/* Upload Note From File */}
+                          {uploadingInFolder === folder.id && (
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="p-3 rounded-lg border border-border bg-accent/20"
+                            >
+                              <h4 className="text-sm font-semibold mb-2">Upload Notes from File</h4>
+                              <NoteFileUpload
+                                onExtracted={(title, content, attachment) =>
+                                  handleFileExtracted(folder.id, title, content, attachment)
+                                }
+                                onCancel={() => setUploadingInFolder(null)}
+                              />
+                            </motion.div>
+                          )}
+
                           {/* Notes list */}
                           {folderNotes.length === 0 &&
-                            creatingNoteInFolder !== folder.id && (
+                            creatingNoteInFolder !== folder.id &&
+                            uploadingInFolder !== folder.id && (
                               <p className="text-sm text-muted-foreground py-2 pl-2">
-                                No notes yet. Click + to add one.
+                                No notes yet. Click + to add one or upload a file.
                               </p>
                             )}
                           {folderNotes.map((note) => (
@@ -923,6 +1002,7 @@ export function Notes() {
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           setCreatingNoteInGroupFolder(gFolder.id);
+                                          setUploadingInGroupFolder(null);
                                           setExpandedGroupFolders((prev) =>
                                             new Set([...prev, gFolder.id])
                                           );
@@ -931,6 +1011,20 @@ export function Notes() {
                                         title="Add note"
                                       >
                                         <Plus className="w-3.5 h-3.5" />
+                                      </button>
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setUploadingInGroupFolder(gFolder.id);
+                                          setCreatingNoteInGroupFolder(null);
+                                          setExpandedGroupFolders((prev) =>
+                                            new Set([...prev, gFolder.id])
+                                          );
+                                        }}
+                                        className="p-1 rounded hover:bg-accent transition-colors"
+                                        title="Upload note from file"
+                                      >
+                                        <Upload className="w-3.5 h-3.5" />
                                       </button>
                                       <button
                                         onClick={(e) => {
@@ -1007,32 +1101,78 @@ export function Notes() {
                                             </motion.div>
                                           )}
 
+                                          {/* Upload Note From File */}
+                                          {uploadingInGroupFolder === gFolder.id && (
+                                            <motion.div
+                                              initial={{ opacity: 0 }}
+                                              animate={{ opacity: 1 }}
+                                              className="p-3 rounded-lg border border-border bg-accent/20"
+                                            >
+                                              <h4 className="text-sm font-semibold mb-2">Upload Notes from File</h4>
+                                              <NoteFileUpload
+                                                onExtracted={(title, content, attachment) =>
+                                                  handleGroupFileExtracted(group.id, gFolder.id, title, content, attachment)
+                                                }
+                                                onCancel={() => setUploadingInGroupFolder(null)}
+                                              />
+                                            </motion.div>
+                                          )}
+
                                           {/* Notes List */}
                                           {folderNotes.length === 0 &&
-                                            creatingNoteInGroupFolder !== gFolder.id && (
+                                            creatingNoteInGroupFolder !== gFolder.id &&
+                                            uploadingInGroupFolder !== gFolder.id && (
                                               <p className="text-xs text-muted-foreground py-2 pl-2">
-                                                No notes yet.
+                                                No notes yet. Click + to add one or upload a file.
                                               </p>
                                             )}
                                           {folderNotes.map((gNote) => (
                                             <div
                                               key={gNote.id}
-                                              className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent/30 transition-colors group cursor-pointer"
-                                              onClick={() => openEditGroupNote(gNote)}
+                                              className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent/30 transition-colors group"
                                             >
                                               <FileText className="w-4 h-4 mt-0.5 text-muted-foreground flex-shrink-0" />
                                               <div className="flex-1 min-w-0">
-                                                <h4 className="text-sm font-medium truncate">
-                                                  {gNote.title}
-                                                </h4>
-                                                {gNote.content && (
-                                                  <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
-                                                    {gNote.content}
+                                                <div
+                                                  className="cursor-pointer"
+                                                  onClick={() => openEditGroupNote(gNote)}
+                                                >
+                                                  <h4 className="text-sm font-medium truncate">
+                                                    {gNote.title}
+                                                  </h4>
+                                                  {gNote.content && (
+                                                    <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                                                      {gNote.content}
+                                                    </p>
+                                                  )}
+                                                  <p className="text-xs text-muted-foreground/70 mt-1">
+                                                    By {gNote.createdByName} · {formatDate(gNote.updatedAt)}
                                                   </p>
+                                                </div>
+                                                {/* File attachment download link */}
+                                                {gNote.attachment && (
+                                                  <button
+                                                    onClick={(e) => {
+                                                      e.stopPropagation();
+                                                      const link = document.createElement("a");
+                                                      link.href = gNote.attachment!.dataUrl;
+                                                      link.download = gNote.attachment!.fileName;
+                                                      document.body.appendChild(link);
+                                                      link.click();
+                                                      document.body.removeChild(link);
+                                                    }}
+                                                    className="mt-2 flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 border border-primary/20 transition-colors text-xs text-primary font-medium"
+                                                    title={`Download ${gNote.attachment.fileName}`}
+                                                  >
+                                                    <Download className="w-3.5 h-3.5" />
+                                                    <span className="truncate max-w-[180px]">{gNote.attachment.fileName}</span>
+                                                    <span className="text-muted-foreground/70 flex-shrink-0">
+                                                      ({gNote.attachment.fileSize < 1024 * 1024
+                                                        ? `${(gNote.attachment.fileSize / 1024).toFixed(1)} KB`
+                                                        : `${(gNote.attachment.fileSize / (1024 * 1024)).toFixed(1)} MB`})
+                                                    </span>
+                                                  </button>
                                                 )}
-                                                <p className="text-xs text-muted-foreground/70 mt-1">
-                                                  By {gNote.createdByName} · {formatDate(gNote.updatedAt)}
-                                                </p>
                                               </div>
                                               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button
@@ -1101,6 +1241,34 @@ export function Notes() {
                   className="w-full min-h-[250px] bg-transparent border-none outline-none resize-none text-sm leading-relaxed"
                   placeholder="Write your note content here..."
                 />
+                {/* Attached file download */}
+                {editingNote.attachment && (
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/20">
+                    <FileText className="w-5 h-5 text-primary flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{editingNote.attachment.fileName}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {editingNote.attachment.fileSize < 1024 * 1024
+                          ? `${(editingNote.attachment.fileSize / 1024).toFixed(1)} KB`
+                          : `${(editingNote.attachment.fileSize / (1024 * 1024)).toFixed(1)} MB`}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        const link = document.createElement("a");
+                        link.href = editingNote.attachment!.dataUrl;
+                        link.download = editingNote.attachment!.fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:shadow-lg transition-all flex items-center gap-1.5"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      Download
+                    </button>
+                  </div>
+                )}
                 <AISummarizeButton
                   noteContent={editContent}
                   existingSummary={editingNote.summary}
@@ -1165,6 +1333,34 @@ export function Notes() {
                   className="w-full min-h-[250px] bg-transparent border-none outline-none resize-none text-sm leading-relaxed"
                   placeholder="Write your note content here..."
                 />
+                {/* Attached file download */}
+                {editingGroupNote.attachment && (
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/20">
+                    <FileText className="w-5 h-5 text-primary flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{editingGroupNote.attachment.fileName}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {editingGroupNote.attachment.fileSize < 1024 * 1024
+                          ? `${(editingGroupNote.attachment.fileSize / 1024).toFixed(1)} KB`
+                          : `${(editingGroupNote.attachment.fileSize / (1024 * 1024)).toFixed(1)} MB`}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        const link = document.createElement("a");
+                        link.href = editingGroupNote.attachment!.dataUrl;
+                        link.download = editingGroupNote.attachment!.fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:shadow-lg transition-all flex items-center gap-1.5"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      Download
+                    </button>
+                  </div>
+                )}
                 <AISummarizeButton
                   noteContent={editGroupNoteContent}
                   existingSummary={undefined}
@@ -1446,19 +1642,52 @@ function NoteCard({
   onDelete: () => void;
   formatDate: (iso: string) => string;
 }) {
+  function handleDownload(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (!note.attachment) return;
+    const link = document.createElement("a");
+    link.href = note.attachment.dataUrl;
+    link.download = note.attachment.fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function formatFileSize(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
   return (
     <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent/30 transition-colors group">
       <FileText className="w-4 h-4 mt-0.5 text-muted-foreground flex-shrink-0" />
-      <div className="flex-1 min-w-0 cursor-pointer" onClick={onEdit}>
-        <h4 className="text-sm font-medium truncate">{note.title}</h4>
-        {note.content && (
-          <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
-            {note.content}
+      <div className="flex-1 min-w-0">
+        <div className="cursor-pointer" onClick={onEdit}>
+          <h4 className="text-sm font-medium truncate">{note.title}</h4>
+          {note.content && (
+            <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+              {note.content}
+            </p>
+          )}
+          <p className="text-xs text-muted-foreground/70 mt-1">
+            {formatDate(note.createdAt)}
           </p>
+        </div>
+        {/* File attachment download link */}
+        {note.attachment && (
+          <button
+            onClick={handleDownload}
+            className="mt-2 flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 border border-primary/20 transition-colors text-xs text-primary font-medium"
+            title={`Download ${note.attachment.fileName}`}
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span className="truncate max-w-[180px]">{note.attachment.fileName}</span>
+            <span className="text-muted-foreground/70 flex-shrink-0">
+              ({formatFileSize(note.attachment.fileSize)})
+            </span>
+          </button>
         )}
-        <p className="text-xs text-muted-foreground/70 mt-1">
-          {formatDate(note.createdAt)}
-        </p>
       </div>
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
