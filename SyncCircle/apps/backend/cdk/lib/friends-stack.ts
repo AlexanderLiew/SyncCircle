@@ -35,9 +35,8 @@ export class FriendsStack extends Stack {
     const dynamodb = new DynamoDbConstruct(this, 'DynamoDb');
 
     // ─── SES Sender Identity ─────────────────────────────────────────────
-    new SesConstruct(this, 'Ses', {
-      senderEmail: props.sesSenderEmail,
-    });
+    // Identity already verified manually in SES console — skip CDK creation
+    // to avoid "already exists" conflict.
 
     // ─── Lambda Functions ────────────────────────────────────────────────
     // Each Lambda has logRetention: 14 days configured via the construct.
@@ -74,6 +73,7 @@ export class FriendsStack extends Stack {
       putTimetableHandler: lambdas.putTimetableHandler,
       getFriendTimetableHandler: lambdas.getFriendTimetableHandler,
       getUsersHandler: lambdas.getUsersHandler,
+      notifyTaskHandler: lambdas.notifyTaskHandler,
     });
   }
 }

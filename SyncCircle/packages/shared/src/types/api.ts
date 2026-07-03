@@ -51,6 +51,9 @@ export const API_PATHS = {
 
   /** GET — List all registered users for friend discovery */
   USERS: '/users',
+
+  /** POST — Send a task reminder email notification */
+  TASKS_NOTIFY: '/tasks/notify',
 } as const;
 
 // ─── Auth Header Format ──────────────────────────────────────────────────────
@@ -220,6 +223,24 @@ export interface UsersListResponse {
     email: string;
   }>;
 }
+
+// ─── Task Notification ────────────────────────────────────────────────────────
+
+/** POST /tasks/notify — request body */
+export interface NotifyTaskRequest {
+  /** The title of the task due tomorrow */
+  taskTitle: string;
+  /** ISO 8601 date format: YYYY-MM-DD */
+  dueDate: string;
+}
+
+/** POST /tasks/notify — response body */
+export interface NotifyTaskResponse {
+  /** Confirmation message */
+  message: string;
+}
+
+// ─── Error Response ──────────────────────────────────────────────────────────
 
 /** Standard error response shape (all endpoints) */
 export interface ErrorResponse {

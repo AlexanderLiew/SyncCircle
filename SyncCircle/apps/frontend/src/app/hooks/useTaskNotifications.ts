@@ -2,10 +2,9 @@ import { useEffect, useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { getTasks, getUser } from '../lib/storage';
 import {
-  WORKATO_TASK_WEBHOOK_URL,
   NOTIFIED_TASKS_KEY,
-  buildTaskDeadlineAlertPayload,
 } from '../lib/workato-client';
+import { notifyTaskDueTomorrow } from '../lib/task-notify-client';
 import type { Task } from '../types';
 
 // ============================================================
@@ -76,25 +75,14 @@ function markNotified(key: string): void {
   localStorage.setItem(NOTIFIED_TASKS_KEY, JSON.stringify([...keys]));
 }
 
-// ---- Workato webhook ----
-
-async function postDeadlineAlert(payload: unknown): Promise<boolean> {
-  try {
-    const res = await fetch(WORKATO_TASK_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    return res.ok;
-  } catch { return false; }
-}
-
 // ---- Path A: on-save email ----
 
 /**
  * Call this immediately after saveTask() in TaskList and Timetable.
- * If the task is due tomorrow it fires the Workato webhook right away
+ * If the task is due tomorrow it fires the backend notification endpoint
  * and shows a confirmation toast — no page reload needed.
+ * Email failures are silently swallowed (fire-and-forget) and do NOT
+ * affect the toast or task save UX.
  */
 export async function fireDeadlineEmailIfTomorrow(task: Task): Promise<void> {
   if (!task.dueDate || task.dueDate !== tomorrowSGT()) return;
@@ -107,17 +95,11 @@ export async function fireDeadlineEmailIfTomorrow(task: Task): Promise<void> {
   if (notified.has(emailKey)) return;
   markNotified(emailKey);
 
-  const payload = buildTaskDeadlineAlertPayload(
-    task.id, task.title, task.dueDate, task.priority,
-    user.email, user.displayName || 'Student', 1
-  );
-
-  const success = await postDeadlineAlert(payload);
+  // Fire-and-forget: send notification via backend (errors silently swallowed)
+  notifyTaskDueTomorrow({ title: task.title, dueDate: task.dueDate });
 
   toast.success('📧 Reminder email scheduled', {
-    description: success
-      ? `You'll receive an email reminder for "${task.title}" tomorrow.`
-      : `Could not send reminder email — check your connection.`,
+    description: `You'll receive an email reminder for "${task.title}" tomorrow.`,
     duration: 6_000,
   });
 }
@@ -192,11 +174,7 @@ async function checkStartupBanners(): Promise<void> {
         const emailKey = `${task.id}:email:${task.dueDate}`;
         if (!notified.has(emailKey)) {
           markNotified(emailKey);
-          const payload = buildTaskDeadlineAlertPayload(
-            task.id, task.title, task.dueDate, task.priority,
-            user.email, user.displayName || 'Student', 1
-          );
-          postDeadlineAlert(payload);
+          notifyTaskDueTomorrow({ title: task.title, dueDate: task.dueDate });
         }
       }
     }

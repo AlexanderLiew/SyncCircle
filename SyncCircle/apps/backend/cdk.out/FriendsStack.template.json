@@ -239,15 +239,6 @@
     "aws:cdk:path": "FriendsStack/DynamoDb/UserTimetablesTable/Resource"
    }
   },
-  "SesSenderIdentity1B72E79E": {
-   "Type": "AWS::SES::EmailIdentity",
-   "Properties": {
-    "EmailIdentity": "noreply@synccircle.com"
-   },
-   "Metadata": {
-    "aws:cdk:path": "FriendsStack/Ses/SenderIdentity/Resource"
-   }
-  },
   "LambdasSearchHandlerServiceRole3F692372": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -384,7 +375,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "d5513cffe6fed58ca8c78d0e9adc3cff1723b6f3bcffab842efd343bfe57c918.zip"
+     "S3Key": "5712d6e3d5fc41d1cca79bfe4fad6969fdad8a2f1ddc3a0112d9d6dc6c6fe230.zip"
     },
     "Environment": {
      "Variables": {
@@ -400,7 +391,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -423,7 +414,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/SearchHandler/Resource",
-    "aws:asset:path": "asset.d5513cffe6fed58ca8c78d0e9adc3cff1723b6f3bcffab842efd343bfe57c918",
+    "aws:asset:path": "asset.5712d6e3d5fc41d1cca79bfe4fad6969fdad8a2f1ddc3a0112d9d6dc6c6fe230",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -578,7 +569,7 @@
        "Action": "ses:SendEmail",
        "Condition": {
         "StringEquals": {
-         "ses:FromAddress": "noreply@synccircle.com"
+         "ses:FromAddress": "alexanderliew2001@gmail.com"
         }
        },
        "Effect": "Allow",
@@ -603,7 +594,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "2aee5da35c32dd3de76a0b77ff0f757cc9a65c5eab581f3280c5b3d6026bbdff.zip"
+     "S3Key": "0d9442686fa8aa4830f2bdde1b2ea5e1e21b48429884edd290ceb966e01ab371.zip"
     },
     "Environment": {
      "Variables": {
@@ -619,7 +610,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -642,7 +633,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/CreateFriendRequestHandler/Resource",
-    "aws:asset:path": "asset.2aee5da35c32dd3de76a0b77ff0f757cc9a65c5eab581f3280c5b3d6026bbdff",
+    "aws:asset:path": "asset.0d9442686fa8aa4830f2bdde1b2ea5e1e21b48429884edd290ceb966e01ab371",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -786,7 +777,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "e1b80bb283af3ec0ee9ab314bc2f7a87a44fb8daac0ebdc6718e79b87ee3b99a.zip"
+     "S3Key": "a3682f2a99826345ad4bc99fe001a2d7eed15967296812dc32bea2ce9bcbb1e5.zip"
     },
     "Environment": {
      "Variables": {
@@ -802,7 +793,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -825,7 +816,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/AcceptHandler/Resource",
-    "aws:asset:path": "asset.e1b80bb283af3ec0ee9ab314bc2f7a87a44fb8daac0ebdc6718e79b87ee3b99a",
+    "aws:asset:path": "asset.a3682f2a99826345ad4bc99fe001a2d7eed15967296812dc32bea2ce9bcbb1e5",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -943,7 +934,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "60a2c523c2ad5c3496a0b72f6b6b42df6d1c4b1ec04e2c12e6a4fe3826a1b4dc.zip"
+     "S3Key": "c567dc114c4258163fe80cb4f80aed67fe8e13029f3e5b7bcd4756558b1d35d9.zip"
     },
     "Environment": {
      "Variables": {
@@ -959,7 +950,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -982,7 +973,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/RejectHandler/Resource",
-    "aws:asset:path": "asset.60a2c523c2ad5c3496a0b72f6b6b42df6d1c4b1ec04e2c12e6a4fe3826a1b4dc",
+    "aws:asset:path": "asset.c567dc114c4258163fe80cb4f80aed67fe8e13029f3e5b7bcd4756558b1d35d9",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1100,7 +1091,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "b5fc87db7d4ed82c349ec13b11980d9f6e727882af7ab080032858da1cd5926b.zip"
+     "S3Key": "6267bd557a97ce814626bb408c885c7a81da9e82500987240e94fe06818128ad.zip"
     },
     "Environment": {
      "Variables": {
@@ -1116,7 +1107,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -1139,7 +1130,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/CancelHandler/Resource",
-    "aws:asset:path": "asset.b5fc87db7d4ed82c349ec13b11980d9f6e727882af7ab080032858da1cd5926b",
+    "aws:asset:path": "asset.6267bd557a97ce814626bb408c885c7a81da9e82500987240e94fe06818128ad",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1280,7 +1271,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "dc494f4cad269cfa8392e464237b90de39bc69fb630c62a526e037012a4d1692.zip"
+     "S3Key": "40c7b0c3afdc115f53cb5212623dc2bb894629dbd704b89cd457516d196742d6.zip"
     },
     "Environment": {
      "Variables": {
@@ -1296,7 +1287,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -1319,7 +1310,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/IncomingHandler/Resource",
-    "aws:asset:path": "asset.dc494f4cad269cfa8392e464237b90de39bc69fb630c62a526e037012a4d1692",
+    "aws:asset:path": "asset.40c7b0c3afdc115f53cb5212623dc2bb894629dbd704b89cd457516d196742d6",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1434,7 +1425,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "76b488c58dbba7c4c38d842e8c5ffa7c99cb132003e20e017a73d7d8835239b2.zip"
+     "S3Key": "0ae72d9f972d7fdc34de0337dccb3b248ccd30ce7a2e0b838e159dff48342db6.zip"
     },
     "Environment": {
      "Variables": {
@@ -1450,7 +1441,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -1473,7 +1464,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/OutgoingHandler/Resource",
-    "aws:asset:path": "asset.76b488c58dbba7c4c38d842e8c5ffa7c99cb132003e20e017a73d7d8835239b2",
+    "aws:asset:path": "asset.0ae72d9f972d7fdc34de0337dccb3b248ccd30ce7a2e0b838e159dff48342db6",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1614,7 +1605,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "0390c60bf837c736a60b6732f337c874f8baae1fa6cc44ba7622dc2548da1685.zip"
+     "S3Key": "185b7d36786ca7fff1b81247ccb987cb944ece47e8629071c859a440b3170316.zip"
     },
     "Environment": {
      "Variables": {
@@ -1630,7 +1621,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -1653,7 +1644,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/ValidateTokenHandler/Resource",
-    "aws:asset:path": "asset.0390c60bf837c736a60b6732f337c874f8baae1fa6cc44ba7622dc2548da1685",
+    "aws:asset:path": "asset.185b7d36786ca7fff1b81247ccb987cb944ece47e8629071c859a440b3170316",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1794,7 +1785,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "f3225c77c7af19b43bee4344ecf6a5ee4dde1c3420586cdf82c62c200fb121c6.zip"
+     "S3Key": "d3bb0a9b29c43ef1622503b65da8056e68c50bd8d23997f3d0d13b44fffd55df.zip"
     },
     "Environment": {
      "Variables": {
@@ -1810,7 +1801,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -1833,7 +1824,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/ListFriendsHandler/Resource",
-    "aws:asset:path": "asset.f3225c77c7af19b43bee4344ecf6a5ee4dde1c3420586cdf82c62c200fb121c6",
+    "aws:asset:path": "asset.d3bb0a9b29c43ef1622503b65da8056e68c50bd8d23997f3d0d13b44fffd55df",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1952,7 +1943,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "2109f64dc1f5a04a985675478656d11f10c66dc9369e7e30f6796e024ec20565.zip"
+     "S3Key": "feb377d6e53206c224583a91638151772b6aa8e90a64ce95bda3ad1f767aabd2.zip"
     },
     "Environment": {
      "Variables": {
@@ -1968,7 +1959,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -1991,7 +1982,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/RemoveFriendHandler/Resource",
-    "aws:asset:path": "asset.2109f64dc1f5a04a985675478656d11f10c66dc9369e7e30f6796e024ec20565",
+    "aws:asset:path": "asset.feb377d6e53206c224583a91638151772b6aa8e90a64ce95bda3ad1f767aabd2",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -2132,7 +2123,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "901e8aa1fa8984ad994fb94077b995544418333aecbd800a2e4ca11091ff9b39.zip"
+     "S3Key": "66204bd2a2e433e33f9654a872b47f908b4c60e6123767dd7415885f9742dea8.zip"
     },
     "Environment": {
      "Variables": {
@@ -2148,7 +2139,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -2171,7 +2162,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/RelationshipHandler/Resource",
-    "aws:asset:path": "asset.901e8aa1fa8984ad994fb94077b995544418333aecbd800a2e4ca11091ff9b39",
+    "aws:asset:path": "asset.66204bd2a2e433e33f9654a872b47f908b4c60e6123767dd7415885f9742dea8",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -2315,7 +2306,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "bd772bace8e7356aaddb4cb8b2a2598438d6d4d3f7c19cd04f5091e76088c25c.zip"
+     "S3Key": "ca77d2ac694c7d9d794862d326df4e1c8733c32926ca8ee05c747c26bdc34c15.zip"
     },
     "Environment": {
      "Variables": {
@@ -2331,7 +2322,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -2354,7 +2345,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/PostConfirmationHandler/Resource",
-    "aws:asset:path": "asset.bd772bace8e7356aaddb4cb8b2a2598438d6d4d3f7c19cd04f5091e76088c25c",
+    "aws:asset:path": "asset.ca77d2ac694c7d9d794862d326df4e1c8733c32926ca8ee05c747c26bdc34c15",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -2455,7 +2446,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "455a14541374c746468cba6bafa7bb38c82a542db2c62b61c4d625d8b6df18fd.zip"
+     "S3Key": "aad43143c0044a205381f533d80d429e99cb80a908ab3f7d367094575b8cb2fe.zip"
     },
     "Environment": {
      "Variables": {
@@ -2471,7 +2462,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -2494,7 +2485,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/PutTimetableHandler/Resource",
-    "aws:asset:path": "asset.455a14541374c746468cba6bafa7bb38c82a542db2c62b61c4d625d8b6df18fd",
+    "aws:asset:path": "asset.aad43143c0044a205381f533d80d429e99cb80a908ab3f7d367094575b8cb2fe",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -2621,7 +2612,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "4b51710bc803c9933e1936d09f1c5d8c35c87605b1441ffece390320405d744f.zip"
+     "S3Key": "a9abd8c9a015d2d6ad4236f4abfd99137378c194071023ad7056fd457e690cd5.zip"
     },
     "Environment": {
      "Variables": {
@@ -2637,7 +2628,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -2660,7 +2651,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/GetFriendTimetableHandler/Resource",
-    "aws:asset:path": "asset.4b51710bc803c9933e1936d09f1c5d8c35c87605b1441ffece390320405d744f",
+    "aws:asset:path": "asset.a9abd8c9a015d2d6ad4236f4abfd99137378c194071023ad7056fd457e690cd5",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -2775,7 +2766,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
-     "S3Key": "0ab344ee1a41e841b4145b596ccc992edfb468610944c19be8b844070251208d.zip"
+     "S3Key": "fee9ac7d7f6e38be4d7abe8a487ef77e1ea5ea5964d3284e952ce8b46f4486a4.zip"
     },
     "Environment": {
      "Variables": {
@@ -2791,7 +2782,7 @@
       "USER_TIMETABLES_TABLE": {
        "Ref": "DynamoDbUserTimetablesTableF2615393"
       },
-      "SES_SENDER_EMAIL": "noreply@synccircle.com",
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
       "FRONTEND_BASE_URL": "http://localhost:5173",
       "EMAIL_ADAPTER": "local"
      }
@@ -2814,7 +2805,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/GetUsersHandler/Resource",
-    "aws:asset:path": "asset.0ab344ee1a41e841b4145b596ccc992edfb468610944c19be8b844070251208d",
+    "aws:asset:path": "asset.fee9ac7d7f6e38be4d7abe8a487ef77e1ea5ea5964d3284e952ce8b46f4486a4",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -2843,6 +2834,160 @@
    },
    "Metadata": {
     "aws:cdk:path": "FriendsStack/Lambdas/GetUsersHandler/LogRetention/Resource"
+   }
+  },
+  "LambdasNotifyTaskHandlerServiceRole0303EBCC": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/NotifyTaskHandler/ServiceRole/Resource"
+   }
+  },
+  "LambdasNotifyTaskHandlerServiceRoleDefaultPolicy2E08C6B7": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:GetItem",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbUserProfilesTable56C9F6F1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "DynamoDbUserProfilesTable56C9F6F1",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "ses:SendEmail",
+       "Condition": {
+        "StringEquals": {
+         "ses:FromAddress": "alexanderliew2001@gmail.com"
+        }
+       },
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdasNotifyTaskHandlerServiceRoleDefaultPolicy2E08C6B7",
+    "Roles": [
+     {
+      "Ref": "LambdasNotifyTaskHandlerServiceRole0303EBCC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/NotifyTaskHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LambdasNotifyTaskHandler920F51D4": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-368082409177-ap-southeast-1",
+     "S3Key": "fa18f32901b006e946a95d0643ad2f38ae0db00da5073d7f96504900ddb92207.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "USER_PROFILES_TABLE": {
+       "Ref": "DynamoDbUserProfilesTable56C9F6F1"
+      },
+      "SES_SENDER_EMAIL": "alexanderliew2001@gmail.com",
+      "EMAIL_ADAPTER": ""
+     }
+    },
+    "FunctionName": "SyncCircle-Tasks-Notify",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdasNotifyTaskHandlerServiceRole0303EBCC",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdasNotifyTaskHandlerServiceRoleDefaultPolicy2E08C6B7",
+    "LambdasNotifyTaskHandlerServiceRole0303EBCC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/NotifyTaskHandler/Resource",
+    "aws:asset:path": "asset.fa18f32901b006e946a95d0643ad2f38ae0db00da5073d7f96504900ddb92207",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LambdasNotifyTaskHandlerLogRetentionF571431F": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "LambdasNotifyTaskHandler920F51D4"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 14
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Lambdas/NotifyTaskHandler/LogRetention/Resource"
    }
   },
   "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
@@ -3142,7 +3287,7 @@
     "aws:cdk:path": "FriendsStack/Api/FriendsApi/Account"
    }
   },
-  "ApiFriendsApiDeploymentA8F321622b88d2831a45619e0c4e7e571d8c688c": {
+  "ApiFriendsApiDeploymentA8F32162420ea6bb0ed94875b9ee03c7c6638804": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "REST API for the SyncCircle Friends Backend",
@@ -3195,6 +3340,11 @@
     "ApiFriendsApifriendssearchPOST0FEE2487",
     "ApiFriendsApifriendssearchC053DB02",
     "ApiFriendsApiOPTIONSBB1AD3D4",
+    "ApiFriendsApitasksnotifyOPTIONS0A87FC2F",
+    "ApiFriendsApitasksnotifyPOST2324A7D4",
+    "ApiFriendsApitasksnotifyC159D599",
+    "ApiFriendsApitasksOPTIONSFA3DD05F",
+    "ApiFriendsApitasks30ABFC39",
     "ApiFriendsApitimetableOPTIONSF1E270A7",
     "ApiFriendsApitimetablePUT39DF82CF",
     "ApiFriendsApitimetable02773215",
@@ -3224,7 +3374,7 @@
      "Format": "{\"requestId\":\"$context.requestId\",\"ip\":\"$context.identity.sourceIp\",\"requestTime\":\"$context.requestTime\",\"httpMethod\":\"$context.httpMethod\",\"resourcePath\":\"$context.resourcePath\",\"status\":\"$context.status\",\"protocol\":\"$context.protocol\",\"responseLength\":\"$context.responseLength\"}"
     },
     "DeploymentId": {
-     "Ref": "ApiFriendsApiDeploymentA8F321622b88d2831a45619e0c4e7e571d8c688c"
+     "Ref": "ApiFriendsApiDeploymentA8F32162420ea6bb0ed94875b9ee03c7c6638804"
     },
     "RestApiId": {
      "Ref": "ApiFriendsApi19C890F1"
@@ -5814,6 +5964,239 @@
     "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/users/GET/Resource"
    }
   },
+  "ApiFriendsApitasks30ABFC39": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ApiFriendsApi19C890F1",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "tasks",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/tasks/Resource"
+   }
+  },
+  "ApiFriendsApitasksOPTIONSFA3DD05F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApitasks30ABFC39"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/tasks/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApitasksnotifyC159D599": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ApiFriendsApitasks30ABFC39"
+    },
+    "PathPart": "notify",
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/tasks/notify/Resource"
+   }
+  },
+  "ApiFriendsApitasksnotifyOPTIONS0A87FC2F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "ApiFriendsApitasksnotifyC159D599"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/tasks/notify/OPTIONS/Resource"
+   }
+  },
+  "ApiFriendsApitasksnotifyPOSTApiPermissionFriendsStackApiFriendsApi009D4584POSTtasksnotifyFBDF812C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasNotifyTaskHandler920F51D4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/",
+       {
+        "Ref": "ApiFriendsApiDeploymentStageprodE329F81B"
+       },
+       "/POST/tasks/notify"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/tasks/notify/POST/ApiPermission.FriendsStackApiFriendsApi009D4584.POST..tasks.notify"
+   }
+  },
+  "ApiFriendsApitasksnotifyPOSTApiPermissionTestFriendsStackApiFriendsApi009D4584POSTtasksnotify3FBD1439": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdasNotifyTaskHandler920F51D4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-southeast-1:368082409177:",
+       {
+        "Ref": "ApiFriendsApi19C890F1"
+       },
+       "/test-invoke-stage/POST/tasks/notify"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/tasks/notify/POST/ApiPermission.Test.FriendsStackApiFriendsApi009D4584.POST..tasks.notify"
+   }
+  },
+  "ApiFriendsApitasksnotifyPOST2324A7D4": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiCognitoAuthorizer23B91BA2"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdasNotifyTaskHandler920F51D4",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ApiFriendsApitasksnotifyC159D599"
+    },
+    "RestApiId": {
+     "Ref": "ApiFriendsApi19C890F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FriendsStack/Api/FriendsApi/Default/tasks/notify/POST/Resource"
+   }
+  },
   "ApiFriendsApiUnauthorized2C1ED6F3": {
    "Type": "AWS::ApiGateway::GatewayResponse",
    "Properties": {
@@ -6014,7 +6397,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12S3W7bMAyFn2X3itqlRe/TbCsGtF3grrsNGJlxlciiZ1INUkHvPkjKT7MrfuSxj3lkTfX07lpff4EdT0y7nTi70vFFwGwV7HgZ272HntqVjr9h5VDN175AUoys4/cerPvZohcr+yxeDJJy0K9aWHpqccP6uZQfwRux5JWFXseGqmupC3LWFJ9KSfHNEphRWM9yUXyj74PZotwD48Fex/nan1zzyzj2ltmST8pRxzo+Uteg5K3Iq0fqHkYKQ370yEkZ6rwV0vGVcVwQuSyf+AhzZ9HLZ6lOkoLBdiC4g72ODbLMBltynXFmDAUv6hsOjvb9wedT9yLQlcOo0CBTGA2WqE8ob9Rm8UBH9fCRyg91gwZ5IM9F+3/0RC2WbBVeGTpcOPA106mpp3EMybMgbzTaDxxLknPX4N+ALH/A2RaExrrO5Syl87blN+Z81ncXq8/X/leQIUhS+broDV+9T2/113w7N2ztZAxebI+6qfUf0ezuJ7oCAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12STW/CMAyGfwv3kDE2TbsC07iwDXUfV2RSUwJp3NXOEKv636cmfO7kx34Tx2+SoR4+DPSgBzvum3zbd3apm3cBs1Ww40WT7z2UlC918wFLh2qy8hFa5aBc5rDwlOOG9WsMz8EbseSVhVI3GaUNMc7JWbPv0kSt4rsFMKOwHnVB8Z0eB7NFGQPjob1uJit/6tptxrq0zJZ8qxwVrJsZFRkK+rhiRsW0plB1S4/cKkOFt0K6+WSs50Suk098hImz6OVSSpVWQWULENzBXjcZsowqG32dcWQMBS/qCStH+/LQ5yJ7FyjiZSTIkCnUBqPVF5Q15Z14oKN6OCTxNE2QIVfkOWr/Sy+UY/SW4JOhwLkDnzydknQbR5M8CrKm2v5iHZ2cswy/A7J8gbM5CNVpnOta256njc/Y+bO+uBp9svJvQaogreq+i97wzc/wXt8+6kFvw9b26+DFlqizFP8AmX+IrpUCAAA="
    },
    "Metadata": {
     "aws:cdk:path": "FriendsStack/CDKMetadata/Default"

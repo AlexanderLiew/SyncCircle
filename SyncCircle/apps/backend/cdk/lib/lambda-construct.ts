@@ -53,6 +53,7 @@ export class LambdaConstruct extends Construct {
   public readonly putTimetableHandler: nodejs.NodejsFunction;
   public readonly getFriendTimetableHandler: nodejs.NodejsFunction;
   public readonly getUsersHandler: nodejs.NodejsFunction;
+  public readonly notifyTaskHandler: nodejs.NodejsFunction;
 
   constructor(scope: Construct, id: string, props: LambdaConstructProps) {
     super(scope, id);
@@ -330,5 +331,33 @@ export class LambdaConstruct extends Construct {
     });
 
     userProfilesTable.grant(this.getUsersHandler, 'dynamodb:Scan');
+
+    // -------------------------------------------------------------------
+    // Notify Task Handler (Email Reminders)
+    // Needs: UserProfiles (GetItem), SES (SendEmail)
+    // EMAIL_ADAPTER is explicitly empty string for real SES sends.
+    // -------------------------------------------------------------------
+    this.notifyTaskHandler = new nodejs.NodejsFunction(this, 'NotifyTaskHandler', {
+      ...defaultFunctionProps,
+      entry: path.join(handlersDir, 'tasks', 'notify.ts'),
+      handler: 'handler',
+      functionName: 'SyncCircle-Tasks-Notify',
+      environment: {
+        USER_PROFILES_TABLE: userProfilesTable.tableName,
+        SES_SENDER_EMAIL: sesSenderEmail,
+        EMAIL_ADAPTER: '',
+      },
+    });
+
+    userProfilesTable.grant(this.notifyTaskHandler, 'dynamodb:GetItem');
+    this.notifyTaskHandler.addToRolePolicy(new iam.PolicyStatement({
+      actions: ['ses:SendEmail'],
+      resources: ['*'],
+      conditions: {
+        StringEquals: {
+          'ses:FromAddress': sesSenderEmail,
+        },
+      },
+    }));
   }
 }

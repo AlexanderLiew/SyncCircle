@@ -10,7 +10,7 @@ new FriendsStack(app, 'FriendsStack', {
     region: 'ap-southeast-1',
   },
   description: 'SyncCircle Friends Backend - Cognito, API Gateway, Lambda, DynamoDB, SES, CloudWatch',
-  sesSenderEmail: process.env.SES_SENDER_EMAIL || 'noreply@synccircle.com',
+  sesSenderEmail: process.env.SES_SENDER_EMAIL || 'alexanderliew2001@gmail.com',
   frontendBaseUrl: process.env.FRONTEND_BASE_URL || 'http://localhost:5173',
   allowedOrigins: process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',')

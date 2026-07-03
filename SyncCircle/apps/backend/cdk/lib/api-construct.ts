@@ -30,6 +30,7 @@ export interface ApiConstructProps {
   putTimetableHandler: lambda.IFunction;
   getFriendTimetableHandler: lambda.IFunction;
   getUsersHandler: lambda.IFunction;
+  notifyTaskHandler: lambda.IFunction;
 }
 
 /**
@@ -326,6 +327,15 @@ export class ApiConstruct extends Construct {
     users.addMethod(
       'GET',
       new apigateway.LambdaIntegration(props.getUsersHandler),
+      authorizerOptions,
+    );
+
+    // POST /tasks/notify (task email reminders)
+    const tasks = this.api.root.addResource('tasks');
+    const tasksNotify = tasks.addResource('notify');
+    tasksNotify.addMethod(
+      'POST',
+      new apigateway.LambdaIntegration(props.notifyTaskHandler),
       authorizerOptions,
     );
 

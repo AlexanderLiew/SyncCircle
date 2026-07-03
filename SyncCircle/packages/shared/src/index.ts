@@ -83,5 +83,7 @@ export type {
   TokenValidationResponse,
   FriendsListResponse,
   UsersListResponse,
+  NotifyTaskRequest,
+  NotifyTaskResponse,
   ErrorResponse,
 } from './types/api';

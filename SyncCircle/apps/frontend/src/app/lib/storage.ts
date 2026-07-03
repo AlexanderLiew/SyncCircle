@@ -89,18 +89,29 @@ export function deleteClass(id: string): void {
   removeById<TimetableClass>(STORAGE_KEYS.CLASSES, id);
 }
 
-// --- Tasks ---
+// --- Tasks (user-scoped) ---
+
+function getTasksKey(): string {
+  try {
+    const userRaw = localStorage.getItem(STORAGE_KEYS.USER);
+    if (userRaw) {
+      const user = JSON.parse(userRaw);
+      if (user.id) return `synccircle_tasks_${user.id}`;
+    }
+  } catch {}
+  return STORAGE_KEYS.TASKS;
+}
 
 export function getTasks(): Task[] {
-  return readArray<Task>(STORAGE_KEYS.TASKS);
+  return readArray<Task>(getTasksKey());
 }
 
 export function saveTask(task: Task): void {
-  upsert(STORAGE_KEYS.TASKS, task);
+  upsert(getTasksKey(), task);
 }
 
 export function deleteTask(id: string): void {
-  removeById<Task>(STORAGE_KEYS.TASKS, id);
+  removeById<Task>(getTasksKey(), id);
 }
 
 // --- Notes ---
