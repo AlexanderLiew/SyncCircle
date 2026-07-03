@@ -14,8 +14,8 @@ import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useWorkato } from "../hooks/useWorkato";
 import { useTaskNotifications } from "../hooks/useTaskNotifications";
-import { getTasks } from "../lib/storage";
 import { useAuth } from "../hooks/useAuth";
+import { getTasks } from "../lib/storage";
 import type { Task } from "../types";
 
 const navItems = [
@@ -31,12 +31,12 @@ export function Layout() {
   const navigate = useNavigate();
   const { retryPendingSyncs } = useWorkato();
   const { pendingCount, checkNow } = useTaskNotifications();
-  const { user, logout } = useAuth();
+  const { user: authUser, logout } = useAuth();
   const [bellOpen, setBellOpen] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
 
   // Derive user display info
-  const displayName = user?.displayName || "User";
+  const displayName = authUser?.displayName || "User";
   const initials = displayName
     .split(" ")
     .map((w) => w[0])

@@ -8,12 +8,13 @@ import {
   Lock,
   Palette,
   Accessibility,
-  ArrowLeft,
+  Sparkles,
+  Mail,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useTheme } from "../hooks/useTheme";
-import { useAuth } from "../hooks/useAuth";
 import { getSettings, saveSettings, getUser, saveUser } from "../lib/storage";
+import { useAuth } from "../hooks/useAuth";
 import type { UserSettings } from "../types";
 
 const settingsSections = [
@@ -22,6 +23,8 @@ const settingsSections = [
   { id: "notifications", label: "Notifications", icon: Bell },
   { id: "privacy", label: "Privacy & Security", icon: Lock },
   { id: "accessibility", label: "Accessibility", icon: Accessibility },
+  { id: "profile", label: "Account", icon: User },
+  { id: "ai", label: "AI Preferences", icon: Sparkles },
 ];
 
 export function Settings() {
@@ -30,22 +33,7 @@ export function Settings() {
   const [activeSection, setActiveSection] = useState("profile");
   const [settings, setSettings] = useState<UserSettings>(getSettings);
   const { currentTheme, applyTheme, getAvailableThemes } = useTheme();
-
-  // Load profile display name from synccircle_user on mount
-  useEffect(() => {
-    const user = getUser();
-    if (user) {
-      setSettings((prev) => ({
-        ...prev,
-        profile: {
-          ...prev.profile,
-          displayName: user.displayName || prev.profile.displayName,
-          avatar: user.avatar || prev.profile.avatar,
-          course: user.course || prev.profile.course,
-        },
-      }));
-    }
-  }, []);
+  const { user } = useAuth();
 
   // Sync theme from context into local settings state on mount
   useEffect(() => {
@@ -323,6 +311,194 @@ export function Settings() {
             })),
           "Reduced Motion"
         )}
+      </div>
+    </div>
+  );
+
+  const renderProfile = () => {
+    const authUser = user;
+    const localUser = getUser();
+    const accountEmail = authUser?.email || localUser?.email || '';
+    const accountName = authUser?.displayName || localUser?.displayName || '';
+
+    return (
+      <div className="space-y-6">
+        {/* Account Email (read-only) */}
+        <div>
+          <label className="block text-sm font-medium mb-2">Account Email</label>
+          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-accent/30 border border-border">
+            <Mail className="w-4 h-4 text-muted-foreground" />
+            <span className="text-foreground">{accountEmail || 'Not available'}</span>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            This is the email you registered with. Task notifications are sent here.
+          </p>
+        </div>
+
+        {/* Display Name (editable) */}
+        <div>
+          <label className="block text-sm font-medium mb-2">Display Name</label>
+          <input
+            type="text"
+            defaultValue={accountName}
+            onBlur={(e) => {
+              const newName = e.target.value.trim();
+              if (newName && newName !== accountName) {
+                // Update localStorage user
+                const current = getUser();
+                if (current) {
+                  saveUser({ ...current, displayName: newName });
+                }
+                // Update settings profile
+                updateSettings((prev) => ({
+                  ...prev,
+                  profile: { ...prev.profile, displayName: newName },
+                }));
+              }
+            }}
+            placeholder="Enter your display name"
+            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+          />
+          <p className="text-xs text-muted-foreground mt-1">
+            This name is shown in notifications and to your friends.
+          </p>
+        </div>
+
+        {/* Avatar */}
+        <div>
+          <label className="block text-sm font-medium mb-2">Avatar</label>
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground text-xl font-bold">
+              {settings.profile.avatar ||
+                (accountName || settings.profile.displayName)
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase()
+                  .slice(0, 2) ||
+                "?"}
+            </div>
+            <input
+              type="text"
+              value={settings.profile.avatar}
+              onChange={(e) =>
+                updateSettings((prev) => ({
+                  ...prev,
+                  profile: { ...prev.profile, avatar: e.target.value },
+                }))
+              }
+              placeholder="Initials or emoji (e.g. 🎓)"
+              className="flex-1 px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+            />
+          </div>
+        </div>
+
+        {/* Course */}
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Course / Program
+          </label>
+          <input
+            type="text"
+            value={settings.profile.course}
+            onChange={(e) =>
+              updateSettings((prev) => ({
+                ...prev,
+                profile: { ...prev.profile, course: e.target.value },
+              }))
+            }
+            placeholder="e.g. Computer Science"
+            className="w-full px-4 py-2 rounded-xl bg-input-background border border-border focus:outline-none focus:ring-2 focus:ring-ring/20"
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const renderAIPreferences = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Response Style</h3>
+        <div className="flex gap-4">
+          {(["concise", "balanced", "detailed"] as const).map((style) => (
+            <label
+              key={style}
+              className={`flex-1 flex flex-col items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                settings.aiPreferences.responseStyle === style
+                  ? "border-primary bg-primary/10"
+                  : "border-border hover:border-primary/50"
+              }`}
+            >
+              <input
+                type="radio"
+                name="responseStyle"
+                value={style}
+                checked={settings.aiPreferences.responseStyle === style}
+                onChange={() =>
+                  updateSettings((prev) => ({
+                    ...prev,
+                    aiPreferences: {
+                      ...prev.aiPreferences,
+                      responseStyle: style,
+                    },
+                  }))
+                }
+                className="sr-only"
+              />
+              <span className="font-medium capitalize">{style}</span>
+              <span className="text-xs text-muted-foreground mt-1">
+                {style === "concise"
+                  ? "Short & direct"
+                  : style === "detailed"
+                  ? "In-depth explanations"
+                  : "Mix of both"}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Planning Aggressiveness</h3>
+        <div className="flex gap-4">
+          {(["relaxed", "moderate", "intensive"] as const).map((level) => (
+            <label
+              key={level}
+              className={`flex-1 flex flex-col items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                settings.aiPreferences.planningAggressiveness === level
+                  ? "border-primary bg-primary/10"
+                  : "border-border hover:border-primary/50"
+              }`}
+            >
+              <input
+                type="radio"
+                name="planningAggressiveness"
+                value={level}
+                checked={
+                  settings.aiPreferences.planningAggressiveness === level
+                }
+                onChange={() =>
+                  updateSettings((prev) => ({
+                    ...prev,
+                    aiPreferences: {
+                      ...prev.aiPreferences,
+                      planningAggressiveness: level,
+                    },
+                  }))
+                }
+                className="sr-only"
+              />
+              <span className="font-medium capitalize">{level}</span>
+              <span className="text-xs text-muted-foreground mt-1">
+                {level === "relaxed"
+                  ? "Fewer reminders"
+                  : level === "intensive"
+                  ? "Proactive planning"
+                  : "Balanced nudges"}
+              </span>
+            </label>
+          ))}
+        </div>
       </div>
     </div>
   );
