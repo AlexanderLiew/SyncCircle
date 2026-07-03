@@ -6,6 +6,8 @@ import {
   type Folder,
   type Friend,
   type StudyGroup,
+  type GroupFolder,
+  type GroupNote,
   type ChatMessage,
   type UserSettings,
   type User,
@@ -196,8 +198,53 @@ export function getGroups(): StudyGroup[] {
   return readArray<StudyGroup>(STORAGE_KEYS.GROUPS);
 }
 
+export function saveGroup(group: StudyGroup): void {
+  upsert(STORAGE_KEYS.GROUPS, group);
+}
+
+export function deleteGroup(id: string): void {
+  removeById<StudyGroup>(STORAGE_KEYS.GROUPS, id);
+}
+
 export function joinGroup(group: StudyGroup): void {
   upsert(STORAGE_KEYS.GROUPS, group);
+}
+
+// --- Group Folders ---
+
+export function getGroupFolders(groupId?: string): GroupFolder[] {
+  const all = readArray<GroupFolder>(STORAGE_KEYS.GROUP_FOLDERS);
+  return groupId ? all.filter((f) => f.groupId === groupId) : all;
+}
+
+export function saveGroupFolder(folder: GroupFolder): void {
+  upsert(STORAGE_KEYS.GROUP_FOLDERS, folder);
+}
+
+export function deleteGroupFolder(id: string): void {
+  // Also delete notes in this folder
+  const notes = readArray<GroupNote>(STORAGE_KEYS.GROUP_NOTES);
+  const remaining = notes.filter((n) => n.folderId !== id);
+  writeArray(STORAGE_KEYS.GROUP_NOTES, remaining);
+  removeById<GroupFolder>(STORAGE_KEYS.GROUP_FOLDERS, id);
+}
+
+// --- Group Notes ---
+
+export function getGroupNotes(groupId?: string, folderId?: string): GroupNote[] {
+  const all = readArray<GroupNote>(STORAGE_KEYS.GROUP_NOTES);
+  let filtered = all;
+  if (groupId) filtered = filtered.filter((n) => n.groupId === groupId);
+  if (folderId) filtered = filtered.filter((n) => n.folderId === folderId);
+  return filtered;
+}
+
+export function saveGroupNote(note: GroupNote): void {
+  upsert(STORAGE_KEYS.GROUP_NOTES, note);
+}
+
+export function deleteGroupNote(id: string): void {
+  removeById<GroupNote>(STORAGE_KEYS.GROUP_NOTES, id);
 }
 
 // --- Messages ---

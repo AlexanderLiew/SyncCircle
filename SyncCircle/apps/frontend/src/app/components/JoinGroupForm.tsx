@@ -59,8 +59,8 @@ export function JoinGroupForm({ onClose, onJoined }: JoinGroupFormProps) {
       (g) => g.name.toLowerCase() === groupName.trim().toLowerCase()
     );
 
-    // Step 4: If no group found or password doesn't match — generic error (security)
-    if (!matchedGroup || matchedGroup.passwordHash !== password) {
+    // Step 4: If no group found — generic error
+    if (!matchedGroup) {
       setFormError("Invalid credentials");
       return;
     }
@@ -114,8 +114,10 @@ export function JoinGroupForm({ onClose, onJoined }: JoinGroupFormProps) {
     const newGroup: StudyGroup = {
       id: crypto.randomUUID(),
       name: groupName.trim(),
-      passwordHash: password, // plain text for hackathon simplicity
+      tag: '',
+      creatorId: user.id,
       members: [user.id],
+      pendingMembers: [],
       createdAt: new Date().toISOString(),
     };
     joinGroup(newGroup);

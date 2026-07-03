@@ -85,9 +85,32 @@ export interface Folder {
 export interface StudyGroup {
   id: string;
   name: string;
-  passwordHash: string; // 4-digit pin hashed
-  members: string[];    // user IDs
+  tag: string;             // short tag for discovery e.g. "CS2040-S1"
+  creatorId: string;       // userId of the group creator
+  members: string[];       // accepted member userIds
+  pendingMembers: string[]; // userIds awaiting approval
   createdAt: string;
+}
+
+export interface GroupFolder {
+  id: string;
+  groupId: string;
+  name: string;
+  color: string;
+  createdBy: string;       // userId
+  createdAt: string;
+}
+
+export interface GroupNote {
+  id: string;
+  groupId: string;
+  folderId: string;
+  title: string;
+  content: string;
+  createdBy: string;       // userId
+  createdByName: string;   // display name for UI
+  createdAt: string;
+  updatedAt: string;
 }
 
 // --- Friends ---
@@ -155,6 +178,8 @@ export const STORAGE_KEYS = {
   FOLDERS: 'synccircle_folders',
   FRIENDS: 'synccircle_friends',
   GROUPS: 'synccircle_groups',
+  GROUP_FOLDERS: 'synccircle_group_folders',
+  GROUP_NOTES: 'synccircle_group_notes',
   MESSAGES: 'synccircle_messages',
   SETTINGS: 'synccircle_settings',
   THEME: 'synccircle_theme',

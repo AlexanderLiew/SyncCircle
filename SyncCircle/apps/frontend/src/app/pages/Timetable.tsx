@@ -325,10 +325,13 @@ export function Timetable() {
   // Sync timetable to backend (fire-and-forget, best effort)
   const syncTimetableToBackend = useCallback((updatedClasses: TimetableClass[]) => {
     const DEV_BYPASS = import.meta.env.VITE_DEV_BYPASS_AUTH === 'true';
-    if (DEV_BYPASS) return; // skip in dev mode
-    apiClient.put('/timetable', { classes: updatedClasses }).catch(() => {
-      // Silent fail — localStorage is the primary store, backend is secondary
-    });
+    if (DEV_BYPASS) {
+      console.log('[Timetable] Dev bypass — skipping backend sync');
+      return;
+    }
+    apiClient.put('/timetable', { classes: updatedClasses })
+      .then(() => console.log('[Timetable] ✅ Synced to backend:', updatedClasses.length, 'classes'))
+      .catch((err) => console.warn('[Timetable] ❌ Backend sync failed:', err));
   }, []);
 
   const handleSyncToGoogleCalendar = async () => {
@@ -393,9 +396,11 @@ export function Timetable() {
         // Fetch friend's timetable from API (if not in dev bypass)
         const DEV_BYPASS = import.meta.env.VITE_DEV_BYPASS_AUTH === 'true';
         if (!DEV_BYPASS) {
+          console.log('[Timetable] Fetching timetable for friend:', friendId);
           apiClient.get<{ classes: TimetableClass[]; updatedAt: string | null }>(
             `/friends/${friendId}/timetable`
           ).then((data) => {
+            console.log('[Timetable] ✅ Got friend timetable:', data.classes.length, 'classes', data);
             if (data.classes.length > 0) {
               // Update the friend's timetable in local state
               setFriends((prevFriends) =>
@@ -406,8 +411,8 @@ export function Timetable() {
                 )
               );
             }
-          }).catch(() => {
-            // Silent fail — use whatever timetable data we already have (seed/localStorage)
+          }).catch((err) => {
+            console.warn('[Timetable] ❌ Failed to fetch friend timetable:', err);
           });
         }
       }
