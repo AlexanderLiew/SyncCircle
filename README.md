@@ -1,10 +1,10 @@
-# CramCircle
+# SyncCircle
 
 AWS Kiro BuildFest 2026 Hackathon.
 
-## What is CramCircle?
+## What is SyncCircle?
 
-CramCircle (SyncCircle) is a student collaboration web app built for the AWS Kiro BuildFest 2026 hackathon. It helps university students sync timetables, share notes, manage tasks, and study together with real-time friend connections.
+SyncCircle is a student collaboration web app built for the AWS Kiro BuildFest 2026 hackathon. It helps university students sync timetables, share notes, manage tasks, and study together with real-time friend connections.
 
 ## Architecture
 
