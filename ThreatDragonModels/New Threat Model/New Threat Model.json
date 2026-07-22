@@ -571,6 +571,100 @@
             "labels": [
               "Data Flow"
             ],
+            "id": "b2ba06f2-b5b6-49f4-88fe-a12c601dfd99",
+            "source": {
+              "cell": "ea6e5c1b-175e-42e7-9354-9b030df57dca",
+              "port": "b628a9e0-f90a-4e8b-a069-508ef343a37c"
+            },
+            "target": {
+              "cell": "6258fdd8-7cb1-453a-beda-246fd8464ac5",
+              "port": "49b36f32-2a01-41eb-88f3-94b2952d979f"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Data Flow"
+            ],
+            "id": "8ba47d5c-f145-4a93-9eda-eca8756e713d",
+            "source": {
+              "cell": "6258fdd8-7cb1-453a-beda-246fd8464ac5",
+              "port": "5cef796f-42e9-4ba4-b8db-ef2ffb23ed36"
+            },
+            "target": {
+              "cell": "3207f991-51f2-43e5-85b3-1f12af7fb28f",
+              "port": "bf595426-e7ad-4f44-ae41-066208a8b006"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Data Flow"
+            ],
             "id": "61c522ca-51b4-4cf2-b62e-deedf404a25a",
             "source": {
               "cell": "0a02c88d-37d1-4074-9140-a861252ad03d",
@@ -618,21 +712,68 @@
             "labels": [
               "Data Flow"
             ],
-            "id": "b2ba06f2-b5b6-49f4-88fe-a12c601dfd99",
+            "id": "de069fbe-b782-4954-931d-ecfc8e94b819",
             "source": {
-              "cell": "ea6e5c1b-175e-42e7-9354-9b030df57dca",
-              "port": "b628a9e0-f90a-4e8b-a069-508ef343a37c"
+              "cell": "6258fdd8-7cb1-453a-beda-246fd8464ac5",
+              "port": "0d04ceae-cf03-49a6-a212-647288db314e"
             },
             "target": {
+              "cell": "9923f1a8-d3f6-4b9f-a53d-a499ce49c778",
+              "port": "bf595426-e7ad-4f44-ae41-066208a8b006"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Data Flow"
+            ],
+            "id": "5fece776-5b45-4886-80c9-dc1173fa221b",
+            "source": {
               "cell": "6258fdd8-7cb1-453a-beda-246fd8464ac5",
               "port": "49b36f32-2a01-41eb-88f3-94b2952d979f"
+            },
+            "target": {
+              "cell": "f2e54b33-2d98-4ab4-9987-e5e6c8cb1233",
+              "port": "bf595426-e7ad-4f44-ae41-066208a8b006"
             },
             "vertices": []
           },
           {
             "position": {
               "x": 135.25,
-              "y": 414
+              "y": 430
             },
             "size": {
               "width": 150,
@@ -747,12 +888,19 @@
               "isWebApplication": false,
               "privilegeLevel": "",
               "threats": []
+            },
+            "tools": {
+              "items": [
+                "boundary",
+                "button-remove"
+              ],
+              "name": null
             }
           },
           {
             "position": {
               "x": 325.25,
-              "y": 459
+              "y": 425
             },
             "size": {
               "width": 130,
@@ -871,8 +1019,8 @@
           },
           {
             "position": {
-              "x": 500,
-              "y": 500
+              "x": 484.25,
+              "y": 425
             },
             "size": {
               "width": 170,
@@ -987,13 +1135,378 @@
               "isWebApplication": false,
               "privilegeLevel": "",
               "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 55.25,
+              "y": 699
             },
-            "tools": {
+            "size": {
+              "width": 190,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "User and MFA Database"
+              },
+              "topLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              },
+              "bottomLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
               "items": [
-                "boundary",
-                "button-remove"
-              ],
-              "name": null
+                {
+                  "group": "top",
+                  "id": "f3ff8401-14dd-43ea-bad7-6f6723692b7e"
+                },
+                {
+                  "group": "right",
+                  "id": "e81284bb-1c11-469d-bf59-ffbd837a2258"
+                },
+                {
+                  "group": "bottom",
+                  "id": "5fc687cf-9709-4cc0-acc9-58aa18a103f0"
+                },
+                {
+                  "group": "left",
+                  "id": "7396cb3a-5ed9-4e85-8c89-f869eb3418cf"
+                }
+              ]
+            },
+            "id": "caa0d2ea-d901-4267-89c2-1cecd37662dd",
+            "zIndex": 14,
+            "data": {
+              "type": "tm.Store",
+              "name": "User and MFA Database",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isALog": false,
+              "isEncrypted": false,
+              "isSigned": false,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 290.25,
+              "y": 699
+            },
+            "size": {
+              "width": 200,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Encrypted Vault Database"
+              },
+              "topLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              },
+              "bottomLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "f3ff8401-14dd-43ea-bad7-6f6723692b7e"
+                },
+                {
+                  "group": "right",
+                  "id": "e81284bb-1c11-469d-bf59-ffbd837a2258"
+                },
+                {
+                  "group": "bottom",
+                  "id": "5fc687cf-9709-4cc0-acc9-58aa18a103f0"
+                },
+                {
+                  "group": "left",
+                  "id": "7396cb3a-5ed9-4e85-8c89-f869eb3418cf"
+                }
+              ]
+            },
+            "id": "bacf22a5-4e5c-4363-870c-4b79ef1b5cc1",
+            "zIndex": 15,
+            "data": {
+              "type": "tm.Store",
+              "name": "Encrypted Vault Database",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isALog": false,
+              "isEncrypted": false,
+              "isSigned": false,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 546,
+              "y": 699
+            },
+            "size": {
+              "width": 150,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Audit Log Database"
+              },
+              "topLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              },
+              "bottomLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "f3ff8401-14dd-43ea-bad7-6f6723692b7e"
+                },
+                {
+                  "group": "right",
+                  "id": "e81284bb-1c11-469d-bf59-ffbd837a2258"
+                },
+                {
+                  "group": "bottom",
+                  "id": "5fc687cf-9709-4cc0-acc9-58aa18a103f0"
+                },
+                {
+                  "group": "left",
+                  "id": "7396cb3a-5ed9-4e85-8c89-f869eb3418cf"
+                }
+              ]
+            },
+            "id": "d5c3375d-1fc7-44b9-b7eb-642cdccf45a3",
+            "zIndex": 16,
+            "data": {
+              "type": "tm.Store",
+              "name": "Audit Log Database",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isALog": false,
+              "isEncrypted": false,
+              "isSigned": false,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": []
             }
           }
         ]
